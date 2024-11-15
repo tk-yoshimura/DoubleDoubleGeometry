@@ -189,7 +189,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static bool IsInfinity(Vector3D v) {
-            return ddouble.IsInfinity(v.X) || ddouble.IsInfinity(v.Y) || ddouble.IsInfinity(v.Z);
+            return !IsNaN(v) && (ddouble.IsInfinity(v.X) || ddouble.IsInfinity(v.Y) || ddouble.IsInfinity(v.Z));
         }
 
         public static bool IsNaN(Vector3D v) {

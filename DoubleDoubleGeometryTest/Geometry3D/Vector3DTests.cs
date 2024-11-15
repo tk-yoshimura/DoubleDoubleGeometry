@@ -1,4 +1,5 @@
-﻿using DoubleDouble;
+﻿using Algebra;
+using DoubleDouble;
 using DoubleDoubleGeometry.Geometry3D;
 
 namespace DoubleDoubleGeometryTest.Geometry3D {
@@ -11,6 +12,10 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(1.0, vector.X);
             Assert.AreEqual(2.0, vector.Y);
             Assert.AreEqual(3.0, vector.Z);
+
+            Assert.AreEqual(new Vector(1, 2, 3), (Vector)vector);
+
+            CollectionAssert.AreEqual(new ddouble[] { 1, 2, 3 }, (ddouble[])vector);
         }
 
         [TestMethod()]
@@ -24,13 +29,29 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(new Vector3D(5, 7, 9), vector1 + vector2);
             Assert.AreEqual(new Vector3D(-3, -3, -3), vector1 - vector2);
             Assert.AreEqual(new Vector3D(3, 3, 3), vector2 - vector1);
-            Assert.AreEqual(new Vector3D(2, 4, 6), vector1 * 2);
-            Assert.AreEqual(new Vector3D(2, 4, 6), 2 * vector1);
-            Assert.AreEqual(new Vector3D(0.5, 1, 1.5), vector1 / 2);
+            Assert.AreEqual(new Vector3D(2, 4, 6), vector1 * 2d);
+            Assert.AreEqual(new Vector3D(2, 4, 6), vector1 * (ddouble)2d);
+            Assert.AreEqual(new Vector3D(2, 4, 6), 2d * vector1);
+            Assert.AreEqual(new Vector3D(2, 4, 6), (ddouble)2d * vector1);
+            Assert.AreEqual(new Vector3D(0.5, 1, 1.5), vector1 / 2d);
+            Assert.AreEqual(new Vector3D(0.5, 1, 1.5), vector1 / (ddouble)2d);
 
             Assert.IsTrue(vector1 == vector3);
             Assert.IsFalse(vector2 == vector3);
             Assert.IsTrue(vector1 != vector2);
+        }
+
+        [TestMethod()]
+        public void TupleTest() {
+            Vector3D vector = (1, 2, 3);
+            (ddouble x, ddouble y, ddouble z) = vector;
+
+            Assert.AreEqual(1.0, vector.X);
+            Assert.AreEqual(2.0, vector.Y);
+            Assert.AreEqual(3.0, vector.Z);
+            Assert.AreEqual(1.0, x);
+            Assert.AreEqual(2.0, y);
+            Assert.AreEqual(3.0, z);
         }
 
         [TestMethod()]
@@ -72,7 +93,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
-        public void InnerProductTest() {
+        public void DotTest() {
             Vector3D vector1 = new(1, 2, 3);
             Vector3D vector2 = new(4, 6, 9);
 
@@ -92,9 +113,13 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         public void IsZeroTest() {
             Vector3D vector1 = new(0, 0, 1);
             Vector3D vector2 = Vector3D.Zero;
+            Vector3D vector3 = Vector3D.Invalid;
+            Vector3D vector4 = (ddouble.PositiveInfinity, ddouble.PositiveInfinity, ddouble.PositiveInfinity);
 
             Assert.IsFalse(Vector3D.IsZero(vector1));
             Assert.IsTrue(Vector3D.IsZero(vector2));
+            Assert.IsFalse(Vector3D.IsZero(vector3));
+            Assert.IsFalse(Vector3D.IsZero(vector4));
         }
 
         [TestMethod()]
@@ -102,10 +127,51 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Vector3D vector1 = new(0, 0, 1);
             Vector3D vector2 = Vector3D.Zero;
             Vector3D vector3 = Vector3D.Invalid;
+            Vector3D vector4 = (ddouble.PositiveInfinity, ddouble.PositiveInfinity, ddouble.PositiveInfinity);
 
             Assert.IsTrue(Vector3D.IsValid(vector1));
             Assert.IsTrue(Vector3D.IsValid(vector2));
             Assert.IsFalse(Vector3D.IsValid(vector3));
+            Assert.IsFalse(Vector3D.IsValid(vector4));
+        }
+
+        [TestMethod()]
+        public void IsNaNTest() {
+            Vector3D vector1 = new(0, 0, 1);
+            Vector3D vector2 = Vector3D.Zero;
+            Vector3D vector3 = Vector3D.Invalid;
+            Vector3D vector4 = (ddouble.PositiveInfinity, ddouble.PositiveInfinity, ddouble.PositiveInfinity);
+
+            Assert.IsFalse(Vector3D.IsNaN(vector1));
+            Assert.IsFalse(Vector3D.IsNaN(vector2));
+            Assert.IsTrue(Vector3D.IsNaN(vector3));
+            Assert.IsFalse(Vector3D.IsNaN(vector4));
+        }
+
+        [TestMethod()]
+        public void IsFiniteTest() {
+            Vector3D vector1 = new(0, 0, 1);
+            Vector3D vector2 = Vector3D.Zero;
+            Vector3D vector3 = Vector3D.Invalid;
+            Vector3D vector4 = (ddouble.PositiveInfinity, ddouble.PositiveInfinity, ddouble.PositiveInfinity);
+
+            Assert.IsTrue(Vector3D.IsFinite(vector1));
+            Assert.IsTrue(Vector3D.IsFinite(vector2));
+            Assert.IsFalse(Vector3D.IsFinite(vector3));
+            Assert.IsFalse(Vector3D.IsFinite(vector4));
+        }
+
+        [TestMethod()]
+        public void IsInfinityTest() {
+            Vector3D vector1 = new(0, 0, 1);
+            Vector3D vector2 = Vector3D.Zero;
+            Vector3D vector3 = Vector3D.Invalid;
+            Vector3D vector4 = (ddouble.PositiveInfinity, ddouble.PositiveInfinity, ddouble.PositiveInfinity);
+
+            Assert.IsFalse(Vector3D.IsInfinity(vector1));
+            Assert.IsFalse(Vector3D.IsInfinity(vector2));
+            Assert.IsFalse(Vector3D.IsInfinity(vector3));
+            Assert.IsTrue(Vector3D.IsInfinity(vector4));
         }
 
         [TestMethod()]

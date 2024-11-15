@@ -156,7 +156,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static bool IsInfinity(Vector2D v) {
-            return !IsFinite(v);
+            return !IsNaN(v) && (ddouble.IsInfinity(v.X) || ddouble.IsInfinity(v.Y));
         }
 
         public static bool IsNaN(Vector2D v) {

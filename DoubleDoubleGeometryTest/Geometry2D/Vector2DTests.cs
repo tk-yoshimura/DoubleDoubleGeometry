@@ -1,4 +1,6 @@
-﻿using DoubleDouble;
+﻿using Algebra;
+using DoubleDouble;
+using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
@@ -10,6 +12,10 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
             Assert.AreEqual(1.0, vector.X);
             Assert.AreEqual(2.0, vector.Y);
+
+            Assert.AreEqual(new Vector(1, 2), (Vector)vector);
+
+            CollectionAssert.AreEqual(new ddouble[] { 1, 2 }, (ddouble[])vector);
         }
 
         [TestMethod()]
@@ -23,13 +29,33 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Assert.AreEqual(new Vector2D(4, 6), vector1 + vector2);
             Assert.AreEqual(new Vector2D(-2, -2), vector1 - vector2);
             Assert.AreEqual(new Vector2D(2, 2), vector2 - vector1);
-            Assert.AreEqual(new Vector2D(2, 4), vector1 * 2);
-            Assert.AreEqual(new Vector2D(2, 4), 2 * vector1);
-            Assert.AreEqual(new Vector2D(0.5, 1), vector1 / 2);
+            Assert.AreEqual(new Vector2D(2, 4), vector1 * 2d);
+            Assert.AreEqual(new Vector2D(2, 4), vector1 * (ddouble)2d);
+            Assert.AreEqual(new Vector2D(2, 4), 2d * vector1);
+            Assert.AreEqual(new Vector2D(2, 4), (ddouble)2d * vector1);
+            Assert.AreEqual(new Vector2D(0.5, 1), vector1 / 2d);
+            Assert.AreEqual(new Vector2D(0.5, 1), vector1 / (ddouble)2d);
+
+            Assert.AreEqual(new Vector2D(3, 8), vector1 * vector2);
+            Assert.AreEqual(new Vector2D(9, 16), vector2 * vector2);
+            Assert.AreEqual(new Vector2D(3, 2), vector2 / vector1);
+
+            Assert.AreEqual(new Vector2D(-4, 3), Complex.ImaginaryOne * vector2);
 
             Assert.IsTrue(vector1 == vector3);
             Assert.IsFalse(vector2 == vector3);
             Assert.IsTrue(vector1 != vector2);
+        }
+
+        [TestMethod()]
+        public void TupleTest() {
+            Vector2D vector = (1, 2);
+            (ddouble x, ddouble y) = vector;
+
+            Assert.AreEqual(1.0, vector.X);
+            Assert.AreEqual(2.0, vector.Y);
+            Assert.AreEqual(1.0, x);
+            Assert.AreEqual(2.0, y);
         }
 
         [TestMethod()]
@@ -82,10 +108,12 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Vector2D vector1 = new(1, 2);
             Vector2D vector2 = Vector2D.Zero;
             Vector2D vector3 = Vector2D.Invalid;
+            Vector2D vector4 = (ddouble.PositiveInfinity, ddouble.PositiveInfinity);
 
             Assert.IsFalse(Vector2D.IsZero(vector1));
             Assert.IsTrue(Vector2D.IsZero(vector2));
             Assert.IsFalse(Vector2D.IsZero(vector3));
+            Assert.IsFalse(Vector2D.IsZero(vector4));
         }
 
         [TestMethod()]
@@ -93,10 +121,51 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Vector2D vector1 = new(1, 2);
             Vector2D vector2 = Vector2D.Zero;
             Vector2D vector3 = Vector2D.Invalid;
+            Vector2D vector4 = (ddouble.PositiveInfinity, ddouble.PositiveInfinity);
 
             Assert.IsTrue(Vector2D.IsValid(vector1));
             Assert.IsTrue(Vector2D.IsValid(vector2));
             Assert.IsFalse(Vector2D.IsValid(vector3));
+            Assert.IsFalse(Vector2D.IsValid(vector4));
+        }
+
+        [TestMethod()]
+        public void IsNaNTest() {
+            Vector2D vector1 = new(1, 2);
+            Vector2D vector2 = Vector2D.Zero;
+            Vector2D vector3 = Vector2D.Invalid;
+            Vector2D vector4 = (ddouble.PositiveInfinity, ddouble.PositiveInfinity);
+
+            Assert.IsFalse(Vector2D.IsNaN(vector1));
+            Assert.IsFalse(Vector2D.IsNaN(vector2));
+            Assert.IsTrue(Vector2D.IsNaN(vector3));
+            Assert.IsFalse(Vector2D.IsNaN(vector4));
+        }
+
+        [TestMethod()]
+        public void IsFiniteTest() {
+            Vector2D vector1 = new(1, 2);
+            Vector2D vector2 = Vector2D.Zero;
+            Vector2D vector3 = Vector2D.Invalid;
+            Vector2D vector4 = (ddouble.PositiveInfinity, ddouble.PositiveInfinity);
+
+            Assert.IsTrue(Vector2D.IsFinite(vector1));
+            Assert.IsTrue(Vector2D.IsFinite(vector2));
+            Assert.IsFalse(Vector2D.IsFinite(vector3));
+            Assert.IsFalse(Vector2D.IsFinite(vector4));
+        }
+
+        [TestMethod()]
+        public void IsInfinityTest() {
+            Vector2D vector1 = new(1, 2);
+            Vector2D vector2 = Vector2D.Zero;
+            Vector2D vector3 = Vector2D.Invalid;
+            Vector2D vector4 = (ddouble.PositiveInfinity, ddouble.PositiveInfinity);
+
+            Assert.IsFalse(Vector2D.IsInfinity(vector1));
+            Assert.IsFalse(Vector2D.IsInfinity(vector2));
+            Assert.IsFalse(Vector2D.IsInfinity(vector3));
+            Assert.IsTrue(Vector2D.IsInfinity(vector4));
         }
 
         [TestMethod()]
