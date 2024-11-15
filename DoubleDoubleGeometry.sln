@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35506.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoubleDoubleGeometry", "DoubleDoubleGeometry\DoubleDoubleGeometry.csproj", "{3110ACA0-385A-453B-AE66-835F0EE4B06D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoubleDoubleGeometryTest", "DoubleDoubleGeometryTest\DoubleDoubleGeometryTest.csproj", "{9422E0CB-BC6E-45A4-9FC3-AC494C340469}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3110ACA0-385A-453B-AE66-835F0EE4B06D} = {3110ACA0-385A-453B-AE66-835F0EE4B06D}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3110ACA0-385A-453B-AE66-835F0EE4B06D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3110ACA0-385A-453B-AE66-835F0EE4B06D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3110ACA0-385A-453B-AE66-835F0EE4B06D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3110ACA0-385A-453B-AE66-835F0EE4B06D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9422E0CB-BC6E-45A4-9FC3-AC494C340469}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9422E0CB-BC6E-45A4-9FC3-AC494C340469}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9422E0CB-BC6E-45A4-9FC3-AC494C340469}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9422E0CB-BC6E-45A4-9FC3-AC494C340469}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {907F0ED5-17B2-43C3-BF76-70AB0722481B}
+	EndGlobalSection
+EndGlobal
