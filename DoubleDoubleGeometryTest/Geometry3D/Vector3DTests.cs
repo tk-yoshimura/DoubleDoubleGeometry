@@ -1,5 +1,6 @@
 ﻿using Algebra;
 using DoubleDouble;
+using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry3D;
 
 namespace DoubleDoubleGeometryTest.Geometry3D {
@@ -39,6 +40,13 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.IsTrue(vector1 == vector3);
             Assert.IsFalse(vector2 == vector3);
             Assert.IsTrue(vector1 != vector2);
+
+            Quaternion q = (11, 9, 2, 7);
+
+            Quaternion qvq = q * Vector3D.ToQuaternion(vector2) * q.Conj;
+            Quaternion qvq_conc = Vector3D.ToQuaternion(q * vector2);
+
+            Assert.AreEqual(qvq, qvq_conc);
         }
 
         [TestMethod()]

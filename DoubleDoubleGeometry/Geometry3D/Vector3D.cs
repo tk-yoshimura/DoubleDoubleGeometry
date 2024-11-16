@@ -86,22 +86,17 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return y;
         }
 
-        public static Quaternion operator *(Quaternion q, Vector3D v) {
+        public static Vector3D operator *(Quaternion q, Vector3D v) {
             ddouble r = -q.I * v.X - q.J * v.Y - q.K * v.Z;
             ddouble i = +q.R * v.X + q.J * v.Z - q.K * v.Y;
             ddouble j = +q.R * v.Y - q.I * v.Z + q.K * v.X;
             ddouble k = +q.R * v.Z + q.I * v.Y - q.J * v.X;
 
-            return new Quaternion(r, i, j, k);
-        }
+            ddouble x = i * q.R - r * q.I + k * q.J - j * q.K;
+            ddouble y = j * q.R - k * q.I - r * q.J + i * q.K;
+            ddouble z = k * q.R + j * q.I - i * q.J - r * q.K;
 
-        public static Quaternion operator *(Vector3D v, Quaternion q) {
-            ddouble r = -v.X * q.I - v.Y * q.J - v.Z * q.K;
-            ddouble i = +v.X * q.R + v.Y * q.K - v.Z * q.J;
-            ddouble j = -v.X * q.K + v.Y * q.R + v.Z * q.I;
-            ddouble k = +v.X * q.J - v.Y * q.I + v.Z * q.R;
-
-            return new Quaternion(r, i, j, k);
+            return new Vector3D(x, y, z);
         }
 
         public static Vector3D operator /(Vector3D v1, Vector3D v2) {
@@ -139,6 +134,8 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public static implicit operator ddouble[](Vector3D v) {
             return [v.X, v.Y, v.Z];
         }
+
+        public static Quaternion ToQuaternion(Vector3D v) => (0d, v.X, v.Y, v.Z);
 
         public void Deconstruct(out ddouble x, out ddouble y, out ddouble z)
             => (x, y, z) = (X, Y, Z);
