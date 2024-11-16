@@ -225,7 +225,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return new Matrix3D(xx, xy, xz, yx, yy, yz, zx, zy, zz);
         }
 
-        public static Matrix3D Scale(double sx, double sy, double sz) {
+        public static Matrix3D Scale(ddouble sx, ddouble sy, ddouble sz) {
             return new Matrix3D(sx, 0d, 0d, 0d, sy, 0d, 0d, 0d, sz);
         }
 
