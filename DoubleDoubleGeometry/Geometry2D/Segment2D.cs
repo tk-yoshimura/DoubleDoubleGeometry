@@ -1,9 +1,13 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
+using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DoubleDoubleGeometry.Geometry2D {
-    public class Segment2D : IGeometry<Segment2D, Vector2D> {
+
+    [DebuggerDisplay("{ToString(),nq}")]
+    public class Segment2D : IGeometry<Segment2D, Vector2D>, IFormattable {
         public readonly Vector2D V0, V1;
 
         public Segment2D(Vector2D v0, Vector2D v1) {
@@ -117,6 +121,22 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static bool IsValid(Segment2D g) {
             return IsFinite(g) && g.V0 != g.V1;
+        }
+
+        public override string ToString() {
+            return $"{V0}, {V1}";
+        }
+
+        public string ToString([AllowNull] string format, [AllowNull] IFormatProvider formatProvider) {
+            if (string.IsNullOrWhiteSpace(format)) {
+                return ToString();
+            }
+
+            return $"{V0.ToString(format)}, {V1.ToString(format)}";
+        }
+
+        public string ToString(string format) {
+            return ToString(format, null);
         }
 
         public override bool Equals(object obj) {

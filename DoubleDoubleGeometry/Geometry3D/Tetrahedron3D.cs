@@ -1,10 +1,13 @@
 ﻿using DoubleDouble;
+using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 
-    public class Tetrahedron3D : IGeometry<Tetrahedron3D, Vector3D> {
+    [DebuggerDisplay("{ToString(),nq}")]
+    public class Tetrahedron3D : IGeometry<Tetrahedron3D, Vector3D>, IFormattable {
         public readonly Vector3D V0, V1, V2, V3;
 
         public Tetrahedron3D(Vector3D v0, Vector3D v1, Vector3D v2, Vector3D v3) {
@@ -134,6 +137,22 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static bool IsValid(Tetrahedron3D g) {
             return IsFinite(g) && g.V0 != g.V1 && g.V0 != g.V2 && g.V0 != g.V3 && g.V1 != g.V2 && g.V1 != g.V3 && g.V2 != g.V3;
+        }
+
+        public override string ToString() {
+            return $"{V0}, {V1}, {V2}, {V3}";
+        }
+
+        public string ToString([AllowNull] string format, [AllowNull] IFormatProvider formatProvider) {
+            if (string.IsNullOrWhiteSpace(format)) {
+                return ToString();
+            }
+
+            return $"{V0.ToString(format)}, {V1.ToString(format)}, {V2.ToString(format)}, {V3.ToString(format)}";
+        }
+
+        public string ToString(string format) {
+            return ToString(format, null);
         }
 
         public override bool Equals(object obj) {

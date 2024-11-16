@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DoubleDoubleGeometry.Geometry2D {
+
     [DebuggerDisplay("{ToString(),nq}")]
     public class Line2D : IGeometry<Line2D, Vector2D>, IFormattable {
         public readonly Vector2D Origin, Direction;
@@ -19,7 +20,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
             if (ddouble.Abs(a) >= ddouble.Abs(b)) {
                 return new Line2D((-c / a, 0d), dir);
             }
-            else { 
+            else {
                 return new Line2D((0d, -c / b), dir);
             }
         }

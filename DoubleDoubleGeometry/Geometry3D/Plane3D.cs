@@ -1,10 +1,12 @@
 ﻿using DoubleDouble;
-using DoubleDoubleGeometry.Geometry2D;
+using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 
-    public class Plane3D : IGeometry<Plane3D, Vector3D> {
+    [DebuggerDisplay("{ToString(),nq}")]
+    public class Plane3D : IGeometry<Plane3D, Vector3D>, IFormattable {
         public readonly Vector3D Normal;
         public readonly ddouble D;
 
@@ -147,6 +149,22 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static bool IsValid(Plane3D g) {
             return IsFinite(g) && !Vector3D.IsZero(g.Normal);
+        }
+
+        public override string ToString() {
+            return $"normal={Normal}, d={D}";
+        }
+
+        public string ToString([AllowNull] string format, [AllowNull] IFormatProvider formatProvider) {
+            if (string.IsNullOrWhiteSpace(format)) {
+                return ToString();
+            }
+
+            return $"normal={Normal.ToString(format)}, d={D.ToString(format)}";
+        }
+
+        public string ToString(string format) {
+            return ToString(format, null);
         }
 
         public override bool Equals(object obj) {

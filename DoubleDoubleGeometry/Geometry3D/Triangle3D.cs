@@ -1,10 +1,13 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
+using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 
-    public class Triangle3D : IGeometry<Triangle3D, Vector3D> {
+    [DebuggerDisplay("{ToString(),nq}")]
+    public class Triangle3D : IGeometry<Triangle3D, Vector3D>, IFormattable {
         public readonly Vector3D V0, V1, V2;
 
         public Triangle3D(Vector3D v0, Vector3D v1, Vector3D v2) {
@@ -126,6 +129,22 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static bool IsValid(Triangle3D g) {
             return IsFinite(g) && g.V0 != g.V1 && g.V1 != g.V2 && g.V2 != g.V0;
+        }
+
+        public override string ToString() {
+            return $"{V0}, {V1}, {V2}";
+        }
+
+        public string ToString([AllowNull] string format, [AllowNull] IFormatProvider formatProvider) {
+            if (string.IsNullOrWhiteSpace(format)) {
+                return ToString();
+            }
+
+            return $"{V0.ToString(format)}, {V1.ToString(format)}, {V2.ToString(format)}";
+        }
+
+        public string ToString(string format) {
+            return ToString(format, null);
         }
 
         public override bool Equals(object obj) {

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DoubleDoubleGeometry.Geometry2D {
+
     [DebuggerDisplay("{ToString(),nq}")]
     public class Circle2D : IGeometry<Circle2D, Vector2D>, IFormattable {
         public readonly Vector2D Center;

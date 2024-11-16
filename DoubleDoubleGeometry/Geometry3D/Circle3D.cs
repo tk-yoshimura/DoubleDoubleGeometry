@@ -1,8 +1,12 @@
 ﻿using DoubleDouble;
+using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DoubleDoubleGeometry.Geometry3D {
-    public class Circle3D {
+
+    [DebuggerDisplay("{ToString(),nq}")]
+    public class Circle3D : IGeometry<Circle3D, Vector3D>, IFormattable {
         public readonly Vector3D Center, Normal;
         public readonly ddouble Radius;
 
@@ -145,6 +149,22 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static bool IsValid(Circle3D g) {
             return IsFinite(g) && !Vector3D.IsZero(g.Normal) && g.Radius >= 0d;
+        }
+
+        public override string ToString() {
+            return $"center={Center}, normal={Normal}, radius={Radius}";
+        }
+
+        public string ToString([AllowNull] string format, [AllowNull] IFormatProvider formatProvider) {
+            if (string.IsNullOrWhiteSpace(format)) {
+                return ToString();
+            }
+
+            return $"center={Center.ToString(format)}, normal={Normal.ToString(format)}, radius={Radius.ToString(format)}";
+        }
+
+        public string ToString(string format) {
+            return ToString(format, null);
         }
 
         public override bool Equals(object obj) {

@@ -1,9 +1,12 @@
 ﻿using DoubleDouble;
+using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 
-    public class Sphere3D : IGeometry<Sphere3D, Vector3D> {
+    [DebuggerDisplay("{ToString(),nq}")]
+    public class Sphere3D : IGeometry<Sphere3D, Vector3D>, IFormattable {
         public readonly Vector3D Center;
         public readonly ddouble Radius;
 
@@ -128,6 +131,22 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static bool IsValid(Sphere3D g) {
             return IsFinite(g) && g.Radius >= 0d;
+        }
+
+        public override string ToString() {
+            return $"center={Center}, radius={Radius}";
+        }
+
+        public string ToString([AllowNull] string format, [AllowNull] IFormatProvider formatProvider) {
+            if (string.IsNullOrWhiteSpace(format)) {
+                return ToString();
+            }
+
+            return $"center={Center.ToString(format)}, radius={Radius.ToString(format)}";
+        }
+
+        public string ToString(string format) {
+            return ToString(format, null);
         }
 
         public override bool Equals(object obj) {

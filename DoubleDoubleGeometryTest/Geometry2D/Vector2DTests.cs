@@ -2,7 +2,6 @@
 using DoubleDouble;
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
-using DoubleDoubleGeometry.Geometry3D;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
     [TestClass()]

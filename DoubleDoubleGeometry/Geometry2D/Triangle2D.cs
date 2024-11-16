@@ -1,9 +1,13 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
+using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DoubleDoubleGeometry.Geometry2D {
-    public class Triangle2D : IGeometry<Triangle2D, Vector2D> {
+
+    [DebuggerDisplay("{ToString(),nq}")]
+    public class Triangle2D : IGeometry<Triangle2D, Vector2D>, IFormattable {
         public readonly Vector2D V0, V1, V2;
 
         public Triangle2D(Vector2D v0, Vector2D v1, Vector2D v2) {
@@ -125,6 +129,22 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static bool IsValid(Triangle2D g) {
             return IsFinite(g) && g.V0 != g.V1 && g.V1 != g.V2 && g.V2 != g.V0;
+        }
+
+        public override string ToString() {
+            return $"{V0}, {V1}, {V2}";
+        }
+
+        public string ToString([AllowNull] string format, [AllowNull] IFormatProvider formatProvider) {
+            if (string.IsNullOrWhiteSpace(format)) {
+                return ToString();
+            }
+
+            return $"{V0.ToString(format)}, {V1.ToString(format)}, {V2.ToString(format)}";
+        }
+
+        public string ToString(string format) {
+            return ToString(format, null);
         }
 
         public override bool Equals(object obj) {

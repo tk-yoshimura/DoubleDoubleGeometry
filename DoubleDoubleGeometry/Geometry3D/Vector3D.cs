@@ -1,7 +1,6 @@
 ﻿using Algebra;
 using DoubleDouble;
 using DoubleDoubleComplex;
-using DoubleDoubleGeometry.Geometry2D;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;

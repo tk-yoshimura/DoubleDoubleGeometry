@@ -1,10 +1,13 @@
 ﻿using DoubleDouble;
+using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 
-    public class Line3D : IGeometry<Line3D, Vector3D> {
+    [DebuggerDisplay("{ToString(),nq}")]
+    public class Line3D : IGeometry<Line3D, Vector3D>, IFormattable {
         public readonly Vector3D Origin, Direction;
 
         private Line3D(Vector3D origin, Vector3D direction) {
@@ -129,6 +132,22 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static bool IsValid(Line3D g) {
             return IsFinite(g) && Vector3D.IsFinite(g.Direction) && !Vector3D.IsZero(g.Direction);
+        }
+
+        public override string ToString() {
+            return $"origin={Origin}, direction={Direction}";
+        }
+
+        public string ToString([AllowNull] string format, [AllowNull] IFormatProvider formatProvider) {
+            if (string.IsNullOrWhiteSpace(format)) {
+                return ToString();
+            }
+
+            return $"origin={Origin.ToString(format)}, direction={Direction.ToString(format)}";
+        }
+
+        public string ToString(string format) {
+            return ToString(format, null);
         }
 
         public override bool Equals(object obj) {
