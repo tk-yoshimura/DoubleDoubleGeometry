@@ -27,7 +27,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
             ddouble ed_inner_product = Vector2D.Dot(ev, dv);
 
-            if (v == 0d) {
+            if (ddouble.IsZero(v)) {
                 ddouble t = ed_inner_product / dv_sqnorm;
 
                 Vector2D v1 = line.Origin + t * line.Direction;
@@ -44,6 +44,16 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
                 return [v1, v2];
             }
+        }
+
+        public static Vector2D[] CircleCircle(Circle2D circle1, Circle2D circle2) {
+            (ddouble a, ddouble b) = 2d * (circle1.Center - circle2.Center);
+            ddouble c = circle1.Radius * circle1.Radius - circle2.Radius * circle2.Radius
+                      - circle1.Center.SquareNorm + circle2.Center.SquareNorm;
+
+            Line2D line = Line2D.FromImplicitFormula(a, b, c);
+
+            return CircleLine(circle1, line);
         }
     }
 }

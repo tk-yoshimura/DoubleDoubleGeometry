@@ -1,6 +1,7 @@
 ﻿using Algebra;
 using DoubleDouble;
 using DoubleDoubleComplex;
+using DoubleDoubleGeometry.Geometry2D;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -185,6 +186,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 ) * ddouble.Sqrt(v2_norm / v1_norm);
             }
         }
+
+        public static int MaxAbsIndex(Vector3D v) =>
+            ddouble.Abs(v.X) >= ddouble.Abs(v.Y)
+            ? (ddouble.Abs(v.X) >= ddouble.Abs(v.Z) ? 0 : 2)
+            : (ddouble.Abs(v.Y) >= ddouble.Abs(v.Z) ? 1 : 2);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Vector3D Zero { get; } = new(0d, 0d, 0d);

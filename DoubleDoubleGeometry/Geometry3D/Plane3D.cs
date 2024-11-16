@@ -1,4 +1,5 @@
 ﻿using DoubleDouble;
+using DoubleDoubleGeometry.Geometry2D;
 using System.Diagnostics;
 
 namespace DoubleDoubleGeometry.Geometry3D {
@@ -19,6 +20,13 @@ namespace DoubleDoubleGeometry.Geometry3D {
         private Plane3D(Vector3D normal, ddouble d) {
             this.Normal = normal;
             this.D = d;
+        }
+
+        public static Plane3D FromImplicitFormula(ddouble a, ddouble b, ddouble c, ddouble d) {
+            Vector3D normal = new(a, b, c);
+            ddouble norm = normal.Norm;
+
+            return new Plane3D(normal / norm, d / norm);
         }
 
         public static Plane3D FromIntercept(Vector3D normal, ddouble d) {

@@ -1,8 +1,11 @@
 ﻿using DoubleDouble;
+using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DoubleDoubleGeometry.Geometry2D {
-    public class Circle2D : IGeometry<Circle2D, Vector2D> {
+    [DebuggerDisplay("{ToString(),nq}")]
+    public class Circle2D : IGeometry<Circle2D, Vector2D>, IFormattable {
         public readonly Vector2D Center;
         public readonly ddouble Radius;
 
@@ -136,6 +139,22 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static bool IsValid(Circle2D g) {
             return IsFinite(g) && g.Radius >= 0d;
+        }
+
+        public override string ToString() {
+            return $"center={Center}, radius={Radius}";
+        }
+
+        public string ToString([AllowNull] string format, [AllowNull] IFormatProvider formatProvider) {
+            if (string.IsNullOrWhiteSpace(format)) {
+                return ToString();
+            }
+
+            return $"center={Center.ToString(format)}, radius={Radius.ToString(format)}";
+        }
+
+        public string ToString(string format) {
+            return ToString(format, null);
         }
 
         public override bool Equals(object obj) {

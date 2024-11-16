@@ -2,6 +2,7 @@
 using DoubleDouble;
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
+using DoubleDoubleGeometry.Geometry3D;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
     [TestClass()]
@@ -101,6 +102,16 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Vector2D vector2 = new(4, -6);
 
             Assert.AreEqual(-8.0, Vector2D.Dot(vector1, vector2));
+        }
+
+        [TestMethod()]
+        public void MaxAbsIndexTest() {
+            Assert.AreEqual(0, Vector2D.MaxAbsIndex((2, 1)));
+            Assert.AreEqual(1, Vector2D.MaxAbsIndex((1, 2)));
+            Assert.AreEqual(0, Vector2D.MaxAbsIndex((-2, -1)));
+            Assert.AreEqual(1, Vector2D.MaxAbsIndex((-1, -2)));
+            Assert.AreEqual(0, Vector2D.MaxAbsIndex((-2, 1)));
+            Assert.AreEqual(1, Vector2D.MaxAbsIndex((1, -2)));
         }
 
         [TestMethod()]

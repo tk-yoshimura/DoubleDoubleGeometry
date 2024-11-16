@@ -47,7 +47,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
             Vector3D pvec = Vector3D.Cross(dir, ev), qvec;
             ddouble det = Vector3D.Dot(eu, pvec);
 
-            if (det > 0) {
+            if (det > 0d) {
                 Vector3D tvec = line.Origin - triangle.V0;
                 ddouble inv_u = Vector3D.Dot(tvec, pvec);
                 if (inv_u < 0d || inv_u > det) {
@@ -60,7 +60,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                     return Vector3D.Invalid;
                 }
             }
-            else if (det < 0) {
+            else if (det < 0d) {
                 Vector3D tvec = line.Origin - triangle.V0;
                 ddouble inv_u = Vector3D.Dot(tvec, pvec);
                 if (inv_u > 0d || inv_u < det) {
@@ -101,11 +101,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
             ddouble c = otoc.SquareNorm - sphere.Radius * sphere.Radius;
             ddouble v = b * b - 4d * c;
 
-            if (!(v >= 0)) {
+            if (!(v >= 0d)) {
                 return [];
             }
 
-            if (v == 0) {
+            if (ddouble.IsZero(v)) {
                 ddouble t = -0.5d * b;
                 Vector3D v1 = line.Origin + t * line.Direction;
 
@@ -126,7 +126,9 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
             Vector3D line_dir = Vector3D.Cross(plane1.Normal, plane2.Normal).Normal;
 
-            if (line_dir.X != 0d) {
+            int index = Vector3D.MaxAbsIndex(line_dir);
+
+            if (index == 0) {
                 ddouble inv = 1d / line_dir.X;
 
                 Vector3D line_org = new(
@@ -137,8 +139,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
                 return Line3D.FromDirection(line_org, line_dir);
             }
-
-            if (line_dir.Y != 0d) {
+            else if (index == 1) {
                 ddouble inv = 1d / line_dir.Y;
 
                 Vector3D line_org = new(
@@ -149,8 +150,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
                 return Line3D.FromDirection(line_org, line_dir);
             }
-
-            if (line_dir.Z != 0d) {
+            else {
                 ddouble inv = 1d / line_dir.Z;
 
                 Vector3D line_org = new(
@@ -161,8 +161,6 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
                 return Line3D.FromDirection(line_org, line_dir);
             }
-
-            return Line3D.Invalid;
         }
 
         public static Circle3D PlaneSphere(Plane3D plane, Sphere3D sphere) {

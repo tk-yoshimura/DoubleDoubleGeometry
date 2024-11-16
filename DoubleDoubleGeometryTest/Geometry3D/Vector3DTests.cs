@@ -118,6 +118,22 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void MaxAbsIndexTest() {
+            Assert.AreEqual(0, Vector3D.MaxAbsIndex((3, 1, 2)));
+            Assert.AreEqual(0, Vector3D.MaxAbsIndex((3, 2, 1)));
+            Assert.AreEqual(1, Vector3D.MaxAbsIndex((1, 3, 2)));
+            Assert.AreEqual(1, Vector3D.MaxAbsIndex((2, 3, 1)));
+            Assert.AreEqual(2, Vector3D.MaxAbsIndex((1, 2, 3)));
+            Assert.AreEqual(2, Vector3D.MaxAbsIndex((2, 1, 3)));
+            Assert.AreEqual(0, Vector3D.MaxAbsIndex((-3, -1, -2)));
+            Assert.AreEqual(0, Vector3D.MaxAbsIndex((-3, -2, -1)));
+            Assert.AreEqual(1, Vector3D.MaxAbsIndex((-1, -3, -2)));
+            Assert.AreEqual(1, Vector3D.MaxAbsIndex((-2, -3, -1)));
+            Assert.AreEqual(2, Vector3D.MaxAbsIndex((-1, -2, -3)));
+            Assert.AreEqual(2, Vector3D.MaxAbsIndex((-2, -1, -3)));
+        }
+
+        [TestMethod()]
         public void IsZeroTest() {
             Vector3D vector1 = new(0, 0, 1);
             Vector3D vector2 = Vector3D.Zero;

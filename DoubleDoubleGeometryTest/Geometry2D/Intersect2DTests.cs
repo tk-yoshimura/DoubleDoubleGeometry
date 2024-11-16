@@ -1,4 +1,5 @@
-﻿using DoubleDoubleGeometry.Geometry2D;
+﻿using DoubleDouble;
+using DoubleDoubleGeometry.Geometry2D;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
     [TestClass()]
@@ -22,6 +23,23 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
             Vector2DAssert.AreEqual(new Vector2D(6, 7), cross[0], 1e-30);
             Vector2DAssert.AreEqual(new Vector2D(9, 16), cross[1], 1e-30);
+        }
+
+        [TestMethod()]
+        public void CircleCircleTest() {
+            Vector2D[] cross1 = Intersect2D.CircleCircle(((0, 1), 5), ((4, 3), ddouble.Sqrt(5)));
+            Vector2D[] cross2 = Intersect2D.CircleCircle(((6, 12), 5), ((7, 12), 3));
+            Vector2D[] cross3 = Intersect2D.CircleCircle(((0, 0), 5), ((0, 2), 3));
+
+            Assert.AreEqual(2, cross1.Length);
+            Vector2DAssert.AreEqual((5, 1), cross1[0], 1e-30);
+            Vector2DAssert.AreEqual((3, 5), cross1[1], 1e-30);
+
+            Assert.AreEqual(0, cross2.Length);
+
+            Assert.AreEqual(1, cross3.Length);
+
+            Vector2DAssert.AreEqual((0, 5), cross3[0], 1e-30);
         }
     }
 }

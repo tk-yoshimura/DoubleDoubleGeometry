@@ -1,13 +1,27 @@
 ﻿using DoubleDouble;
+using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DoubleDoubleGeometry.Geometry2D {
-    public class Line2D : IGeometry<Line2D, Vector2D> {
+    [DebuggerDisplay("{ToString(),nq}")]
+    public class Line2D : IGeometry<Line2D, Vector2D>, IFormattable {
         public readonly Vector2D Origin, Direction;
 
         private Line2D(Vector2D origin, Vector2D direction) {
             this.Origin = origin;
             this.Direction = direction;
+        }
+
+        public static Line2D FromImplicitFormula(ddouble a, ddouble b, ddouble c) {
+            Vector2D dir = new Vector2D(b, -a).Normal;
+
+            if (ddouble.Abs(a) >= ddouble.Abs(b)) {
+                return new Line2D((-c / a, 0d), dir);
+            }
+            else { 
+                return new Line2D((0d, -c / b), dir);
+            }
         }
 
         public static Line2D FromDirection(Vector2D origin, Vector2D direction) {
@@ -121,6 +135,22 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static bool IsValid(Line2D g) {
             return IsFinite(g) && Vector2D.IsFinite(g.Direction) && !Vector2D.IsZero(g.Direction);
+        }
+
+        public override string ToString() {
+            return $"origin={Origin}, direction={Direction}";
+        }
+
+        public string ToString([AllowNull] string format, [AllowNull] IFormatProvider formatProvider) {
+            if (string.IsNullOrWhiteSpace(format)) {
+                return ToString();
+            }
+
+            return $"origin={Origin.ToString(format)}, direction={Direction.ToString(format)}";
+        }
+
+        public string ToString(string format) {
+            return ToString(format, null);
         }
 
         public override bool Equals(object obj) {

@@ -158,6 +158,8 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return v1.X * v2.X + v1.Y * v2.Y;
         }
 
+        public static int MaxAbsIndex(Vector2D v) => ddouble.Abs(v.X) >= ddouble.Abs(v.Y) ? 0 : 1;
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Vector2D Zero { get; } = new(0d, 0d);
 
