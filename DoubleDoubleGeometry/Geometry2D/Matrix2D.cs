@@ -1,4 +1,5 @@
-﻿using DoubleDouble;
+﻿using Algebra;
+using DoubleDouble;
 using DoubleDoubleComplex;
 using System;
 using System.Diagnostics;
@@ -25,6 +26,17 @@ namespace DoubleDoubleGeometry.Geometry2D {
             this.E01 = -c.I;
             this.E10 = c.I;
             this.E11 = c.R;
+        }
+
+        public Matrix2D(Matrix m) {
+            if (m.Shape != (2, 2)) {
+                throw new ArgumentException("invalid shape", nameof(m));
+            }
+
+            this.E00 = m[0, 0];
+            this.E01 = m[0, 1];
+            this.E10 = m[1, 0];
+            this.E11 = m[1, 1];
         }
 
         public static Matrix2D Transpose(Matrix2D m) {
@@ -137,11 +149,15 @@ namespace DoubleDoubleGeometry.Geometry2D {
             ddouble.NaN, ddouble.NaN
         );
 
-        public static implicit operator Algebra.Matrix(Matrix2D m) {
+        public static implicit operator Matrix(Matrix2D m) {
             return new ddouble[,] {
                 { m.E00, m.E01 },
                 { m.E10, m.E11 }
             };
+        }
+
+        public static implicit operator Matrix2D(Matrix m) {
+            return new(m);
         }
 
         public static implicit operator ddouble[,](Matrix2D m) {

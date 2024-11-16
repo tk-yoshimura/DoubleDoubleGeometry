@@ -1,4 +1,6 @@
-﻿using DoubleDouble;
+﻿using Algebra;
+using DoubleDouble;
+using DoubleDoubleGeometry.Geometry2D;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -50,6 +52,29 @@ namespace DoubleDoubleGeometry.Geometry3D {
             this.E31 = e31;
             this.E32 = e32;
             this.E33 = e33;
+        }
+
+        public HomogeneousMatrix3D(Matrix m) {
+            if (m.Shape != (4, 4)) {
+                throw new ArgumentException("invalid shape", nameof(m));
+            }
+
+            this.E00 = m[0, 0];
+            this.E01 = m[0, 1];
+            this.E02 = m[0, 2];
+            this.E03 = m[0, 3];
+            this.E10 = m[1, 0];
+            this.E11 = m[1, 1];
+            this.E12 = m[1, 2];
+            this.E13 = m[1, 3];
+            this.E20 = m[2, 0];
+            this.E21 = m[2, 1];
+            this.E22 = m[2, 2];
+            this.E23 = m[2, 3];
+            this.E30 = m[3, 0];
+            this.E31 = m[3, 1];
+            this.E32 = m[3, 2];
+            this.E33 = m[3, 3];
         }
 
         public static HomogeneousMatrix3D Transpose(HomogeneousMatrix3D m) {
@@ -175,13 +200,17 @@ namespace DoubleDoubleGeometry.Geometry3D {
             ddouble.NaN, ddouble.NaN, ddouble.NaN, ddouble.NaN
         );
 
-        public static implicit operator Algebra.Matrix(HomogeneousMatrix3D m) {
+        public static implicit operator Matrix(HomogeneousMatrix3D m) {
             return new ddouble[,] {
                 { m.E00, m.E01, m.E02, m.E03 },
                 { m.E10, m.E11, m.E12, m.E13 },
                 { m.E20, m.E21, m.E22, m.E23 },
                 { m.E30, m.E31, m.E32, m.E33 },
             };
+        }
+
+        public static implicit operator HomogeneousMatrix3D(Matrix m) {
+            return new(m);
         }
 
         public static implicit operator ddouble[,](HomogeneousMatrix3D m) {

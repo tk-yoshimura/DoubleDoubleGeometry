@@ -1,4 +1,6 @@
-﻿using DoubleDouble;
+﻿using Algebra;
+using DoubleDouble;
+using DoubleDoubleGeometry.Geometry2D;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -23,6 +25,22 @@ namespace DoubleDoubleGeometry.Geometry3D {
             this.E20 = e20;
             this.E21 = e21;
             this.E22 = e22;
+        }
+
+        public Matrix3D(Matrix m) {
+            if (m.Shape != (3, 3)) {
+                throw new ArgumentException("invalid shape", nameof(m));
+            }
+
+            this.E00 = m[0, 0];
+            this.E01 = m[0, 1];
+            this.E02 = m[0, 2];
+            this.E10 = m[1, 0];
+            this.E11 = m[1, 1];
+            this.E12 = m[1, 2];
+            this.E20 = m[2, 0];
+            this.E21 = m[2, 1];
+            this.E22 = m[2, 2];
         }
 
         public static Matrix3D Transpose(Matrix3D m) {
@@ -187,12 +205,16 @@ namespace DoubleDoubleGeometry.Geometry3D {
             ddouble.NaN, ddouble.NaN, ddouble.NaN
         );
 
-        public static implicit operator Algebra.Matrix(Matrix3D m) {
+        public static implicit operator Matrix(Matrix3D m) {
             return new ddouble[,] {
                 { m.E00, m.E01, m.E02 },
                 { m.E10, m.E11, m.E12 },
                 { m.E20, m.E21, m.E22 }
             };
+        }
+
+        public static implicit operator Matrix3D(Matrix m) {
+            return new(m);
         }
 
         public static implicit operator ddouble[,](Matrix3D m) {

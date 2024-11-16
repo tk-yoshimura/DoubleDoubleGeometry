@@ -1,4 +1,5 @@
-﻿using DoubleDouble;
+﻿using Algebra;
+using DoubleDouble;
 using DoubleDoubleComplex;
 using System;
 using System.Diagnostics;
@@ -14,6 +15,16 @@ namespace DoubleDoubleGeometry.Geometry3D {
             this.X = x;
             this.Y = y;
             this.Z = z;
+        }
+
+        public Vector3D(Vector v) {
+            if (v.Dim != 3) {
+                throw new ArgumentException("invalid dim", nameof(v));
+            }
+
+            this.X = v[0];
+            this.Y = v[1];
+            this.Z = v[2];
         }
 
         public ddouble Norm => ddouble.Hypot(X, Y, Z);
@@ -127,8 +138,12 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return (v.X, v.Y, v.Z);
         }
 
-        public static implicit operator Algebra.Vector(Vector3D v) {
+        public static implicit operator Vector(Vector3D v) {
             return new(v.X, v.Y, v.Z);
+        }
+
+        public static implicit operator Vector3D(Vector v) {
+            return new(v);
         }
 
         public static implicit operator ddouble[](Vector3D v) {

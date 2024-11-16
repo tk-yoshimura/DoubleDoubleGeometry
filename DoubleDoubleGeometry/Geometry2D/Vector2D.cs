@@ -1,5 +1,7 @@
-﻿using DoubleDouble;
+﻿using Algebra;
+using DoubleDouble;
 using DoubleDoubleComplex;
+using DoubleDoubleGeometry.Geometry3D;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -13,6 +15,15 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public Vector2D(ddouble x, ddouble y) {
             this.X = x;
             this.Y = y;
+        }
+
+        public Vector2D(Vector v) {
+            if (v.Dim != 2) {
+                throw new ArgumentException("invalid dim", nameof(v));
+            }
+
+            this.X = v[0];
+            this.Y = v[1];
         }
 
         public ddouble Norm => ddouble.Hypot(X, Y);
@@ -118,13 +129,19 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return (v.X, v.Y);
         }
 
-        public static implicit operator Algebra.Vector(Vector2D v) {
+        public static implicit operator Vector(Vector2D v) {
             return new(v.X, v.Y);
+        }
+
+        public static implicit operator Vector2D(Vector v) {
+            return new(v);
         }
 
         public static implicit operator ddouble[](Vector2D v) {
             return [v.X, v.Y];
         }
+
+        public static Complex ToComplex(Vector3D v) => (v.X, v.Y);
 
         public void Deconstruct(out ddouble x, out ddouble y)
             => (x, y) = (X, Y);
