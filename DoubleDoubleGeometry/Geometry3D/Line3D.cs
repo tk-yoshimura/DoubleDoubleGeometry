@@ -1,5 +1,6 @@
 ﻿using DoubleDouble;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 
@@ -67,24 +68,30 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return new(g.Origin / r, g.Direction * double.Sign(r));
         }
 
-        public static Line3D operator *(Matrix3D matrix, Line3D line) {
-            Vector3D v0 = matrix * line.Origin, v1 = matrix * (line.Origin + line.Direction);
+        public static Line3D operator *(Matrix3D m, Line3D g) {
+            Vector3D v0 = m * g.Origin, v1 = m * (g.Origin + g.Direction);
 
             return FromIntersection(v0, v1);
         }
 
-        public static Line3D operator *(HomogeneousMatrix3D matrix, Line3D line) {
-            Vector3D v0 = matrix * line.Origin, v1 = matrix * (line.Origin + line.Direction);
+        public static Line3D operator *(HomogeneousMatrix3D m, Line3D g) {
+            Vector3D v0 = m * g.Origin, v1 = m * (g.Origin + g.Direction);
 
             return FromIntersection(v0, v1);
         }
 
-        public static bool operator ==(Line3D t1, Line3D t2) {
-            return (t1.Origin == t2.Origin) && (t1.Direction == t2.Direction);
+        public static Line3D operator *(Quaternion q, Line3D g) {
+            Vector3D v0 = q * g.Origin, v1 = q * (g.Origin + g.Direction);
+
+            return FromIntersection(v0, v1);
         }
 
-        public static bool operator !=(Line3D t1, Line3D t2) {
-            return !(t1 == t2);
+        public static bool operator ==(Line3D g1, Line3D g2) {
+            return (g1.Origin == g2.Origin) && (g1.Direction == g2.Direction);
+        }
+
+        public static bool operator !=(Line3D g1, Line3D g2) {
+            return !(g1 == g2);
         }
 
         public static implicit operator Line3D((Vector3D v0, Vector3D v1) g) {

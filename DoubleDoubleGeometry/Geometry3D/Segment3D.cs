@@ -1,5 +1,6 @@
 ﻿using DoubleDouble;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 
@@ -68,6 +69,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static Segment3D operator *(HomogeneousMatrix3D m, Segment3D g) {
             return new Segment3D(m * g.V0, m * g.V1);
+        }
+
+        public static Segment3D operator *(Quaternion q, Segment3D g) {
+            return new Segment3D(q * g.V0, q * g.V1);
         }
 
         public static bool operator ==(Segment3D g1, Segment3D g2) {

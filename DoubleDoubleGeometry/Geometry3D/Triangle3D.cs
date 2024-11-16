@@ -1,4 +1,5 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
 using System.Diagnostics;
 
 namespace DoubleDoubleGeometry.Geometry3D {
@@ -76,6 +77,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static Triangle3D operator *(HomogeneousMatrix3D m, Triangle3D g) {
             return new Triangle3D(m * g.V0, m * g.V1, m * g.V2);
+        }
+
+        public static Triangle3D operator *(Quaternion q, Triangle3D g) {
+            return new Triangle3D(q * g.V0, q * g.V1, q * g.V2);
         }
 
         public static bool operator ==(Triangle3D g1, Triangle3D g2) {

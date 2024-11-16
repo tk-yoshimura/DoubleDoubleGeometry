@@ -89,12 +89,12 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return new(g.Center / r, g.Radius / r);
         }
 
-        public static bool operator ==(Circle2D t1, Circle2D t2) {
-            return (t1.Center == t2.Center) && (t1.Radius == t2.Radius);
+        public static bool operator ==(Circle2D g1, Circle2D g2) {
+            return (g1.Center == g2.Center) && (g1.Radius == g2.Radius);
         }
 
-        public static bool operator !=(Circle2D t1, Circle2D t2) {
-            return !(t1 == t2);
+        public static bool operator !=(Circle2D g1, Circle2D g2) {
+            return !(g1 == g2);
         }
 
         public static implicit operator Circle2D((Vector2D center, ddouble radius) g) {

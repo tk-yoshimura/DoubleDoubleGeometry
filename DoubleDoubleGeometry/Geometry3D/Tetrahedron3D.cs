@@ -1,5 +1,6 @@
 ﻿using DoubleDouble;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 
@@ -84,6 +85,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static Tetrahedron3D operator *(HomogeneousMatrix3D m, Tetrahedron3D g) {
             return new Tetrahedron3D(m * g.V0, m * g.V1, m * g.V2, m * g.V3);
+        }
+
+        public static Tetrahedron3D operator *(Quaternion q, Tetrahedron3D g) {
+            return new Tetrahedron3D(q * g.V0, q * g.V1, q * g.V2, q * g.V3);
         }
 
         public static bool operator ==(Tetrahedron3D g1, Tetrahedron3D g2) {

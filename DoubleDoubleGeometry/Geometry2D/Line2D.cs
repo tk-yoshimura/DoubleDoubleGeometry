@@ -66,24 +66,24 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return new(g.Origin / r, g.Direction * double.Sign(r));
         }
 
-        public static Line2D operator *(Matrix2D matrix, Line2D line) {
-            Vector2D v0 = matrix * line.Origin, v1 = matrix * (line.Origin + line.Direction);
+        public static Line2D operator *(Matrix2D m, Line2D g) {
+            Vector2D v0 = m * g.Origin, v1 = m * (g.Origin + g.Direction);
 
             return FromIntersection(v0, v1);
         }
 
-        public static Line2D operator *(HomogeneousMatrix2D matrix, Line2D line) {
-            Vector2D v0 = matrix * line.Origin, v1 = matrix * (line.Origin + line.Direction);
+        public static Line2D operator *(HomogeneousMatrix2D m, Line2D g) {
+            Vector2D v0 = m * g.Origin, v1 = m * (g.Origin + g.Direction);
 
             return FromIntersection(v0, v1);
         }
 
-        public static bool operator ==(Line2D t1, Line2D t2) {
-            return (t1.Origin == t2.Origin) && (t1.Direction == t2.Direction);
+        public static bool operator ==(Line2D g1, Line2D g2) {
+            return (g1.Origin == g2.Origin) && (g1.Direction == g2.Direction);
         }
 
-        public static bool operator !=(Line2D t1, Line2D t2) {
-            return !(t1 == t2);
+        public static bool operator !=(Line2D g1, Line2D g2) {
+            return !(g1 == g2);
         }
 
         public static implicit operator Line2D((Vector2D v0, Vector2D v1) g) {

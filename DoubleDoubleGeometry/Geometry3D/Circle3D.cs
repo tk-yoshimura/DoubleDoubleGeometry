@@ -98,12 +98,12 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return new(g.Center / r, g.Normal, g.Radius / r, 0);
         }
 
-        public static bool operator ==(Circle3D t1, Circle3D t2) {
-            return (t1.Center == t2.Center) && (t1.Normal == t2.Normal) && (t1.Radius == t2.Radius);
+        public static bool operator ==(Circle3D g1, Circle3D g2) {
+            return (g1.Center == g2.Center) && (g1.Normal == g2.Normal) && (g1.Radius == g2.Radius);
         }
 
-        public static bool operator !=(Circle3D t1, Circle3D t2) {
-            return !(t1 == t2);
+        public static bool operator !=(Circle3D g1, Circle3D g2) {
+            return !(g1 == g2);
         }
 
         public static implicit operator Circle3D((Vector3D center, Vector3D normal, ddouble radius) g) {
