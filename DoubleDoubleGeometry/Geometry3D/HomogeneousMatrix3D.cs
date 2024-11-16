@@ -215,10 +215,13 @@ namespace DoubleDoubleGeometry.Geometry3D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Det => ((Matrix)this).Det;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static HomogeneousMatrix3D Zero { get; } = new(0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d);
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static HomogeneousMatrix3D Identity { get; } = new(1d, 0d, 0d, 0d, 1d, 0d, 0d, 0d, 1d);
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static HomogeneousMatrix3D Invalid { get; } = new(
             ddouble.NaN, ddouble.NaN, ddouble.NaN, ddouble.NaN,
             ddouble.NaN, ddouble.NaN, ddouble.NaN, ddouble.NaN,
