@@ -186,6 +186,29 @@ namespace DoubleDoubleGeometry.Geometry3D {
             }
         }
 
+        public static Vector3D ScaleB(Vector3D v, int n) {
+            return new(ddouble.Ldexp(v.X, n), ddouble.Ldexp(v.Y, n), ddouble.Ldexp(v.Z, n));
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public int MaxExponent {
+            get {
+                int max_exponent = int.MinValue + 1; // abs(int.minvalue) throw arithmetic exception
+
+                if (ddouble.IsFinite(X)) {
+                    max_exponent = int.Max(ddouble.ILogB(X), max_exponent);
+                }
+                if (ddouble.IsFinite(Y)) {
+                    max_exponent = int.Max(ddouble.ILogB(Y), max_exponent);
+                }
+                if (ddouble.IsFinite(Z)) {
+                    max_exponent = int.Max(ddouble.ILogB(Z), max_exponent);
+                }
+
+                return max_exponent;
+            }
+        }
+
         public static int MaxAbsIndex(Vector3D v) =>
             ddouble.Abs(v.X) >= ddouble.Abs(v.Y)
             ? (ddouble.Abs(v.X) >= ddouble.Abs(v.Z) ? 0 : 2)

@@ -21,5 +21,9 @@ namespace DoubleDoubleGeometry {
         static abstract ddouble SquareDistance(TSelf v1, TSelf v2);
 
         static abstract ddouble Dot(TSelf v1, TSelf v2);
+
+        static abstract TSelf ScaleB(TSelf v, int n);
+
+        int MaxExponent { get; }
     }
 }

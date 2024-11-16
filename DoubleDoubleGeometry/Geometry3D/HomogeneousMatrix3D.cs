@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace DoubleDoubleGeometry.Geometry3D {
 
     [DebuggerDisplay("{ToString(),nq}")]
-    public class HomogeneousMatrix3D : IFormattable {
+    public class HomogeneousMatrix3D : IMatrix<HomogeneousMatrix3D>, IFormattable {
         public readonly ddouble E00, E01, E02, E03, E10, E11, E12, E13, E20, E21, E22, E23, E30, E31, E32, E33;
 
         public HomogeneousMatrix3D(
@@ -87,6 +87,13 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public HomogeneousMatrix3D T => Transpose(this);
+
+        public static HomogeneousMatrix3D Invert(HomogeneousMatrix3D m) {
+            return ((Matrix)m).Inverse;
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public HomogeneousMatrix3D Inverse => Invert(this);
 
         public static HomogeneousMatrix3D operator +(HomogeneousMatrix3D m) {
             return m;
@@ -188,6 +195,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return new HomogeneousMatrix3D(1, 0, 0, mx, 0, 1, 0, my, 0, 0, 1, mz, 0, 0, 0, 1);
         }
 
+        public static ddouble Det(HomogeneousMatrix3D m) {
+            return ((Matrix)m).Det;
+        }
+
         public static HomogeneousMatrix3D Zero { get; } = new(0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d);
 
         public static HomogeneousMatrix3D Identity { get; } = new(1d, 0d, 0d, 0d, 1d, 0d, 0d, 0d, 1d);
@@ -221,6 +232,117 @@ namespace DoubleDoubleGeometry.Geometry3D {
             };
         }
 
+        public static HomogeneousMatrix3D ScaleB(HomogeneousMatrix3D v, int n) {
+            return new(
+                ddouble.Ldexp(v.E00, n), ddouble.Ldexp(v.E01, n), ddouble.Ldexp(v.E02, n), ddouble.Ldexp(v.E03, n),
+                ddouble.Ldexp(v.E10, n), ddouble.Ldexp(v.E11, n), ddouble.Ldexp(v.E12, n), ddouble.Ldexp(v.E13, n),
+                ddouble.Ldexp(v.E20, n), ddouble.Ldexp(v.E21, n), ddouble.Ldexp(v.E22, n), ddouble.Ldexp(v.E23, n),
+                ddouble.Ldexp(v.E30, n), ddouble.Ldexp(v.E31, n), ddouble.Ldexp(v.E32, n), ddouble.Ldexp(v.E33, n)
+            );
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public int MaxExponent {
+            get {
+                int max_exponent = int.MinValue + 1; // abs(int.minvalue) throw arithmetic exception
+
+                if (ddouble.IsFinite(E00)) {
+                    max_exponent = int.Max(ddouble.ILogB(E00), max_exponent);
+                }
+                if (ddouble.IsFinite(E01)) {
+                    max_exponent = int.Max(ddouble.ILogB(E01), max_exponent);
+                }
+                if (ddouble.IsFinite(E02)) {
+                    max_exponent = int.Max(ddouble.ILogB(E02), max_exponent);
+                }
+                if (ddouble.IsFinite(E03)) {
+                    max_exponent = int.Max(ddouble.ILogB(E03), max_exponent);
+                }
+                if (ddouble.IsFinite(E10)) {
+                    max_exponent = int.Max(ddouble.ILogB(E10), max_exponent);
+                }
+                if (ddouble.IsFinite(E11)) {
+                    max_exponent = int.Max(ddouble.ILogB(E11), max_exponent);
+                }
+                if (ddouble.IsFinite(E12)) {
+                    max_exponent = int.Max(ddouble.ILogB(E12), max_exponent);
+                }
+                if (ddouble.IsFinite(E13)) {
+                    max_exponent = int.Max(ddouble.ILogB(E13), max_exponent);
+                }
+                if (ddouble.IsFinite(E20)) {
+                    max_exponent = int.Max(ddouble.ILogB(E20), max_exponent);
+                }
+                if (ddouble.IsFinite(E21)) {
+                    max_exponent = int.Max(ddouble.ILogB(E21), max_exponent);
+                }
+                if (ddouble.IsFinite(E22)) {
+                    max_exponent = int.Max(ddouble.ILogB(E22), max_exponent);
+                }
+                if (ddouble.IsFinite(E23)) {
+                    max_exponent = int.Max(ddouble.ILogB(E23), max_exponent);
+                }
+                if (ddouble.IsFinite(E30)) {
+                    max_exponent = int.Max(ddouble.ILogB(E30), max_exponent);
+                }
+                if (ddouble.IsFinite(E31)) {
+                    max_exponent = int.Max(ddouble.ILogB(E31), max_exponent);
+                }
+                if (ddouble.IsFinite(E32)) {
+                    max_exponent = int.Max(ddouble.ILogB(E32), max_exponent);
+                }
+                if (ddouble.IsFinite(E33)) {
+                    max_exponent = int.Max(ddouble.ILogB(E33), max_exponent);
+                }
+
+                return max_exponent;
+            }
+        }
+
+        public static bool IsZero(HomogeneousMatrix3D m) {
+            return
+                ddouble.IsZero(m.E00) && ddouble.IsZero(m.E01) && ddouble.IsZero(m.E02) && ddouble.IsZero(m.E03) &&
+                ddouble.IsZero(m.E10) && ddouble.IsZero(m.E11) && ddouble.IsZero(m.E12) && ddouble.IsZero(m.E13) &&
+                ddouble.IsZero(m.E20) && ddouble.IsZero(m.E21) && ddouble.IsZero(m.E22) && ddouble.IsZero(m.E23) &&
+                ddouble.IsZero(m.E30) && ddouble.IsZero(m.E31) && ddouble.IsZero(m.E32) && ddouble.IsZero(m.E33);
+        }
+
+        public static bool IsFinite(HomogeneousMatrix3D m) {
+            return
+                ddouble.IsFinite(m.E00) && ddouble.IsFinite(m.E01) && ddouble.IsFinite(m.E02) && ddouble.IsFinite(m.E03) &&
+                ddouble.IsFinite(m.E10) && ddouble.IsFinite(m.E11) && ddouble.IsFinite(m.E12) && ddouble.IsFinite(m.E13) &&
+                ddouble.IsFinite(m.E20) && ddouble.IsFinite(m.E21) && ddouble.IsFinite(m.E22) && ddouble.IsFinite(m.E23) &&
+                ddouble.IsFinite(m.E30) && ddouble.IsFinite(m.E31) && ddouble.IsFinite(m.E32) && ddouble.IsFinite(m.E33);
+        }
+
+        public static bool IsInfinity(HomogeneousMatrix3D m) {
+            return !IsNaN(m) && (
+                ddouble.IsInfinity(m.E00) || ddouble.IsInfinity(m.E01) || ddouble.IsInfinity(m.E02) || ddouble.IsInfinity(m.E03) ||
+                ddouble.IsInfinity(m.E10) || ddouble.IsInfinity(m.E11) || ddouble.IsInfinity(m.E12) || ddouble.IsInfinity(m.E13) ||
+                ddouble.IsInfinity(m.E20) || ddouble.IsInfinity(m.E21) || ddouble.IsInfinity(m.E22) || ddouble.IsInfinity(m.E23) ||
+                ddouble.IsInfinity(m.E30) || ddouble.IsInfinity(m.E31) || ddouble.IsInfinity(m.E32) || ddouble.IsInfinity(m.E33));
+        }
+
+        public static bool IsNaN(HomogeneousMatrix3D m) {
+            return
+                ddouble.IsNaN(m.E00) || ddouble.IsNaN(m.E01) || ddouble.IsNaN(m.E02) || ddouble.IsNaN(m.E03) ||
+                ddouble.IsNaN(m.E10) || ddouble.IsNaN(m.E11) || ddouble.IsNaN(m.E12) || ddouble.IsNaN(m.E13) ||
+                ddouble.IsNaN(m.E20) || ddouble.IsNaN(m.E21) || ddouble.IsNaN(m.E22) || ddouble.IsNaN(m.E23) ||
+                ddouble.IsNaN(m.E30) || ddouble.IsNaN(m.E31) || ddouble.IsNaN(m.E32) || ddouble.IsNaN(m.E33);
+        }
+
+        public static bool IsIdentity(HomogeneousMatrix3D m) {
+            return
+                m.E00 == 1d && m.E01 == 0d && m.E02 == 0d && m.E03 == 0d &&
+                m.E10 == 0d && m.E11 == 1d && m.E12 == 0d && m.E13 == 0d &&
+                m.E20 == 0d && m.E21 == 0d && m.E22 == 1d && m.E23 == 0d &&
+                m.E30 == 0d && m.E31 == 0d && m.E32 == 0d && m.E33 == 1d;
+        }
+
+        public static bool IsValid(HomogeneousMatrix3D v) {
+            return IsFinite(v);
+        }
+
         public override string ToString() {
             return
                 $"[[{E00}, {E01}, {E02}, {E03}], " +
@@ -247,6 +369,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public override bool Equals(object obj) {
             return (obj is not null) && obj is HomogeneousMatrix3D matrix && matrix == this;
+        }
+
+        public bool Equals(HomogeneousMatrix3D other) {
+            return ReferenceEquals(this, other) || (other is not null && other == this);
         }
 
         public override int GetHashCode() {

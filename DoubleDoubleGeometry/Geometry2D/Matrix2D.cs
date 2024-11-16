@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace DoubleDoubleGeometry.Geometry2D {
 
     [DebuggerDisplay("{ToString(),nq}")]
-    public class Matrix2D : IFormattable {
+    public class Matrix2D : IMatrix<Matrix2D>, IFormattable {
         public readonly ddouble E00, E01, E10, E11;
 
         public Matrix2D(
@@ -48,6 +48,19 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public Matrix2D T => Transpose(this);
+
+        public static Matrix2D Invert(Matrix2D m) {
+            int exponent = m.MaxExponent;
+            m = ScaleB(m, -exponent);
+
+            return new Matrix2D(
+                m.E11, -m.E01,
+                -m.E10, m.E00
+            ) / ddouble.Ldexp(Det(m), exponent);
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Matrix2D Inverse => Invert(this);
 
         public static Matrix2D operator +(Matrix2D m) {
             return m;
@@ -137,6 +150,12 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return new Matrix2D(sx, 0d, 0d, sy);
         }
 
+        public static ddouble Det(Matrix2D m) {
+            ddouble det = m.E00 * m.E11 - m.E01 * m.E10;
+
+            return det;
+        }
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Matrix2D Zero { get; } = new(0d, 0d, 0d, 0d);
 
@@ -167,6 +186,69 @@ namespace DoubleDoubleGeometry.Geometry2D {
             };
         }
 
+        public static Matrix2D ScaleB(Matrix2D v, int n) {
+            return new(
+                ddouble.Ldexp(v.E00, n), ddouble.Ldexp(v.E01, n),
+                ddouble.Ldexp(v.E10, n), ddouble.Ldexp(v.E11, n)
+            );
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public int MaxExponent {
+            get {
+                int max_exponent = int.MinValue + 1; // abs(int.minvalue) throw arithmetic exception
+
+                if (ddouble.IsFinite(E00)) {
+                    max_exponent = int.Max(ddouble.ILogB(E00), max_exponent);
+                }
+                if (ddouble.IsFinite(E01)) {
+                    max_exponent = int.Max(ddouble.ILogB(E01), max_exponent);
+                }
+                if (ddouble.IsFinite(E10)) {
+                    max_exponent = int.Max(ddouble.ILogB(E10), max_exponent);
+                }
+                if (ddouble.IsFinite(E11)) {
+                    max_exponent = int.Max(ddouble.ILogB(E11), max_exponent);
+                }
+
+                return max_exponent;
+            }
+        }
+
+        public static bool IsZero(Matrix2D m) {
+            return
+                ddouble.IsZero(m.E00) && ddouble.IsZero(m.E01) &&
+                ddouble.IsZero(m.E10) && ddouble.IsZero(m.E11);
+        }
+
+        public static bool IsFinite(Matrix2D m) {
+            return
+                ddouble.IsFinite(m.E00) && ddouble.IsFinite(m.E01) &&
+                ddouble.IsFinite(m.E10) && ddouble.IsFinite(m.E11);
+        }
+
+        public static bool IsInfinity(Matrix2D m) {
+            return !IsNaN(m) && (
+                ddouble.IsInfinity(m.E00) || ddouble.IsInfinity(m.E01) ||
+                ddouble.IsInfinity(m.E10) || ddouble.IsInfinity(m.E11));
+        }
+
+        public static bool IsNaN(Matrix2D m) {
+            return
+                ddouble.IsNaN(m.E00) || ddouble.IsNaN(m.E01) ||
+                ddouble.IsNaN(m.E10) || ddouble.IsNaN(m.E11);
+        }
+
+        public static bool IsIdentity(Matrix2D m) {
+            return
+                m.E00 == 1d && m.E01 == 0d &&
+                m.E10 == 0d && m.E11 == 1d;
+        }
+
+        public static bool IsValid(Matrix2D v) {
+            return IsFinite(v);
+        }
+
         public override string ToString() {
             return
                 $"[[{E00}, {E01}], " +
@@ -189,6 +271,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public override bool Equals(object obj) {
             return (obj is not null) && obj is Matrix2D matrix && matrix == this;
+        }
+
+        public bool Equals(Matrix2D other) {
+            return ReferenceEquals(this, other) || (other is not null && other == this);
         }
 
         public override int GetHashCode() {

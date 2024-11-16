@@ -1,4 +1,5 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry3D;
 
 namespace DoubleDoubleGeometryTest.Geometry3D {
@@ -17,6 +18,16 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(7, matrix1.E20);
             Assert.AreEqual(8, matrix1.E21);
             Assert.AreEqual(9, matrix1.E22);
+        }
+
+        [TestMethod()]
+        public void QuaternionTest() {
+            Quaternion q = (2, 3, 4, 5);
+            Vector3D v = (7, 6, 8);
+
+            Matrix3D m = new(q);
+
+            Vector3DAssert.AreEqual(q * v, m * v, 1e-30);
         }
 
         [TestMethod()]

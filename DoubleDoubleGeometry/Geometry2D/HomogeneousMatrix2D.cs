@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace DoubleDoubleGeometry.Geometry2D {
 
     [DebuggerDisplay("{ToString(),nq}")]
-    public class HomogeneousMatrix2D : IFormattable {
+    public class HomogeneousMatrix2D : IMatrix<HomogeneousMatrix2D>, IFormattable {
         public readonly ddouble E00, E01, E02, E10, E11, E12, E20, E21, E22;
 
         public HomogeneousMatrix2D(
@@ -65,6 +65,26 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public HomogeneousMatrix2D T => Transpose(this);
+
+        public static HomogeneousMatrix2D Invert(HomogeneousMatrix2D m) {
+            int exponent = m.MaxExponent;
+            m = ScaleB(m, -exponent);
+
+            return new HomogeneousMatrix2D(
+                m.E11 * m.E22 - m.E12 * m.E21,
+                m.E02 * m.E21 - m.E01 * m.E22,
+                m.E01 * m.E12 - m.E02 * m.E11,
+                m.E12 * m.E20 - m.E10 * m.E22,
+                m.E00 * m.E22 - m.E02 * m.E20,
+                m.E02 * m.E10 - m.E00 * m.E12,
+                m.E10 * m.E21 - m.E11 * m.E20,
+                m.E01 * m.E20 - m.E00 * m.E21,
+                m.E00 * m.E11 - m.E01 * m.E10
+            ) / ddouble.Ldexp(Det(m), exponent);
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public HomogeneousMatrix2D Inverse => Invert(this);
 
         public static HomogeneousMatrix2D operator +(HomogeneousMatrix2D m) {
             return m;
@@ -167,6 +187,15 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return new HomogeneousMatrix2D(1d, 0d, mx, 0d, 1d, my, 0d, 0d, 1d);
         }
 
+        public static ddouble Det(HomogeneousMatrix2D m) {
+            ddouble det =
+                m.E00 * (m.E11 * m.E22 - m.E21 * m.E12) +
+                m.E10 * (m.E21 * m.E02 - m.E01 * m.E22) +
+                m.E20 * (m.E01 * m.E12 - m.E11 * m.E02);
+
+            return det;
+        }
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static HomogeneousMatrix2D Zero { get; } = new(0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d);
 
@@ -200,6 +229,90 @@ namespace DoubleDoubleGeometry.Geometry2D {
             };
         }
 
+        public static HomogeneousMatrix2D ScaleB(HomogeneousMatrix2D v, int n) {
+            return new(
+                ddouble.Ldexp(v.E00, n), ddouble.Ldexp(v.E01, n), ddouble.Ldexp(v.E02, n),
+                ddouble.Ldexp(v.E10, n), ddouble.Ldexp(v.E11, n), ddouble.Ldexp(v.E12, n),
+                ddouble.Ldexp(v.E20, n), ddouble.Ldexp(v.E21, n), ddouble.Ldexp(v.E22, n)
+            );
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public int MaxExponent {
+            get {
+                int max_exponent = int.MinValue + 1; // abs(int.minvalue) throw arithmetic exception
+
+                if (ddouble.IsFinite(E00)) {
+                    max_exponent = int.Max(ddouble.ILogB(E00), max_exponent);
+                }
+                if (ddouble.IsFinite(E01)) {
+                    max_exponent = int.Max(ddouble.ILogB(E01), max_exponent);
+                }
+                if (ddouble.IsFinite(E02)) {
+                    max_exponent = int.Max(ddouble.ILogB(E02), max_exponent);
+                }
+                if (ddouble.IsFinite(E10)) {
+                    max_exponent = int.Max(ddouble.ILogB(E10), max_exponent);
+                }
+                if (ddouble.IsFinite(E11)) {
+                    max_exponent = int.Max(ddouble.ILogB(E11), max_exponent);
+                }
+                if (ddouble.IsFinite(E12)) {
+                    max_exponent = int.Max(ddouble.ILogB(E12), max_exponent);
+                }
+                if (ddouble.IsFinite(E20)) {
+                    max_exponent = int.Max(ddouble.ILogB(E20), max_exponent);
+                }
+                if (ddouble.IsFinite(E21)) {
+                    max_exponent = int.Max(ddouble.ILogB(E21), max_exponent);
+                }
+                if (ddouble.IsFinite(E22)) {
+                    max_exponent = int.Max(ddouble.ILogB(E22), max_exponent);
+                }
+
+                return max_exponent;
+            }
+        }
+
+        public static bool IsZero(HomogeneousMatrix2D m) {
+            return
+                ddouble.IsZero(m.E00) && ddouble.IsZero(m.E01) && ddouble.IsZero(m.E02) &&
+                ddouble.IsZero(m.E10) && ddouble.IsZero(m.E11) && ddouble.IsZero(m.E12) &&
+                ddouble.IsZero(m.E20) && ddouble.IsZero(m.E21) && ddouble.IsZero(m.E22);
+        }
+
+        public static bool IsFinite(HomogeneousMatrix2D m) {
+            return
+                ddouble.IsFinite(m.E00) && ddouble.IsFinite(m.E01) && ddouble.IsFinite(m.E02) &&
+                ddouble.IsFinite(m.E10) && ddouble.IsFinite(m.E11) && ddouble.IsFinite(m.E12) &&
+                ddouble.IsFinite(m.E20) && ddouble.IsFinite(m.E21) && ddouble.IsFinite(m.E22);
+        }
+
+        public static bool IsInfinity(HomogeneousMatrix2D m) {
+            return !IsNaN(m) && (
+                ddouble.IsInfinity(m.E00) || ddouble.IsInfinity(m.E01) || ddouble.IsInfinity(m.E02) ||
+                ddouble.IsInfinity(m.E10) || ddouble.IsInfinity(m.E11) || ddouble.IsInfinity(m.E12) ||
+                ddouble.IsInfinity(m.E20) || ddouble.IsInfinity(m.E21) || ddouble.IsInfinity(m.E22));
+        }
+
+        public static bool IsNaN(HomogeneousMatrix2D m) {
+            return
+                ddouble.IsNaN(m.E00) || ddouble.IsNaN(m.E01) || ddouble.IsFinite(m.E02) ||
+                ddouble.IsNaN(m.E10) || ddouble.IsNaN(m.E11) || ddouble.IsFinite(m.E12) ||
+                ddouble.IsNaN(m.E20) || ddouble.IsNaN(m.E21) || ddouble.IsFinite(m.E22);
+        }
+
+        public static bool IsIdentity(HomogeneousMatrix2D m) {
+            return
+                m.E00 == 1d && m.E01 == 0d && m.E02 == 0d &&
+                m.E10 == 0d && m.E11 == 1d && m.E12 == 0d &&
+                m.E20 == 0d && m.E21 == 0d && m.E22 == 1d;
+        }
+
+        public static bool IsValid(HomogeneousMatrix2D v) {
+            return IsFinite(v);
+        }
+
         public override string ToString() {
             return
                 $"[[{E00}, {E01}, {E02}], " +
@@ -224,6 +337,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public override bool Equals(object obj) {
             return (obj is not null) && obj is HomogeneousMatrix2D matrix && matrix == this;
+        }
+
+        public bool Equals(HomogeneousMatrix2D other) {
+            return ReferenceEquals(this, other) || (other is not null && other == this);
         }
 
         public override int GetHashCode() {
