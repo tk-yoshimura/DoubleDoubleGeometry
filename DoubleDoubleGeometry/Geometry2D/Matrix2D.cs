@@ -56,7 +56,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return new Matrix2D(
                 m.E11, -m.E01,
                 -m.E10, m.E00
-            ) / ddouble.Ldexp(Det(m), exponent);
+            ) / ddouble.Ldexp(m.Det, exponent);
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -150,10 +150,13 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return new Matrix2D(sx, 0d, 0d, sy);
         }
 
-        public static ddouble Det(Matrix2D m) {
-            ddouble det = m.E00 * m.E11 - m.E01 * m.E10;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Det {
+            get {
+                ddouble det = E00 * E11 - E01 * E10;
 
-            return det;
+                return det;
+            }
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

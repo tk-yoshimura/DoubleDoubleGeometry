@@ -1,5 +1,7 @@
-﻿using DoubleDouble;
+﻿using Algebra;
+using DoubleDouble;
 using DoubleDoubleGeometry.Geometry2D;
+using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
     [TestClass()]
@@ -19,6 +21,17 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Matrix2D matrix1 = new Matrix2D(1, 2, 3, 4).T;
 
             Assert.AreEqual(new Matrix2D(1, 3, 2, 4), matrix1);
+        }
+
+        [TestMethod()]
+        public void InverseTest() {
+            Matrix2D matrix1 = new Matrix2D(1, 2, 3, 4);
+            Matrix2D matrix2 = matrix1.Inverse.Inverse;
+
+            PrecisionAssert.AreEqual(matrix1.E00, matrix2.E00, 1e-30);
+            PrecisionAssert.AreEqual(matrix1.E01, matrix2.E01, 1e-30);
+            PrecisionAssert.AreEqual(matrix1.E10, matrix2.E10, 1e-30);
+            PrecisionAssert.AreEqual(matrix1.E11, matrix2.E11, 1e-30);
         }
 
         [TestMethod()]
@@ -96,6 +109,13 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Vector2D vector = new(1, 2);
 
             Assert.AreEqual(new Vector2D(2, 6), Matrix2D.Scale(2, 3) * vector);
+        }
+
+        [TestMethod()]
+        public void DetTest() {
+            Matrix2D matrix = new Matrix2D(5, 2, 3, 4);
+
+            PrecisionAssert.AreEqual(((Matrix)matrix).Det, matrix.Det, 1e-30);
         }
 
         [TestMethod()]

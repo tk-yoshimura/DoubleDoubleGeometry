@@ -25,7 +25,7 @@ namespace DoubleDoubleGeometry {
 
         static abstract TSelf ScaleB(TSelf m, int n);
 
-        static abstract ddouble Det(TSelf m);
+        ddouble Det { get; }
 
         int MaxExponent { get; }
 

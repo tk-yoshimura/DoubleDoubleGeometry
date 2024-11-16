@@ -85,7 +85,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 m.E10 * m.E21 - m.E11 * m.E20,
                 m.E01 * m.E20 - m.E00 * m.E21,
                 m.E00 * m.E11 - m.E01 * m.E10
-            ) / ddouble.Ldexp(Det(m), exponent);
+            ) / ddouble.Ldexp(m.Det, exponent);
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -229,13 +229,16 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return new Matrix3D(sx, 0d, 0d, 0d, sy, 0d, 0d, 0d, sz);
         }
 
-        public static ddouble Det(Matrix3D m) {
-            ddouble det =
-                m.E00 * (m.E11 * m.E22 - m.E21 * m.E12) +
-                m.E10 * (m.E21 * m.E02 - m.E01 * m.E22) +
-                m.E20 * (m.E01 * m.E12 - m.E11 * m.E02);
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Det {
+            get {
+                ddouble det =
+                    E00 * (E11 * E22 - E21 * E12) +
+                    E10 * (E21 * E02 - E01 * E22) +
+                    E20 * (E01 * E12 - E11 * E02);
 
-            return det;
+                return det;
+            }
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

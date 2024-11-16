@@ -80,7 +80,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
                 m.E10 * m.E21 - m.E11 * m.E20,
                 m.E01 * m.E20 - m.E00 * m.E21,
                 m.E00 * m.E11 - m.E01 * m.E10
-            ) / ddouble.Ldexp(Det(m), exponent);
+            ) / ddouble.Ldexp(m.Det, exponent);
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -187,13 +187,16 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return new HomogeneousMatrix2D(1d, 0d, mx, 0d, 1d, my, 0d, 0d, 1d);
         }
 
-        public static ddouble Det(HomogeneousMatrix2D m) {
-            ddouble det =
-                m.E00 * (m.E11 * m.E22 - m.E21 * m.E12) +
-                m.E10 * (m.E21 * m.E02 - m.E01 * m.E22) +
-                m.E20 * (m.E01 * m.E12 - m.E11 * m.E02);
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Det {
+            get {
+                ddouble det =
+                    E00 * (E11 * E22 - E21 * E12) +
+                    E10 * (E21 * E02 - E01 * E22) +
+                    E20 * (E01 * E12 - E11 * E02);
 
-            return det;
+                return det;
+            }
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

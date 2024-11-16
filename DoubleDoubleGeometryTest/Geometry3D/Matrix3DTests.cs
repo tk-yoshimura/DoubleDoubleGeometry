@@ -1,6 +1,8 @@
-﻿using DoubleDouble;
+﻿using Algebra;
+using DoubleDouble;
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry3D;
+using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry3D {
     [TestClass()]
@@ -35,6 +37,22 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Matrix3D matrix1 = new Matrix3D(1, 2, 3, 4, 5, 6, 7, 8, 9).T;
 
             Assert.AreEqual(new Matrix3D(1, 4, 7, 2, 5, 8, 3, 6, 9), matrix1);
+        }
+
+        [TestMethod()]
+        public void InverseTest() {
+            Matrix3D matrix1 = new Matrix3D(1, 2, 3, 4, 2, 6, 7, 8, 10);
+            Matrix3D matrix2 = matrix1.Inverse.Inverse;
+
+            PrecisionAssert.AreEqual(matrix1.E00, matrix2.E00, 1e-30);
+            PrecisionAssert.AreEqual(matrix1.E01, matrix2.E01, 1e-30);
+            PrecisionAssert.AreEqual(matrix1.E02, matrix2.E02, 1e-30);
+            PrecisionAssert.AreEqual(matrix1.E10, matrix2.E10, 1e-30);
+            PrecisionAssert.AreEqual(matrix1.E11, matrix2.E11, 1e-30);
+            PrecisionAssert.AreEqual(matrix1.E12, matrix2.E12, 1e-30);
+            PrecisionAssert.AreEqual(matrix1.E20, matrix2.E20, 1e-30);
+            PrecisionAssert.AreEqual(matrix1.E21, matrix2.E21, 1e-30);
+            PrecisionAssert.AreEqual(matrix1.E22, matrix2.E22, 1e-30);
         }
 
         [TestMethod()]
@@ -160,6 +178,13 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Vector3D vector = new(1, 2, 3);
 
             Assert.AreEqual(new Vector3D(2, 6, 12), Matrix3D.Scale(2, 3, 4) * vector);
+        }
+
+        [TestMethod()]
+        public void DetTest() {
+            Matrix3D matrix = new Matrix3D(5, 2, 3, 4, 2, 3, 1, 7, 9);
+
+            PrecisionAssert.AreEqual(((Matrix)matrix).Det, matrix.Det, 1e-30);
         }
 
         [TestMethod()]

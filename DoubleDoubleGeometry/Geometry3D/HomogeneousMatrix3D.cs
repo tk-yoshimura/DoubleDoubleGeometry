@@ -195,9 +195,8 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return new HomogeneousMatrix3D(1, 0, 0, mx, 0, 1, 0, my, 0, 0, 1, mz, 0, 0, 0, 1);
         }
 
-        public static ddouble Det(HomogeneousMatrix3D m) {
-            return ((Matrix)m).Det;
-        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Det => ((Matrix)this).Det;
 
         public static HomogeneousMatrix3D Zero { get; } = new(0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d);
 
