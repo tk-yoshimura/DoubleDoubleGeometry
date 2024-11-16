@@ -191,7 +191,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return new(m.E00, m.E01, m.E02, m.E10, m.E11, m.E12, m.E20, m.E21, m.E22);
         }
 
-        public static HomogeneousMatrix3D Move(double mx, double my, double mz) {
+        public static HomogeneousMatrix3D Move(ddouble mx, ddouble my, ddouble mz) {
             return new HomogeneousMatrix3D(1, 0, 0, mx, 0, 1, 0, my, 0, 0, 1, mz, 0, 0, 0, 1);
         }
 
