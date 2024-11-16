@@ -57,9 +57,9 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static HomogeneousMatrix2D Transpose(HomogeneousMatrix2D m) {
             return new HomogeneousMatrix2D(
-                m.E00, m.E10, m.E21,
+                m.E00, m.E10, m.E20,
                 m.E01, m.E11, m.E21,
-                m.E12, m.E12, m.E22
+                m.E02, m.E12, m.E22
             );
         }
 
@@ -116,17 +116,17 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static HomogeneousMatrix2D operator *(HomogeneousMatrix2D m1, HomogeneousMatrix2D m2) {
             return new HomogeneousMatrix2D(
-                m1.E00 * m2.E00 + m1.E01 * m2.E10 + m1.E02 * m2.E21,
+                m1.E00 * m2.E00 + m1.E01 * m2.E10 + m1.E02 * m2.E20,
                 m1.E00 * m2.E01 + m1.E01 * m2.E11 + m1.E02 * m2.E21,
-                m1.E00 * m2.E12 + m1.E01 * m2.E12 + m1.E02 * m2.E22,
+                m1.E00 * m2.E02 + m1.E01 * m2.E12 + m1.E02 * m2.E22,
 
-                m1.E10 * m2.E00 + m1.E11 * m2.E10 + m1.E12 * m2.E21,
+                m1.E10 * m2.E00 + m1.E11 * m2.E10 + m1.E12 * m2.E20,
                 m1.E10 * m2.E01 + m1.E11 * m2.E11 + m1.E12 * m2.E21,
-                m1.E10 * m2.E12 + m1.E11 * m2.E12 + m1.E12 * m2.E22,
+                m1.E10 * m2.E02 + m1.E11 * m2.E12 + m1.E12 * m2.E22,
 
-                m1.E20 * m2.E00 + m1.E21 * m2.E10 + m1.E22 * m2.E21,
+                m1.E20 * m2.E00 + m1.E21 * m2.E10 + m1.E22 * m2.E20,
                 m1.E20 * m2.E01 + m1.E21 * m2.E11 + m1.E22 * m2.E21,
-                m1.E20 * m2.E12 + m1.E21 * m2.E12 + m1.E22 * m2.E22
+                m1.E20 * m2.E02 + m1.E21 * m2.E12 + m1.E22 * m2.E22
             );
         }
 
