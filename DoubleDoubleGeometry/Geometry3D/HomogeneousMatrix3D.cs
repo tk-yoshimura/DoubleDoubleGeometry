@@ -150,6 +150,15 @@ namespace DoubleDoubleGeometry.Geometry3D {
             );
         }
 
+        public static HomogeneousMatrix3D operator *(ddouble r, HomogeneousMatrix3D m) {
+            return new HomogeneousMatrix3D(
+                m.E00 * r, m.E01 * r, m.E02 * r, m.E03 * r,
+                m.E10 * r, m.E11 * r, m.E12 * r, m.E13 * r,
+                m.E20 * r, m.E21 * r, m.E22 * r, m.E23 * r,
+                m.E30 * r, m.E31 * r, m.E32 * r, m.E33 * r
+            );
+        }
+
         public static HomogeneousMatrix3D operator *(double r, HomogeneousMatrix3D m) {
             return new HomogeneousMatrix3D(
                 m.E00 * r, m.E01 * r, m.E02 * r, m.E03 * r,
@@ -159,8 +168,16 @@ namespace DoubleDoubleGeometry.Geometry3D {
             );
         }
 
+        public static HomogeneousMatrix3D operator *(HomogeneousMatrix3D m, ddouble r) {
+            return r * m;
+        }
+
         public static HomogeneousMatrix3D operator *(HomogeneousMatrix3D m, double r) {
             return r * m;
+        }
+
+        public static HomogeneousMatrix3D operator /(HomogeneousMatrix3D m, ddouble r) {
+            return 1d / r * m;
         }
 
         public static HomogeneousMatrix3D operator /(HomogeneousMatrix3D m, double r) {
@@ -357,7 +374,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
             return
                 $"[[{E00.ToString(format)}, {E01.ToString(format)}, {E02.ToString(format)}, {E03.ToString(format)}], " +
-                $"[{E10.ToString(format)}, {E11.ToString(format)}, {E12.ToString(format)}, {E03.ToString(format)}], " +
+                $"[{E10.ToString(format)}, {E11.ToString(format)}, {E12.ToString(format)}, {E13.ToString(format)}], " +
                 $"[{E20.ToString(format)}, {E21.ToString(format)}, {E22.ToString(format)}, {E23.ToString(format)}], " +
                 $"[{E30.ToString(format)}, {E31.ToString(format)}, {E32.ToString(format)}, {E33.ToString(format)}]]";
         }
