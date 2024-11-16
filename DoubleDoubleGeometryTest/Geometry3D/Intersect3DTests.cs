@@ -68,7 +68,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Vector3D v1 = new(1, 0, 0), v2 = new(0, 1, 0), v3 = new(0, 0, 1);
             Vector3D v4 = new Vector3D(1, 2, 3) / 6, v5 = new(1, -0.1, -0.1);
 
-            Circle3D circle = Circle3D.Circum(new Triangle3D(matrix * v1, matrix * v2, matrix * v3));
+            Circle3D circle = Circle3D.FromCircum(new Triangle3D(matrix * v1, matrix * v2, matrix * v3));
 
             Vector3D cross1 = Intersect3D.LineCircle(matrix * Line3D.FromDirection(Vector3D.Zero, v4), circle);
 
@@ -103,9 +103,9 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         public void PlanePlaneTest() {
             Vector3D v1 = new(-1, 2, 4), v2 = new(1, 2, 4), v3 = new(1, -2, -1), v4 = new(1, 2, 3);
 
-            Plane3D plane_xy = new(new Vector3D(0, 0, 1), Vector3D.Zero);
-            Plane3D plane_yz = new(new Vector3D(1, 0, 0), Vector3D.Zero);
-            Plane3D plane_zx = new(new Vector3D(0, 1, 0), Vector3D.Zero);
+            Plane3D plane_xy = Plane3D.FromNormal(new Vector3D(0, 0, 1), Vector3D.Zero);
+            Plane3D plane_yz = Plane3D.FromNormal(new Vector3D(1, 0, 0), Vector3D.Zero);
+            Plane3D plane_zx = Plane3D.FromNormal(new Vector3D(0, 1, 0), Vector3D.Zero);
 
             Plane3D plane1 = Plane3D.FromIntersection(v1, v2, v3);
             Plane3D plane2 = Plane3D.FromIntersection(v1, v2, v4);
@@ -124,7 +124,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Vector3D v0 = matrix * Vector3D.Zero, v1 = matrix * new Vector3D(1, 0, 0), v2 = matrix * new Vector3D(0, 1, 0), v3 = matrix * new Vector3D(0, 0, 1);
 
             Plane3D plane = Plane3D.FromIntersection(v1, v2, v3);
-            Circle3D circle = Circle3D.Circum(new Triangle3D(v1, v2, v3));
+            Circle3D circle = Circle3D.FromCircum(new Triangle3D(v1, v2, v3));
             Sphere3D sphere = new(v0, 1);
 
             Circle3D cross = Intersect3D.PlaneSphere(plane, sphere);

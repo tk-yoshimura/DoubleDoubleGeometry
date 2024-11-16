@@ -19,7 +19,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         public void CircumTest() {
             Vector2D v0 = new(3, 9), v1 = new(4, 2), v2 = new(12, 6);
 
-            Circle2D circle = Circle2D.Circum(new Triangle2D(v0, v1, v2));
+            Circle2D circle = Circle2D.FromCircum(new Triangle2D(v0, v1, v2));
 
             Vector2DAssert.AreEqual(new Vector2D(7, 6), circle.Center, 1e-30);
             PrecisionAssert.AreEqual(5, circle.Radius, 1e-30);
@@ -29,7 +29,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         public void IncircleTest() {
             Vector2D v0 = new(2, 1), v1 = new(6, 1), v2 = new(6, 4);
 
-            Circle2D circle = Circle2D.Incircle(new Triangle2D(v0, v1, v2));
+            Circle2D circle = Circle2D.FromIncircle(new Triangle2D(v0, v1, v2));
 
             Vector2DAssert.AreEqual(new Vector2D(5, 2), circle.Center, 1e-30);
             PrecisionAssert.AreEqual(1, circle.Radius, 1e-30);

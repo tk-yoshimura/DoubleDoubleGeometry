@@ -5,7 +5,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
     public class Plane3DTests {
         [TestMethod()]
         public void Plane3DTest() {
-            Plane3D plane1 = new(new Vector3D(1, 2, 3), 4);
+            Plane3D plane1 = Plane3D.FromIntercept(new Vector3D(1, 2, 3), 4);
             Plane3D plane2 = Plane3D.FromIntersection(new Vector3D(1, 0, 0), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1));
 
             Vector3D normal1 = new Vector3D(1, 2, 3).Normal;

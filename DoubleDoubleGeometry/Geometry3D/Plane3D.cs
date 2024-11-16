@@ -16,19 +16,27 @@ namespace DoubleDoubleGeometry.Geometry3D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble C => Normal.Z;
 
-        public Plane3D(Vector3D normal, ddouble d, int _) {
+        private Plane3D(Vector3D normal, ddouble d) {
             this.Normal = normal;
             this.D = d;
         }
 
-        public Plane3D(Vector3D normal, ddouble d) {
-            this.Normal = normal.Normal;
-            this.D = d;
+        public static Plane3D FromIntercept(Vector3D normal, ddouble d) {
+            normal = normal.Normal;
+
+            return new Plane3D(
+                normal,
+                d
+            );
         }
 
-        public Plane3D(Vector3D normal, Vector3D v) {
-            this.Normal = normal.Normal;
-            this.D = -(A * v.X + B * v.Y + C * v.Z);
+        public static Plane3D FromNormal(Vector3D normal, Vector3D v) {
+            normal = normal.Normal;
+
+            return new Plane3D(
+                normal,
+                -(normal.X * v.X + normal.Y * v.Y + normal.Z * v.Z)
+            );
         }
 
         public static Plane3D FromIntersection(Vector3D v0, Vector3D v1, Vector3D v2) {
@@ -45,11 +53,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Plane3D operator -(Plane3D g) {
-            return new(-g.Normal, -g.D, 0);
+            return new(-g.Normal, -g.D);
         }
 
         public static Plane3D operator +(Plane3D g, Vector3D v) {
-            return new(-g.Normal, g.D - (g.A * v.X + g.B * v.Y + g.C * v.Z), 0);
+            return new(-g.Normal, g.D - (g.A * v.X + g.B * v.Y + g.C * v.Z));
         }
 
         public static Plane3D operator +(Vector3D v, Plane3D g) {
@@ -65,11 +73,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Plane3D operator *(Plane3D g, ddouble r) {
-            return new(g.Normal, g.D * r, 0);
+            return new(g.Normal, g.D * r);
         }
 
         public static Plane3D operator *(Plane3D g, double r) {
-            return new(g.Normal, g.D * r, 0);
+            return new(g.Normal, g.D * r);
         }
 
         public static Plane3D operator *(ddouble r, Plane3D g) {
@@ -81,11 +89,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Plane3D operator /(Plane3D g, ddouble r) {
-            return new(g.Normal, g.D / r, 0);
+            return new(g.Normal, g.D / r);
         }
 
         public static Plane3D operator /(Plane3D g, double r) {
-            return new(g.Normal, g.D / r, 0);
+            return new(g.Normal, g.D / r);
         }
 
         public static bool operator ==(Plane3D g1, Plane3D g2) {

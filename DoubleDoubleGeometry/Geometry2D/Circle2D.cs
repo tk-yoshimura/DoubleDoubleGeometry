@@ -11,10 +11,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
             this.Radius = radius;
         }
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble Area => Radius * Radius * ddouble.Pi;
+        public static Circle2D FromIntersection(Vector2D v1, Vector2D v2, Vector2D v3) {
+            return FromCircum((v1, v2, v3));
+        }
 
-        public static Circle2D Circum(Triangle2D triangle) {
+        public static Circle2D FromCircum(Triangle2D triangle) {
             Vector2D a = triangle.V0 - triangle.V1, b = triangle.V1 - triangle.V2, c = triangle.V2 - triangle.V0;
 
             ddouble a_sqnorm = a.SquareNorm, b_sqnorm = b.SquareNorm, c_sqnorm = c.SquareNorm;
@@ -30,7 +31,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return new Circle2D(center, radius);
         }
 
-        public static Circle2D Incircle(Triangle2D triangle) {
+        public static Circle2D FromIncircle(Triangle2D triangle) {
             Vector2D a = triangle.V0 - triangle.V1, b = triangle.V1 - triangle.V2, c = triangle.V2 - triangle.V0;
 
             ddouble a_norm = a.Norm, b_norm = b.Norm, c_norm = c.Norm, s = triangle.Area, sum_norm = a_norm + b_norm + c_norm;
@@ -40,6 +41,9 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
             return new Circle2D(center, radius);
         }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Area => Radius * Radius * ddouble.Pi;
 
         public static Circle2D operator +(Circle2D g) {
             return g;
