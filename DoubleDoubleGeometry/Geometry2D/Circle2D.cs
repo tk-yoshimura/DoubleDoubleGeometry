@@ -1,6 +1,5 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
-using DoubleDoubleGeometry.Geometry3D;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
