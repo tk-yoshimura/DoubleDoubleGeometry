@@ -275,7 +275,15 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static implicit operator Matrix3D(ddouble[,] m) {
-            return new Matrix(m);
+            if ((m.GetLength(0), m.GetLength(1)) != (3, 3)) {
+                throw new ArgumentException("invalid shape", nameof(m));
+            }
+
+            return new(
+                m[0, 0], m[0, 1], m[0, 2],
+                m[1, 0], m[1, 1], m[1, 2],
+                m[2, 0], m[2, 1], m[2, 2]
+            );
         }
 
         public static Matrix3D ScaleB(Matrix3D v, int n) {

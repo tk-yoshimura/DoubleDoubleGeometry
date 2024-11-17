@@ -124,7 +124,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public static Line3D PlanePlane(Plane3D plane1, Plane3D plane2) {
             Vector3D normal1 = plane1.Normal, normal2 = plane1.Normal;
 
-            Vector3D line_dir = Vector3D.Cross(plane1.Normal, plane2.Normal).Normal;
+            Vector3D line_dir = Vector3D.NormalizeSign(Vector3D.Cross(plane1.Normal, plane2.Normal).Normal);
 
             int index = Vector3D.MaxAbsIndex(line_dir);
 

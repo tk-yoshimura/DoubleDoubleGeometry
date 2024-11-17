@@ -2,6 +2,7 @@
 using DoubleDouble;
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry3D;
+using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry3D {
     [TestClass()]
@@ -47,6 +48,50 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Quaternion qvq_conc = Vector3D.ToQuaternion(q * vector2);
 
             Assert.AreEqual(qvq, qvq_conc);
+        }
+
+        [TestMethod()]
+        public void NormalizeSignTest() {
+            ddouble[] tests = [-1, -0.0, 0.0, 1, ddouble.NaN];
+
+            foreach (ddouble x in tests) {
+                foreach (ddouble y in tests) {
+                    foreach (ddouble z in tests) {
+                        Vector3D v = (x, y, z);
+                        Vector3D u = Vector3D.NormalizeSign(v);
+
+                        Console.WriteLine(v);
+                        Console.WriteLine(u);
+                        Console.WriteLine("");
+
+                        if (Vector3D.IsNaN(v)) {
+                            Assert.IsTrue(Vector3D.IsNaN(u));
+                            continue;
+                        }
+
+                        Assert.IsTrue(v == u || v == -u);
+                        PrecisionAssert.IsPositive(u.X);
+
+                        if (u.X == 0d) {
+                            PrecisionAssert.IsPositive(u.Y);
+
+                            if (u.Y == 0d) {
+                                PrecisionAssert.IsPositive(u.Z);
+                            }
+                        }
+
+                        if (u.X == 0d) {
+                            PrecisionAssert.IsPlusZero(u.X);
+                        }
+                        if (u.Y == 0d) {
+                            PrecisionAssert.IsPlusZero(u.Y);
+                        }
+                        if (u.Z == 0d) {
+                            PrecisionAssert.IsPlusZero(u.Z);
+                        }
+                    }
+                }
+            }
         }
 
         [TestMethod()]

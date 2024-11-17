@@ -190,7 +190,14 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static implicit operator Matrix2D(ddouble[,] m) {
-            return new Matrix(m);
+            if ((m.GetLength(0), m.GetLength(1)) != (2, 2)) {
+                throw new ArgumentException("invalid shape", nameof(m));
+            }
+
+            return new(
+                m[0, 0], m[0, 1],
+                m[1, 0], m[1, 1]
+            );
         }
 
         public static Matrix2D ScaleB(Matrix2D v, int n) {

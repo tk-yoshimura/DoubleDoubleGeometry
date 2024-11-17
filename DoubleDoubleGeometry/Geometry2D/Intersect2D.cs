@@ -12,6 +12,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
             ddouble vv12 = dv1.X * dv2.Y - dv1.Y * dv2.X;
 
             Vector2D y = new((vv1 * dv2.X - vv2 * dv1.X) / vv12, (vv1 * dv2.Y - vv2 * dv1.Y) / vv12);
+
             return y;
         }
 

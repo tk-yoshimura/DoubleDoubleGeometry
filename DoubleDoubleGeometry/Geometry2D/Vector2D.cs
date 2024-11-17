@@ -129,8 +129,12 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return [v.X, v.Y];
         }
 
-        public static implicit operator Vector2D(ddouble[] m) {
-            return new Vector(m);
+        public static implicit operator Vector2D(ddouble[] v) {
+            if (v.Length != 2) {
+                throw new ArgumentException("invalid dim", nameof(v));
+            }
+
+            return new Vector2D(v[0], v[1]);
         }
 
         public static Complex ToComplex(Vector3D v) => (v.X, v.Y);
@@ -196,6 +200,28 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static bool IsValid(Vector2D v) {
             return IsFinite(v);
+        }
+
+        public static Vector2D NormalizeSign(Vector2D v) {
+            if (IsNaN(v)) {
+                return v;
+            }
+
+            if (v.X > 0d) {
+                return (v.X, v.Y == 0d ? 0d : v.Y);
+            }
+            else if (ddouble.IsNegative(v.X)) {
+                v = (-v.X, v.Y == 0d ? 0d : -v.Y);
+            }
+
+            if (v.X > 0d || v.Y > 0d) {
+                return v;
+            }
+            else if (ddouble.IsNegative(v.Y)) {
+                v = (0d, -v.Y);
+            }
+
+            return v;
         }
 
         public override string ToString() {

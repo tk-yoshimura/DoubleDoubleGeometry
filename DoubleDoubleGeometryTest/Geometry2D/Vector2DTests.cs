@@ -2,6 +2,7 @@
 using DoubleDouble;
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
+using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
     [TestClass()]
@@ -176,6 +177,41 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Assert.IsFalse(Vector2D.IsInfinity(vector2));
             Assert.IsFalse(Vector2D.IsInfinity(vector3));
             Assert.IsTrue(Vector2D.IsInfinity(vector4));
+        }
+
+        [TestMethod()]
+        public void NormalizeSignTest() {
+            ddouble[] tests = [-1, -0.0, 0.0, 1, ddouble.NaN];
+
+            foreach (ddouble x in tests) {
+                foreach (ddouble y in tests) {
+                    Vector2D v = (x, y);
+                    Vector2D u = Vector2D.NormalizeSign(v);
+
+                    Console.WriteLine(v);
+                    Console.WriteLine(u);
+                    Console.WriteLine("");
+
+                    if (Vector2D.IsNaN(v)) {
+                        Assert.IsTrue(Vector2D.IsNaN(u));
+                        continue;
+                    }
+
+                    Assert.IsTrue(v == u || v == -u);
+                    PrecisionAssert.IsPositive(u.X);
+
+                    if (u.X == 0d) {
+                        PrecisionAssert.IsPositive(u.Y);
+                    }
+
+                    if (u.X == 0d) {
+                        PrecisionAssert.IsPlusZero(u.X);
+                    }
+                    if (u.Y == 0d) {
+                        PrecisionAssert.IsPlusZero(u.Y);
+                    }
+                }
+            }
         }
 
         [TestMethod()]
