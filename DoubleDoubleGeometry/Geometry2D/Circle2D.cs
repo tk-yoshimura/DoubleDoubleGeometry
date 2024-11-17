@@ -1,4 +1,6 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
+using DoubleDoubleGeometry.Geometry3D;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -71,6 +73,12 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static Circle2D operator -(Vector2D v, Circle2D g) {
             return new(v - g.Center, g.Radius);
+        }
+
+        public static Circle2D operator *(Complex c, Circle2D g) {
+            ddouble norm = c.Norm;
+
+            return new(g.Center * norm, g.Radius * norm);
         }
 
         public static Circle2D operator *(Circle2D g, ddouble r) {

@@ -1,4 +1,6 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
+using DoubleDoubleGeometry.Geometry2D;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -62,6 +64,12 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static Sphere3D operator -(Vector3D v, Sphere3D g) {
             return new(v - g.Center, g.Radius);
+        }
+
+        public static Sphere3D operator *(Quaternion q, Sphere3D g) {
+            ddouble norm = q.Norm;
+
+            return new(g.Center * norm, g.Radius * norm);
         }
 
         public static Sphere3D operator *(Sphere3D g, ddouble r) {

@@ -1,4 +1,5 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -80,6 +81,13 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static Circle3D operator -(Vector3D v, Circle3D g) {
             return new(v - g.Center, -g.Normal, g.Radius, 0);
+        }
+
+        public static Circle3D operator *(Quaternion q, Circle3D g) {
+            Vector3D normal = q * g.Normal;
+            ddouble norm = normal.Norm;
+
+            return new(g.Center * norm, normal / norm, g.Radius * norm, 0);
         }
 
         public static Circle3D operator *(Circle3D g, ddouble r) {
