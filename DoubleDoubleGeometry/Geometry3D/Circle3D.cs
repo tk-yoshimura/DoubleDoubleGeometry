@@ -38,7 +38,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
             ddouble rc = c_sqnorm * (a_sqnorm + b_sqnorm - c_sqnorm);
 
             Vector3D center = (ra * triangle.V2 + rb * triangle.V0 + rc * triangle.V1) / (ra + rb + rc);
-            Vector3D normal = Vector3D.Cross(c, a);
+            Vector3D normal = Vector3D.NormalizeSign(Vector3D.Cross(c, a));
             ddouble radius = a_norm * b_norm * c_norm / ddouble.Sqrt((a_norm + b_norm + c_norm) * (-a_norm + b_norm + c_norm) * (a_norm - b_norm + c_norm) * (a_norm + b_norm - c_norm));
 
             return new Circle3D(center, normal, radius);
@@ -50,7 +50,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
             ddouble a_norm = a.Norm, b_norm = b.Norm, c_norm = c.Norm, s = triangle.Area, sum_norm = a_norm + b_norm + c_norm;
 
             Vector3D center = (a_norm * triangle.V2 + b_norm * triangle.V0 + c_norm * triangle.V1) / sum_norm;
-            Vector3D normal = Vector3D.Cross(c, a);
+            Vector3D normal = Vector3D.NormalizeSign(Vector3D.Cross(c, a));
             ddouble radius = 2d * s / sum_norm;
 
             return new Circle3D(center, normal, radius);

@@ -26,7 +26,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Plane3D FromImplicitFormula(ddouble a, ddouble b, ddouble c, ddouble d) {
-            Vector3D normal = new(a, b, c);
+            Vector3D normal = (a, b, c);
             ddouble norm = normal.Norm;
 
             return new Plane3D(normal / norm, d / norm);
@@ -51,12 +51,8 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Plane3D FromIntersection(Vector3D v0, Vector3D v1, Vector3D v2) {
-            Vector3D normal = Vector3D.Cross(v1 - v0, v2 - v0).Normal;
-
-            if (ddouble.IsNegative(normal.X)) {
-                normal = -normal;
-            }
-
+            Vector3D normal = Vector3D.NormalizeSign(Vector3D.Cross(v1 - v0, v2 - v0).Normal);
+                        
             return new Plane3D(
                 normal,
                 -(normal.X * v0.X + normal.Y * v0.Y + normal.Z * v0.Z)
