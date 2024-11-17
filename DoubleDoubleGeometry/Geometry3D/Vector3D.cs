@@ -84,19 +84,6 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return ret;
         }
 
-        public static Vector3D operator *(HomogeneousMatrix3D m, Vector3D v) {
-            Vector3D ret = new(
-                v.X * m.E00 + v.Y * m.E01 + v.Z * m.E02 + m.E03,
-                v.X * m.E10 + v.Y * m.E11 + v.Z * m.E12 + m.E13,
-                v.X * m.E20 + v.Y * m.E21 + v.Z * m.E22 + m.E23
-            );
-
-            ddouble w = v.X * m.E30 + v.Y * m.E31 + v.Z * m.E32 + m.E33;
-            Vector3D y = (w == 1d) ? ret : (ret / w);
-
-            return y;
-        }
-
         public static Vector3D operator *(Quaternion q, Vector3D v) {
             ddouble r = -q.I * v.X - q.J * v.Y - q.K * v.Z;
             ddouble i = +q.R * v.X + q.J * v.Z - q.K * v.Y;

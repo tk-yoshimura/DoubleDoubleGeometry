@@ -86,10 +86,6 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return new Tetrahedron3D(m * g.V0, m * g.V1, m * g.V2, m * g.V3);
         }
 
-        public static Tetrahedron3D operator *(HomogeneousMatrix3D m, Tetrahedron3D g) {
-            return new Tetrahedron3D(m * g.V0, m * g.V1, m * g.V2, m * g.V3);
-        }
-
         public static Tetrahedron3D operator *(Quaternion q, Tetrahedron3D g) {
             return new Tetrahedron3D(q * g.V0, q * g.V1, q * g.V2, q * g.V3);
         }

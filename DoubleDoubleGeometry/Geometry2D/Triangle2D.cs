@@ -78,10 +78,6 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return new Triangle2D(m * g.V0, m * g.V1, m * g.V2);
         }
 
-        public static Triangle2D operator *(HomogeneousMatrix2D m, Triangle2D g) {
-            return new Triangle2D(m * g.V0, m * g.V1, m * g.V2);
-        }
-
         public static Triangle2D operator *(Complex c, Triangle2D g) {
             return new Triangle2D(c * g.V0, c * g.V1, c * g.V2);
         }

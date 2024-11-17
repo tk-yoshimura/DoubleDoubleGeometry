@@ -70,10 +70,6 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return new Segment2D(m * g.V0, m * g.V1);
         }
 
-        public static Segment2D operator *(HomogeneousMatrix2D m, Segment2D g) {
-            return new Segment2D(m * g.V0, m * g.V1);
-        }
-
         public static Segment2D operator *(Complex c, Segment2D g) {
             return new Segment2D(c * g.V0, c * g.V1);
         }

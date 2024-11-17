@@ -7,7 +7,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         [TestMethod()]
         public void Tetrahedron3DTest() {
             Tetrahedron3D tetrahedron1 = new(new Vector3D(0, 0, 0), new Vector3D(1, 0, 0), new Vector3D(0, 2, 0), new Vector3D(0, 0, 3));
-            Tetrahedron3D tetrahedron2 = HomogeneousMatrix3D.Move(2, 4, 6) * Matrix3D.Scale(1, 2, 3) * tetrahedron1;
+            Tetrahedron3D tetrahedron2 = Matrix3D.Scale(1, 2, 3) * tetrahedron1 + (2, 4, 6);
 
             PrecisionAssert.AreEqual(9, (Matrix3D.Rotate(1, 1, 1) * tetrahedron1).Area, 1e-30);
             PrecisionAssert.AreEqual(1, (Matrix3D.Rotate(1, 1, 1) * tetrahedron1).Volume, 1e-30);

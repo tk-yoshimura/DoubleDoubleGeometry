@@ -6,7 +6,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
     public class Intersect3DTests {
         [TestMethod()]
         public void LineLineTest() {
-            HomogeneousMatrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3) * HomogeneousMatrix3D.Move(-5, -6, -7);
+            Matrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
 
             Line3D line1 = Line3D.FromDirection(new Vector3D(1, 3, 1), new Vector3D(3, 2, 0));
             Line3D line2 = Line3D.FromDirection(new Vector3D(6, 1, 1), new Vector3D(-1, 2, 0));
@@ -18,7 +18,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void LinePlaneTest() {
-            HomogeneousMatrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3) * HomogeneousMatrix3D.Move(-5, -6, -7);
+            Matrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
 
             Vector3D v1 = new(1, 0, 0), v2 = new(0, 2, 0), v3 = new(0, 0, 3);
 
@@ -35,7 +35,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void LineTriangleTest() {
-            HomogeneousMatrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3) * HomogeneousMatrix3D.Move(-5, -6, -7);
+            Matrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
 
             Vector3D v1 = new(1, 0, 0), v2 = new(0, 1, 0), v3 = new(0, 0, 1);
 
@@ -63,7 +63,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void LineCircleTest() {
-            HomogeneousMatrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3) * HomogeneousMatrix3D.Move(-5, -6, -7);
+            Matrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
 
             Vector3D v1 = new(1, 0, 0), v2 = new(0, 1, 0), v3 = new(0, 0, 1);
             Vector3D v4 = new Vector3D(1, 2, 3) / 6, v5 = new(1, -0.1, -0.1);
@@ -85,7 +85,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void LineSphereTest() {
-            HomogeneousMatrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4) * HomogeneousMatrix3D.Move(-5, -6, -7);
+            Matrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4);
 
             Vector3D v0 = new(3, 4, 0), v1 = new(0, 3, -4);
 
@@ -119,7 +119,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void PlaneSphereTest() {
-            HomogeneousMatrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4) * HomogeneousMatrix3D.Move(-5, -6, -7);
+            Matrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4);
 
             Vector3D v0 = matrix * Vector3D.Zero, v1 = matrix * new Vector3D(1, 0, 0), v2 = matrix * new Vector3D(0, 1, 0), v3 = matrix * new Vector3D(0, 0, 1);
 

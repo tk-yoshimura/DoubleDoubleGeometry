@@ -7,7 +7,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         [TestMethod()]
         public void Triangle3DTest() {
             Triangle3D triangle1 = new(new Vector3D(8, 1, 1), new Vector3D(2, 3, 1), new Vector3D(4, 9, 1));
-            Triangle3D triangle2 = HomogeneousMatrix3D.Move(2, 4, 6) * Matrix3D.Scale(1, 2, 3) * triangle1;
+            Triangle3D triangle2 = Matrix3D.Scale(1, 2, 3) * triangle1 + (2, 4, 6);
 
             PrecisionAssert.AreEqual((2 * 2 + 6 * 6) / 2, (Matrix3D.Rotate(1, 1, 1) * triangle1).Area, 1e-30);
             PrecisionAssert.AreEqual(2 * 2 + 6 * 6, (Matrix3D.Rotate(1, 2, 3) * triangle2).Area, 2e-30);

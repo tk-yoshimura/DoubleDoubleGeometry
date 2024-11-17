@@ -77,12 +77,6 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return FromIntersection(v0, v1);
         }
 
-        public static Line3D operator *(HomogeneousMatrix3D m, Line3D g) {
-            Vector3D v0 = m * g.Origin, v1 = m * (g.Origin + g.Direction);
-
-            return FromIntersection(v0, v1);
-        }
-
         public static Line3D operator *(Quaternion q, Line3D g) {
             Vector3D v0 = q * g.Origin, v1 = q * (g.Origin + g.Direction);
 

@@ -8,7 +8,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         [TestMethod()]
         public void Segment2DTest() {
             Segment2D segment1 = new(new Vector2D(6, 1), new Vector2D(-1, 2));
-            Segment2D segment2 = HomogeneousMatrix2D.Move(2, 4) * Matrix2D.Scale(1, 2) * segment1;
+            Segment2D segment2 = Matrix2D.Scale(1, 2) * segment1 + (2, 4);
 
             PrecisionAssert.AreEqual(ddouble.Sqrt(7 * 7 + 1 * 1), segment1.Length, 1e-30);
 

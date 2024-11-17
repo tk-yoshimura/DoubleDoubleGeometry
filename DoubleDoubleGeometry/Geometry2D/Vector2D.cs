@@ -82,18 +82,6 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return ret;
         }
 
-        public static Vector2D operator *(HomogeneousMatrix2D m, Vector2D v) {
-            Vector2D ret = new(
-                v.X * m.E00 + v.Y * m.E01 + m.E02,
-                v.X * m.E10 + v.Y * m.E11 + m.E12
-            );
-
-            ddouble w = v.X * m.E20 + v.Y * m.E21 + m.E22;
-            Vector2D y = (w == 1d) ? ret : (ret / w);
-
-            return y;
-        }
-
         public static Vector2D operator *(Complex c, Vector2D v) {
             Vector2D ret = new(v.X * c.R - v.Y * c.I,
                                v.X * c.I + v.Y * c.R);

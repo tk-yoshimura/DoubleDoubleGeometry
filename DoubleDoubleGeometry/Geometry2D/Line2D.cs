@@ -87,12 +87,6 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return FromIntersection(v0, v1);
         }
 
-        public static Line2D operator *(HomogeneousMatrix2D m, Line2D g) {
-            Vector2D v0 = m * g.Origin, v1 = m * (g.Origin + g.Direction);
-
-            return FromIntersection(v0, v1);
-        }
-
         public static bool operator ==(Line2D g1, Line2D g2) {
             return (g1.Origin == g2.Origin) && (g1.Direction == g2.Direction);
         }
