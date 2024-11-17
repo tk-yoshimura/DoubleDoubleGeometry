@@ -1,4 +1,5 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -52,6 +53,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public static Plane3D FromIntersection(Vector3D v0, Vector3D v1, Vector3D v2) {
             Vector3D normal = Vector3D.Cross(v1 - v0, v2 - v0).Normal;
 
+            if (ddouble.IsNegative(normal.X)) {
+                normal = -normal;
+            }
+
             return new Plane3D(
                 normal,
                 -(normal.X * v0.X + normal.Y * v0.Y + normal.Z * v0.Z)
@@ -80,6 +85,18 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static Plane3D operator -(Vector3D v, Plane3D g) {
             return v + (-g);
+        }
+
+        public static Plane3D operator *(Matrix3D m, Plane3D g) {
+            (Vector3D v0, Vector3D v1, Vector3D v2) = Points(g);
+
+            return FromIntersection(m * v0, m * v1, m * v2);
+        }
+
+        public static Plane3D operator *(Quaternion q, Plane3D g) {
+            (Vector3D v0, Vector3D v1, Vector3D v2) = Points(g);
+
+            return FromIntersection(q * v0, q * v1, q * v2);
         }
 
         public static Plane3D operator *(Plane3D g, ddouble r) {
@@ -177,6 +194,20 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public override int GetHashCode() {
             return Normal.GetHashCode() ^ D.GetHashCode();
+        }
+
+        private static (Vector3D v0, Vector3D v1, Vector3D v2) Points(Plane3D g) {
+            int index = Vector3D.MaxAbsIndex(g.Normal);
+
+            if (index == 0) {
+                return ((-g.D / g.A, 0d, 0d), (-(g.D + g.B) / g.A, 1d, 0d), (-(g.D + g.C) / g.A, 0d, 1d));
+            }
+            else if (index == 1) {
+                return ((0d, -g.D / g.B, 0d), (0d, -(g.D + g.C) / g.B, 1d), (1d, -(g.D + g.A) / g.B, 0d));
+            }
+            else {
+                return ((0d, 0d, -g.D / g.C), (0d, 1d, -(g.D + g.B) / g.C), (1d, 0d, -(g.D + g.A) / g.C));
+            }
         }
     }
 }

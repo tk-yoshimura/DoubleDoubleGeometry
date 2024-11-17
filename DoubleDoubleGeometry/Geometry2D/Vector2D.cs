@@ -129,6 +129,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return [v.X, v.Y];
         }
 
+        public static implicit operator Vector2D(ddouble[] m) {
+            return new Vector(m);
+        }
+
         public static Complex ToComplex(Vector3D v) => (v.X, v.Y);
 
         public void Deconstruct(out ddouble x, out ddouble y)

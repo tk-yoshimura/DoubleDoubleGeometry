@@ -189,6 +189,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
             };
         }
 
+        public static implicit operator Matrix2D(ddouble[,] m) {
+            return new Matrix(m);
+        }
+
         public static Matrix2D ScaleB(Matrix2D v, int n) {
             return new(
                 ddouble.Ldexp(v.E00, n), ddouble.Ldexp(v.E01, n),

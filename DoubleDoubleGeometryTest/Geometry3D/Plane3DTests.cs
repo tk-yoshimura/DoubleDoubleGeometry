@@ -1,4 +1,6 @@
-﻿using DoubleDoubleGeometry.Geometry3D;
+﻿using DoubleDouble;
+using DoubleDoubleGeometry.Geometry3D;
+using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry3D {
     [TestClass()]
@@ -19,6 +21,42 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Assert.AreEqual(normal2, plane2.Normal);
             Assert.AreEqual(-normal2.X, plane2.D);
+        }
+
+        [TestMethod()]
+        public void MatrixTest() {
+            Matrix3D m = new ddouble[,] { { 3, 5, 1 }, { 2, 7, -1 }, { 6, -2, 3 } };
+            Vector3D v1 = (1, 2, 3), v2 = (4, 6, -2), v3 = (7, -3, 1), v4 = (5, -2, 4), v5 = (8, 2, 5);
+
+            Plane3D plane123_a = m * Plane3D.FromIntersection(v1, v2, v3);
+            Plane3D plane123_b = Plane3D.FromIntersection(m * v1, m * v2, m * v3);
+
+            Plane3D plane124_a = m * Plane3D.FromIntersection(v1, v2, v4);
+            Plane3D plane124_b = Plane3D.FromIntersection(m * v1, m * v2, m * v4);
+
+            Plane3D plane125_a = m * Plane3D.FromIntersection(v1, v2, v5);
+            Plane3D plane125_b = Plane3D.FromIntersection(m * v1, m * v2, m * v5);
+
+            Plane3D plane134_a = m * Plane3D.FromIntersection(v1, v3, v4);
+            Plane3D plane134_b = Plane3D.FromIntersection(m * v1, m * v3, m * v4);
+
+            Plane3D plane345_a = m * Plane3D.FromIntersection(v3, v4, v5);
+            Plane3D plane345_b = Plane3D.FromIntersection(m * v3, m * v4, m * v5);
+
+            Vector3DAssert.AreEqual(plane123_a.Normal, plane123_b.Normal, 2e-30);
+            PrecisionAssert.AreEqual(plane123_a.D, plane123_b.D, 2e-30);
+
+            Vector3DAssert.AreEqual(plane124_a.Normal, plane124_b.Normal, 2e-30);
+            PrecisionAssert.AreEqual(plane124_a.D, plane124_b.D, 2e-30);
+
+            Vector3DAssert.AreEqual(plane125_a.Normal, plane125_b.Normal, 2e-30);
+            PrecisionAssert.AreEqual(plane125_a.D, plane125_b.D, 2e-30);
+
+            Vector3DAssert.AreEqual(plane134_a.Normal, plane134_b.Normal, 2e-30);
+            PrecisionAssert.AreEqual(plane134_a.D, plane134_b.D, 2e-30);
+
+            Vector3DAssert.AreEqual(plane345_a.Normal, plane345_b.Normal, 2e-30);
+            PrecisionAssert.AreEqual(plane345_a.D, plane345_b.D, 2e-30);
         }
 
         [TestMethod()]

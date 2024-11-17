@@ -274,6 +274,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
             };
         }
 
+        public static implicit operator Matrix3D(ddouble[,] m) {
+            return new Matrix(m);
+        }
+
         public static Matrix3D ScaleB(Matrix3D v, int n) {
             return new(
                 ddouble.Ldexp(v.E00, n), ddouble.Ldexp(v.E01, n), ddouble.Ldexp(v.E02, n),
