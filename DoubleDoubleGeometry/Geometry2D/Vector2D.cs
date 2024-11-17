@@ -5,6 +5,7 @@ using DoubleDoubleGeometry.Geometry3D;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace DoubleDoubleGeometry.Geometry2D {
 
@@ -250,6 +251,21 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public override int GetHashCode() {
             return X.GetHashCode() ^ Y.GetHashCode();
+        }
+    }
+
+    public static class Vector2DIOExpand {
+
+        public static void Write(this BinaryWriter writer, Vector2D v) {
+            DoubleDoubleIOExpand.Write(writer, v.X);
+            DoubleDoubleIOExpand.Write(writer, v.Y);
+        }
+
+        public static Vector2D ReadVector2D(this BinaryReader reader) {
+            ddouble x = reader.ReadDDouble();
+            ddouble y = reader.ReadDDouble();
+
+            return (x, y);
         }
     }
 }

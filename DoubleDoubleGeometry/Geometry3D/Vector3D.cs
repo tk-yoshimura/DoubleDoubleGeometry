@@ -4,6 +4,7 @@ using DoubleDoubleComplex;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 
@@ -290,6 +291,23 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public override int GetHashCode() {
             return X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode();
+        }
+    }
+
+    public static class Vector3DIOExpand {
+
+        public static void Write(this BinaryWriter writer, Vector3D v) {
+            DoubleDoubleIOExpand.Write(writer, v.X);
+            DoubleDoubleIOExpand.Write(writer, v.Y);
+            DoubleDoubleIOExpand.Write(writer, v.Z);
+        }
+
+        public static Vector3D ReadVector3D(this BinaryReader reader) {
+            ddouble x = reader.ReadDDouble();
+            ddouble y = reader.ReadDDouble();
+            ddouble z = reader.ReadDDouble();
+
+            return (x, y, z);
         }
     }
 }

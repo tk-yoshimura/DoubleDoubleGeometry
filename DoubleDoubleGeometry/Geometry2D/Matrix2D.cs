@@ -4,6 +4,7 @@ using DoubleDoubleComplex;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace DoubleDoubleGeometry.Geometry2D {
 
@@ -294,6 +295,25 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public override int GetHashCode() {
             return E00.GetHashCode() ^ E01.GetHashCode()
                  ^ E10.GetHashCode() ^ E11.GetHashCode();
+        }
+    }
+
+    public static class Matrix2DIOExpand {
+
+        public static void Write(this BinaryWriter writer, Matrix2D m) {
+            DoubleDoubleIOExpand.Write(writer, m.E00);
+            DoubleDoubleIOExpand.Write(writer, m.E01);
+            DoubleDoubleIOExpand.Write(writer, m.E10);
+            DoubleDoubleIOExpand.Write(writer, m.E11);
+        }
+
+        public static Matrix2D ReadMatrix2D(this BinaryReader reader) {
+            ddouble e00 = reader.ReadDDouble();
+            ddouble e01 = reader.ReadDDouble();
+            ddouble e10 = reader.ReadDDouble();
+            ddouble e11 = reader.ReadDDouble();
+
+            return new(e00, e01, e10, e11);
         }
     }
 }

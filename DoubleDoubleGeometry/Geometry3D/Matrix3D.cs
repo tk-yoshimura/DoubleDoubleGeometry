@@ -4,6 +4,7 @@ using DoubleDoubleComplex;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 
@@ -404,6 +405,35 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return E00.GetHashCode() ^ E01.GetHashCode() ^ E02.GetHashCode()
                  ^ E10.GetHashCode() ^ E11.GetHashCode() ^ E12.GetHashCode()
                  ^ E20.GetHashCode() ^ E21.GetHashCode() ^ E22.GetHashCode();
+        }
+    }
+
+    public static class Matrix3DIOExpand {
+
+        public static void Write(this BinaryWriter writer, Matrix3D m) {
+            DoubleDoubleIOExpand.Write(writer, m.E00);
+            DoubleDoubleIOExpand.Write(writer, m.E01);
+            DoubleDoubleIOExpand.Write(writer, m.E02);
+            DoubleDoubleIOExpand.Write(writer, m.E10);
+            DoubleDoubleIOExpand.Write(writer, m.E11);
+            DoubleDoubleIOExpand.Write(writer, m.E12);
+            DoubleDoubleIOExpand.Write(writer, m.E20);
+            DoubleDoubleIOExpand.Write(writer, m.E21);
+            DoubleDoubleIOExpand.Write(writer, m.E22);
+        }
+
+        public static Matrix3D ReadMatrix3D(this BinaryReader reader) {
+            ddouble e00 = reader.ReadDDouble();
+            ddouble e01 = reader.ReadDDouble();
+            ddouble e02 = reader.ReadDDouble();
+            ddouble e10 = reader.ReadDDouble();
+            ddouble e11 = reader.ReadDDouble();
+            ddouble e12 = reader.ReadDDouble();
+            ddouble e20 = reader.ReadDDouble();
+            ddouble e21 = reader.ReadDDouble();
+            ddouble e22 = reader.ReadDDouble();
+
+            return new(e00, e01, e02, e10, e11, e12, e20, e21, e22);
         }
     }
 }
