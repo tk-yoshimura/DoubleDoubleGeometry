@@ -13,6 +13,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             PrecisionAssert.AreEqual(2.0, circle.Radius, 1e-30);
 
             PrecisionAssert.AreEqual(4 * ddouble.Pi, circle.Area, 1e-30);
+            PrecisionAssert.AreEqual(4 * ddouble.Pi, circle.Perimeter, 1e-30);
         }
 
         [TestMethod()]
@@ -33,6 +34,17 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
             Vector2DAssert.AreEqual(new Vector2D(5, 2), circle.Center, 1e-30);
             PrecisionAssert.AreEqual(1, circle.Radius, 1e-30);
+        }
+
+        [TestMethod()]
+        public void FromImplicitTest() {
+            Circle2D circle = Circle2D.FromImplicit(-4, 6, -3);
+
+            Vector2DAssert.AreEqual(new Vector2D(2, -3), circle.Center, 1e-30);
+            PrecisionAssert.AreEqual(4, circle.Radius, 1e-30);
+            PrecisionAssert.AreEqual(-4, circle.A, 1e-30);
+            PrecisionAssert.AreEqual(6, circle.B, 1e-30);
+            PrecisionAssert.AreEqual(-3, circle.C, 1e-30);
         }
 
         [TestMethod()]

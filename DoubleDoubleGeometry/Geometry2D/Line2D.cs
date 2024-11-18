@@ -14,7 +14,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
             this.Direction = direction;
         }
 
-        public static Line2D FromImplicitFormula(ddouble a, ddouble b, ddouble c) {
+        public static Line2D FromImplicit(ddouble a, ddouble b, ddouble c) {
             Vector2D dir = new Vector2D(b, -a).Normal;
 
             if (ddouble.Abs(a) >= ddouble.Abs(b)) {

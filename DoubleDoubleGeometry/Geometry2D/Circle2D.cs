@@ -47,8 +47,27 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return new Circle2D(center, radius);
         }
 
+        public static Circle2D FromImplicit(ddouble a, ddouble b, ddouble c) {
+            Vector2D center = (a * -0.5d, b * -0.5d);
+            ddouble radius = ddouble.Sqrt(ddouble.Ldexp(a * a + b * b, -2) - c);
+
+            return new Circle2D(center, radius);
+        }
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Area => Radius * Radius * ddouble.Pi;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Perimeter => 2d * Radius * ddouble.Pi;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble A => -2d * Center.X;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble B => -2d * Center.Y;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble C => Center.SquareNorm - Radius * Radius;
 
         public static Circle2D operator +(Circle2D g) {
             return g;

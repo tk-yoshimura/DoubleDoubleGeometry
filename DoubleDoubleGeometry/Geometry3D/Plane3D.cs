@@ -25,7 +25,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
             this.D = d;
         }
 
-        public static Plane3D FromImplicitFormula(ddouble a, ddouble b, ddouble c, ddouble d) {
+        public static Plane3D FromImplicit(ddouble a, ddouble b, ddouble c, ddouble d) {
             Vector3D normal = (a, b, c);
             ddouble norm = normal.Norm;
 

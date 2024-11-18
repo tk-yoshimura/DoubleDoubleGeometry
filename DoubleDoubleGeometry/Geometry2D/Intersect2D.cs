@@ -52,7 +52,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
             ddouble c = circle1.Radius * circle1.Radius - circle2.Radius * circle2.Radius
                       - circle1.Center.SquareNorm + circle2.Center.SquareNorm;
 
-            Line2D line = Line2D.FromImplicitFormula(a, b, c);
+            Line2D line = Line2D.FromImplicit(a, b, c);
 
             return CircleLine(circle1, line);
         }

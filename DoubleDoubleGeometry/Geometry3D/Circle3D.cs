@@ -59,6 +59,9 @@ namespace DoubleDoubleGeometry.Geometry3D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Area => Radius * Radius * ddouble.Pi;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Perimeter => 2d * Radius * ddouble.Pi;
+
         public static Circle3D operator +(Circle3D g) {
             return g;
         }
