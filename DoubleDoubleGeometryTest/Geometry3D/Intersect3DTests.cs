@@ -103,9 +103,9 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         public void PlanePlaneTest() {
             Vector3D v1 = new(-1, 2, 4), v2 = new(1, 2, 4), v3 = new(1, -2, -1), v4 = new(1, 2, 3);
 
-            Plane3D plane_xy = Plane3D.FromNormal(new Vector3D(0, 0, 1), Vector3D.Zero);
-            Plane3D plane_yz = Plane3D.FromNormal(new Vector3D(1, 0, 0), Vector3D.Zero);
-            Plane3D plane_zx = Plane3D.FromNormal(new Vector3D(0, 1, 0), Vector3D.Zero);
+            Plane3D plane_xy = Plane3D.FromNormal(Vector3D.Zero, new Vector3D(0, 0, 1));
+            Plane3D plane_yz = Plane3D.FromNormal(Vector3D.Zero, new Vector3D(1, 0, 0));
+            Plane3D plane_zx = Plane3D.FromNormal(Vector3D.Zero, new Vector3D(0, 1, 0));
 
             Plane3D plane1 = Plane3D.FromIntersection(v1, v2, v3);
             Plane3D plane2 = Plane3D.FromIntersection(v1, v2, v4);

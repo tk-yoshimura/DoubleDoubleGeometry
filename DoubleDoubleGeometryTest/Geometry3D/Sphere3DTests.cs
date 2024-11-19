@@ -20,6 +20,22 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void OperatorTest() {
+            Assert.AreEqual(new Sphere3D((4, 5, 1), 3), +(new Sphere3D((4, 5, 1), 3)));
+            Assert.AreEqual(new Sphere3D((-4, -5, -1), 3), -(new Sphere3D((4, 5, 1), 3)));
+            Assert.AreEqual(new Sphere3D((5, 9, 8), 3), new Sphere3D((4, 5, 1), 3) + (1, 4, 7));
+            Assert.AreEqual(new Sphere3D((3, 1, -6), 3), new Sphere3D((4, 5, 1), 3) - (1, 4, 7));
+            Assert.AreEqual(new Sphere3D((5, 9, 8), 3), (1, 4, 7) + new Sphere3D((4, 5, 1), 3));
+            Assert.AreEqual(new Sphere3D((-3, -1, 6), 3), (1, 4, 7) - new Sphere3D((4, 5, 1), 3));
+            Assert.AreEqual(new Sphere3D((8, 10, 2), 6), new Sphere3D((4, 5, 1), 3) * (ddouble)2);
+            Assert.AreEqual(new Sphere3D((8, 10, 2), 6), new Sphere3D((4, 5, 1), 3) * (double)2);
+            Assert.AreEqual(new Sphere3D((8, 10, 2), 6), (ddouble)2 * new Sphere3D((4, 5, 1), 3));
+            Assert.AreEqual(new Sphere3D((8, 10, 2), 6), (double)2 * new Sphere3D((4, 5, 1), 3));
+            Assert.AreEqual(new Sphere3D((2, 2.5, 0.5), 1.5), new Sphere3D((4, 5, 1), 3) / (ddouble)2);
+            Assert.AreEqual(new Sphere3D((2, 2.5, 0.5), 1.5), new Sphere3D((4, 5, 1), 3) / (double)2);
+        }
+
+        [TestMethod()]
         public void ValidTest() {
             Assert.IsTrue(Sphere3D.IsValid(new Sphere3D(new Vector3D(1, 2, 3), 4)));
             Assert.IsFalse(Sphere3D.IsValid(Sphere3D.Invalid));

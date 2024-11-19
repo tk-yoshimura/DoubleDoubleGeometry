@@ -97,6 +97,27 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void OperatorTest() {
+            static void almost_equal(Plane3D expected, Plane3D actual) {
+                Vector3DAssert.AreEqual(expected.Normal, actual.Normal, 1e-30);
+                PrecisionAssert.AreEqual(expected.D, actual.D, 1e-30);
+            }
+
+            almost_equal(Plane3D.FromNormal((4, 5, 2), (1, 2, 4)), +(Plane3D.FromNormal((4, 5, 2), (1, 2, 4))));
+            almost_equal(Plane3D.FromNormal((-4, -5, -2), (1, 2, 4)), -(Plane3D.FromNormal((4, 5, 2), (1, 2, 4))));
+            almost_equal(Plane3D.FromNormal((5, 9, 8), (1, 2, 4)), Plane3D.FromNormal((4, 5, 2), (1, 2, 4)) + (1, 4, 6));
+            almost_equal(Plane3D.FromNormal((3, 1, -4), (1, 2, 4)), Plane3D.FromNormal((4, 5, 2), (1, 2, 4)) - (1, 4, 6));
+            almost_equal(Plane3D.FromNormal((5, 9, 8), (1, 2, 4)), (1, 4, 6) + Plane3D.FromNormal((4, 5, 2), (1, 2, 4)));
+            almost_equal(Plane3D.FromNormal((-3, -1, 4), (1, 2, 4)), (1, 4, 6) - Plane3D.FromNormal((4, 5, 2), (1, 2, 4)));
+            almost_equal(Plane3D.FromNormal((8, 10, 4), (1, 2, 4)), Plane3D.FromNormal((4, 5, 2), (1, 2, 4)) * (ddouble)2);
+            almost_equal(Plane3D.FromNormal((8, 10, 4), (1, 2, 4)), Plane3D.FromNormal((4, 5, 2), (1, 2, 4)) * (double)2);
+            almost_equal(Plane3D.FromNormal((8, 10, 4), (1, 2, 4)), (ddouble)2 * Plane3D.FromNormal((4, 5, 2), (1, 2, 4)));
+            almost_equal(Plane3D.FromNormal((8, 10, 4), (1, 2, 4)), (double)2 * Plane3D.FromNormal((4, 5, 2), (1, 2, 4)));
+            almost_equal(Plane3D.FromNormal((2, 2.5, 1), (1, 2, 4)), Plane3D.FromNormal((4, 5, 2), (1, 2, 4)) / (ddouble)2);
+            almost_equal(Plane3D.FromNormal((2, 2.5, 1), (1, 2, 4)), Plane3D.FromNormal((4, 5, 2), (1, 2, 4)) / (double)2);
+        }
+
+        [TestMethod()]
         public void ValidTest() {
             Assert.IsTrue(Plane3D.IsValid(Plane3D.FromIntersection(new Vector3D(1, 0, 0), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1))));
             Assert.IsFalse(Plane3D.IsValid(Plane3D.Invalid));

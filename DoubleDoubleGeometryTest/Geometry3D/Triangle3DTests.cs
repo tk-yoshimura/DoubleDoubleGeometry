@@ -1,4 +1,5 @@
-﻿using DoubleDoubleGeometry.Geometry3D;
+﻿using DoubleDouble;
+using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry3D {
@@ -15,6 +16,22 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Vector3DAssert.AreEqual(new Vector3D(8 * 1 + 2, 1 * 2 + 4, 1 * 3 + 6), triangle2.V0, 1e-30);
             Vector3DAssert.AreEqual(new Vector3D(2 * 1 + 2, 3 * 2 + 4, 1 * 3 + 6), triangle2.V1, 1e-30);
             Vector3DAssert.AreEqual(new Vector3D(4 * 1 + 2, 9 * 2 + 4, 1 * 3 + 6), triangle2.V2, 1e-30);
+        }
+
+        [TestMethod()]
+        public void OperatorTest() {
+            Assert.AreEqual(new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2)), +(new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2))));
+            Assert.AreEqual(new Triangle3D((-4, -5, -3), (-1, -2, -7), (-5, -1, -2)), -(new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2))));
+            Assert.AreEqual(new Triangle3D((5, 9, 8), (2, 6, 12), (6, 5, 7)), new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2)) + (1, 4, 5));
+            Assert.AreEqual(new Triangle3D((3, 1, -2), (0, -2, 2), (4, -3, -3)), new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2)) - (1, 4, 5));
+            Assert.AreEqual(new Triangle3D((5, 9, 8), (2, 6, 12), (6, 5, 7)), (1, 4, 5) + new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2)));
+            Assert.AreEqual(new Triangle3D((-3, -1, 2), (0, 2, -2), (-4, 3, 3)), (1, 4, 5) - new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2)));
+            Assert.AreEqual(new Triangle3D((8, 10, 6), (2, 4, 14), (10, 2, 4)), new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2)) * (ddouble)2);
+            Assert.AreEqual(new Triangle3D((8, 10, 6), (2, 4, 14), (10, 2, 4)), new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2)) * (double)2);
+            Assert.AreEqual(new Triangle3D((8, 10, 6), (2, 4, 14), (10, 2, 4)), (ddouble)2 * new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2)));
+            Assert.AreEqual(new Triangle3D((8, 10, 6), (2, 4, 14), (10, 2, 4)), (double)2 * new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2)));
+            Assert.AreEqual(new Triangle3D((2, 2.5, 1.5), (0.5, 1, 3.5), (2.5, 0.5, 1)), new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2)) / (ddouble)2);
+            Assert.AreEqual(new Triangle3D((2, 2.5, 1.5), (0.5, 1, 3.5), (2.5, 0.5, 1)), new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2)) / (double)2);
         }
 
         [TestMethod()]

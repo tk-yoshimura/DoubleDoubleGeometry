@@ -55,6 +55,22 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void OperatorTest() {
+            Assert.AreEqual(new Circle3D((4, 5, 2), (1, 2, 4), 3), +(new Circle3D((4, 5, 2), (1, 2, 4), 3)));
+            Assert.AreEqual(new Circle3D((-4, -5, -2), (-1, -2, -4), 3), -(new Circle3D((4, 5, 2), (1, 2, 4), 3)));
+            Assert.AreEqual(new Circle3D((5, 9, 8), (1, 2, 4), 3), new Circle3D((4, 5, 2), (1, 2, 4), 3) + (1, 4, 6));
+            Assert.AreEqual(new Circle3D((3, 1, -4), (1, 2, 4), 3), new Circle3D((4, 5, 2), (1, 2, 4), 3) - (1, 4, 6));
+            Assert.AreEqual(new Circle3D((5, 9, 8), (1, 2, 4), 3), (1, 4, 6) + new Circle3D((4, 5, 2), (1, 2, 4), 3));
+            Assert.AreEqual(new Circle3D((-3, -1, 4), (-1, -2, -4), 3), (1, 4, 6) - new Circle3D((4, 5, 2), (1, 2, 4), 3));
+            Assert.AreEqual(new Circle3D((8, 10, 4), (1, 2, 4), 6), new Circle3D((4, 5, 2), (1, 2, 4), 3) * (ddouble)2);
+            Assert.AreEqual(new Circle3D((8, 10, 4), (1, 2, 4), 6), new Circle3D((4, 5, 2), (1, 2, 4), 3) * (double)2);
+            Assert.AreEqual(new Circle3D((8, 10, 4), (1, 2, 4), 6), (ddouble)2 * new Circle3D((4, 5, 2), (1, 2, 4), 3));
+            Assert.AreEqual(new Circle3D((8, 10, 4), (1, 2, 4), 6), (double)2 * new Circle3D((4, 5, 2), (1, 2, 4), 3));
+            Assert.AreEqual(new Circle3D((2, 2.5, 1), (1, 2, 4), 1.5), new Circle3D((4, 5, 2), (1, 2, 4), 3) / (ddouble)2);
+            Assert.AreEqual(new Circle3D((2, 2.5, 1), (1, 2, 4), 1.5), new Circle3D((4, 5, 2), (1, 2, 4), 3) / (double)2);
+        }
+
+        [TestMethod()]
         public void ValidTest() {
             Assert.IsTrue(Circle3D.IsValid(new Circle3D(new Vector3D(1, 3, 5), new Vector3D(2, 4, 6), 2)));
             Assert.IsFalse(Circle3D.IsValid(Circle3D.Invalid));

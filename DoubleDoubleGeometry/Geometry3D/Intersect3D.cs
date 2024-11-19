@@ -85,7 +85,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Vector3D LineCircle(Line3D line, Circle3D circle) {
-            Vector3D cross = LinePlane(line, Plane3D.FromNormal(circle.Normal, circle.Center));
+            Vector3D cross = LinePlane(line, Plane3D.FromNormal(circle.Center, circle.Normal));
 
             Vector3D y = Vector3D.SquareDistance(cross, circle.Center) < circle.Radius * circle.Radius
                 ? cross

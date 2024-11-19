@@ -1,4 +1,5 @@
-﻿using DoubleDoubleGeometry.Geometry3D;
+﻿using DoubleDouble;
+using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry3D {
@@ -17,6 +18,22 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Vector3DAssert.AreEqual(new Vector3D(1 * 1 + 2, 0 * 2 + 4, 0 * 3 + 6), tetrahedron2.V1, 1e-30);
             Vector3DAssert.AreEqual(new Vector3D(0 * 1 + 2, 2 * 2 + 4, 0 * 3 + 6), tetrahedron2.V2, 1e-30);
             Vector3DAssert.AreEqual(new Vector3D(0 * 1 + 2, 0 * 2 + 4, 3 * 3 + 6), tetrahedron2.V3, 1e-30);
+        }
+
+        [TestMethod()]
+        public void OperatorTest() {
+            Assert.AreEqual(new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5)), +(new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5))));
+            Assert.AreEqual(new Tetrahedron3D((-4, -5, -3), (-1, -2, -7), (-5, -1, -2), (-3, -4, -5)), -(new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5))));
+            Assert.AreEqual(new Tetrahedron3D((5, 9, 8), (2, 6, 12), (6, 5, 7), (4, 8, 10)), new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5)) + (1, 4, 5));
+            Assert.AreEqual(new Tetrahedron3D((3, 1, -2), (0, -2, 2), (4, -3, -3), (2, 0, 0)), new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5)) - (1, 4, 5));
+            Assert.AreEqual(new Tetrahedron3D((5, 9, 8), (2, 6, 12), (6, 5, 7), (4, 8, 10)), (1, 4, 5) + new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5)));
+            Assert.AreEqual(new Tetrahedron3D((-3, -1, 2), (0, 2, -2), (-4, 3, 3), (-2, 0, 0)), (1, 4, 5) - new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5)));
+            Assert.AreEqual(new Tetrahedron3D((8, 10, 6), (2, 4, 14), (10, 2, 4), (6, 8, 10)), new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5)) * (ddouble)2);
+            Assert.AreEqual(new Tetrahedron3D((8, 10, 6), (2, 4, 14), (10, 2, 4), (6, 8, 10)), new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5)) * (double)2);
+            Assert.AreEqual(new Tetrahedron3D((8, 10, 6), (2, 4, 14), (10, 2, 4), (6, 8, 10)), (ddouble)2 * new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5)));
+            Assert.AreEqual(new Tetrahedron3D((8, 10, 6), (2, 4, 14), (10, 2, 4), (6, 8, 10)), (double)2 * new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5)));
+            Assert.AreEqual(new Tetrahedron3D((2, 2.5, 1.5), (0.5, 1, 3.5), (2.5, 0.5, 1), (1.5, 2, 2.5)), new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5)) / (ddouble)2);
+            Assert.AreEqual(new Tetrahedron3D((2, 2.5, 1.5), (0.5, 1, 3.5), (2.5, 0.5, 1), (1.5, 2, 2.5)), new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5)) / (double)2);
         }
 
         [TestMethod()]

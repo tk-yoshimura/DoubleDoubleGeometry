@@ -17,6 +17,22 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void OperatorTest() {
+            Assert.AreEqual(new Segment3D((4, 5, 3), (1, 2, 7)), +(new Segment3D((4, 5, 3), (1, 2, 7))));
+            Assert.AreEqual(new Segment3D((-4, -5, -3), (-1, -2, -7)), -(new Segment3D((4, 5, 3), (1, 2, 7))));
+            Assert.AreEqual(new Segment3D((5, 9, 8), (2, 6, 12)), new Segment3D((4, 5, 3), (1, 2, 7)) + (1, 4, 5));
+            Assert.AreEqual(new Segment3D((3, 1, -2), (0, -2, 2)), new Segment3D((4, 5, 3), (1, 2, 7)) - (1, 4, 5));
+            Assert.AreEqual(new Segment3D((5, 9, 8), (2, 6, 12)), (1, 4, 5) + new Segment3D((4, 5, 3), (1, 2, 7)));
+            Assert.AreEqual(new Segment3D((-3, -1, 2), (0, 2, -2)), (1, 4, 5) - new Segment3D((4, 5, 3), (1, 2, 7)));
+            Assert.AreEqual(new Segment3D((8, 10, 6), (2, 4, 14)), new Segment3D((4, 5, 3), (1, 2, 7)) * (ddouble)2);
+            Assert.AreEqual(new Segment3D((8, 10, 6), (2, 4, 14)), new Segment3D((4, 5, 3), (1, 2, 7)) * (double)2);
+            Assert.AreEqual(new Segment3D((8, 10, 6), (2, 4, 14)), (ddouble)2 * new Segment3D((4, 5, 3), (1, 2, 7)));
+            Assert.AreEqual(new Segment3D((8, 10, 6), (2, 4, 14)), (double)2 * new Segment3D((4, 5, 3), (1, 2, 7)));
+            Assert.AreEqual(new Segment3D((2, 2.5, 1.5), (0.5, 1, 3.5)), new Segment3D((4, 5, 3), (1, 2, 7)) / (ddouble)2);
+            Assert.AreEqual(new Segment3D((2, 2.5, 1.5), (0.5, 1, 3.5)), new Segment3D((4, 5, 3), (1, 2, 7)) / (double)2);
+        }
+
+        [TestMethod()]
         public void ValidTest() {
             Assert.IsTrue(Segment3D.IsValid(new Segment3D(new Vector3D(6, 1, 4), new Vector3D(-1, 2, 6))));
             Assert.IsFalse(Segment3D.IsValid(Segment3D.Invalid));

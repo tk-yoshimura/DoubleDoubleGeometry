@@ -1,6 +1,7 @@
 ﻿using Algebra;
 using DoubleDouble;
 using DoubleDoubleComplex;
+using DoubleDoubleGeometry.Geometry2D;
 using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 
@@ -30,6 +31,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(new Vector3D(-1, -2, -3), -vector1);
             Assert.AreEqual(new Vector3D(5, 7, 9), vector1 + vector2);
             Assert.AreEqual(new Vector3D(-3, -3, -3), vector1 - vector2);
+            Assert.AreEqual(new Vector3D(4, 10, 18), vector1 * vector2);
             Assert.AreEqual(new Vector3D(3, 3, 3), vector2 - vector1);
             Assert.AreEqual(new Vector3D(2, 4, 6), vector1 * 2d);
             Assert.AreEqual(new Vector3D(2, 4, 6), vector1 * (ddouble)2d);
@@ -44,10 +46,12 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Quaternion q = (11, 9, 2, 7);
 
-            Quaternion qvq = q * Vector3D.ToQuaternion(vector2) * q.Conj;
-            Quaternion qvq_conc = Vector3D.ToQuaternion(q * vector2);
+            Quaternion qvq = q * (Quaternion)vector2 * q.Conj;
+            Quaternion qvq_conc = (Quaternion)(q * vector2);
 
             Assert.AreEqual(qvq, qvq_conc);
+
+            Assert.AreEqual(new Quaternion(0, 1, 2, 3), (Quaternion)vector1);
         }
 
         [TestMethod()]
@@ -154,6 +158,15 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void ScaleBTest() {
+            Vector3D vector1 = new(4, -6, 9);
+
+            Assert.AreEqual(3, vector1.MaxExponent);
+
+            Assert.AreEqual((2, -3, 4.5), Vector3D.ScaleB(vector1, -1));
+        }
+
+        [TestMethod()]
         public void CrossTest() {
             Vector3D vector1 = new(1, 2, 3);
             Vector3D vector2 = new(4, 6, 9);
@@ -251,6 +264,27 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual("[1.00e0, 2.00e0, 3.00e0]", vector1.ToString("e2"));
             Assert.AreEqual("[1, 2, 3]", $"{vector1}");
             Assert.AreEqual("[1.00e0, 2.00e0, 3.00e0]", $"{vector1:e2}");
+        }
+
+        [TestMethod]
+        public void IOTest() {
+            const string filename_bin = "v3_iotest.bin";
+
+            Vector3D v = (ddouble.Pi, ddouble.E, ddouble.RcpE);
+
+            using (BinaryWriter stream = new BinaryWriter(File.Open(filename_bin, FileMode.Create))) {
+                stream.Write(v);
+            }
+
+            Vector3D u;
+
+            using (BinaryReader stream = new BinaryReader(File.OpenRead(filename_bin))) {
+                u = stream.ReadVector3D();
+            }
+
+            Assert.AreEqual(v, u);
+
+            File.Delete(filename_bin);
         }
     }
 }

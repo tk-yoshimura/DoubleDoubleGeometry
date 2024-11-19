@@ -31,7 +31,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
             (a, c, d, e) =
                 (a * sqcs + b * cssn + c * sqsn, a * sqsn - b * cssn + c * sqcs,
                  e * sn + d * cs, e * cs - d * sn);
-            
+
             if (a > c) {
                 angle += 0.5d;
             }

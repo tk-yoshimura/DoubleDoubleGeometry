@@ -46,6 +46,8 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Assert.IsTrue(vector1 == vector3);
             Assert.IsFalse(vector2 == vector3);
             Assert.IsTrue(vector1 != vector2);
+
+            Assert.AreEqual(new Complex(1, 2), (Complex)vector1);
         }
 
         [TestMethod()]
@@ -102,6 +104,15 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Vector2D vector2 = new(4, -6);
 
             Assert.AreEqual(-8.0, Vector2D.Dot(vector1, vector2));
+        }
+
+        [TestMethod()]
+        public void ScaleBTest() {
+            Vector2D vector1 = new(4, -6);
+
+            Assert.AreEqual(2, vector1.MaxExponent);
+
+            Assert.AreEqual((2, -3), Vector2D.ScaleB(vector1, -1));
         }
 
         [TestMethod()]
@@ -222,6 +233,27 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Assert.AreEqual("[1.00e0, 2.00e0]", vector1.ToString("e2"));
             Assert.AreEqual("[1, 2]", $"{vector1}");
             Assert.AreEqual("[1.00e0, 2.00e0]", $"{vector1:e2}");
+        }
+
+        [TestMethod]
+        public void IOTest() {
+            const string filename_bin = "v2_iotest.bin";
+
+            Vector2D v = (ddouble.Pi, ddouble.E);
+
+            using (BinaryWriter stream = new BinaryWriter(File.Open(filename_bin, FileMode.Create))) {
+                stream.Write(v);
+            }
+
+            Vector2D u;
+
+            using (BinaryReader stream = new BinaryReader(File.OpenRead(filename_bin))) {
+                u = stream.ReadVector2D();
+            }
+
+            Assert.AreEqual(v, u);
+
+            File.Delete(filename_bin);
         }
     }
 }

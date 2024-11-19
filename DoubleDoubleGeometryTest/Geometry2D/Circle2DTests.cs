@@ -48,6 +48,22 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         }
 
         [TestMethod()]
+        public void OperatorTest() {
+            Assert.AreEqual(new Circle2D((4, 5), 3), +(new Circle2D((4, 5), 3)));
+            Assert.AreEqual(new Circle2D((-4, -5), 3), -(new Circle2D((4, 5), 3)));
+            Assert.AreEqual(new Circle2D((5, 9), 3), new Circle2D((4, 5), 3) + (1, 4));
+            Assert.AreEqual(new Circle2D((3, 1), 3), new Circle2D((4, 5), 3) - (1, 4));
+            Assert.AreEqual(new Circle2D((5, 9), 3), (1, 4) + new Circle2D((4, 5), 3));
+            Assert.AreEqual(new Circle2D((-3, -1), 3), (1, 4) - new Circle2D((4, 5), 3));
+            Assert.AreEqual(new Circle2D((8, 10), 6), new Circle2D((4, 5), 3) * (ddouble)2);
+            Assert.AreEqual(new Circle2D((8, 10), 6), new Circle2D((4, 5), 3) * (double)2);
+            Assert.AreEqual(new Circle2D((8, 10), 6), (ddouble)2 * new Circle2D((4, 5), 3));
+            Assert.AreEqual(new Circle2D((8, 10), 6), (double)2 * new Circle2D((4, 5), 3));
+            Assert.AreEqual(new Circle2D((2, 2.5), 1.5), new Circle2D((4, 5), 3) / (ddouble)2);
+            Assert.AreEqual(new Circle2D((2, 2.5), 1.5), new Circle2D((4, 5), 3) / (double)2);
+        }
+
+        [TestMethod()]
         public void ValidTest() {
             Assert.IsTrue(Circle2D.IsValid(new Circle2D(new Vector2D(1, 3), 2)));
             Assert.IsFalse(Circle2D.IsValid(Circle2D.Invalid));

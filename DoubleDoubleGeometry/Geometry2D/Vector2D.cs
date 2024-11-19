@@ -1,7 +1,6 @@
 ﻿using Algebra;
 using DoubleDouble;
 using DoubleDoubleComplex;
-using DoubleDoubleGeometry.Geometry3D;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -118,6 +117,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return (v.X, v.Y);
         }
 
+        public static explicit operator Complex(Vector2D v) {
+            return (v.X, v.Y);
+        }
+
         public static implicit operator Vector(Vector2D v) {
             return new(v.X, v.Y);
         }
@@ -137,8 +140,6 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
             return new Vector2D(v[0], v[1]);
         }
-
-        public static Complex ToComplex(Vector3D v) => (v.X, v.Y);
 
         public void Deconstruct(out ddouble x, out ddouble y)
             => (x, y) = (X, Y);

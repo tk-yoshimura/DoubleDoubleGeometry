@@ -41,7 +41,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
             );
         }
 
-        public static Plane3D FromNormal(Vector3D normal, Vector3D v) {
+        public static Plane3D FromNormal(Vector3D v, Vector3D normal) {
             normal = normal.Normal;
 
             return new Plane3D(
@@ -52,7 +52,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static Plane3D FromIntersection(Vector3D v0, Vector3D v1, Vector3D v2) {
             Vector3D normal = Vector3D.NormalizeSign(Vector3D.Cross(v1 - v0, v2 - v0).Normal);
-                        
+
             return new Plane3D(
                 normal,
                 -(normal.X * v0.X + normal.Y * v0.Y + normal.Z * v0.Z)
@@ -64,11 +64,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Plane3D operator -(Plane3D g) {
-            return new(-g.Normal, -g.D);
+            return new(g.Normal, -g.D);
         }
 
         public static Plane3D operator +(Plane3D g, Vector3D v) {
-            return new(-g.Normal, g.D - (g.A * v.X + g.B * v.Y + g.C * v.Z));
+            return new(g.Normal, g.D - (g.A * v.X + g.B * v.Y + g.C * v.Z));
         }
 
         public static Plane3D operator +(Vector3D v, Plane3D g) {

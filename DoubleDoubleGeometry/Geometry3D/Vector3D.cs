@@ -126,6 +126,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return (v.X, v.Y, v.Z);
         }
 
+        public static explicit operator Quaternion(Vector3D v) {
+            return (0d, v.X, v.Y, v.Z);
+        }
+
         public static implicit operator Vector(Vector3D v) {
             return new(v.X, v.Y, v.Z);
         }
@@ -145,8 +149,6 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
             return new Vector3D(v[0], v[1], v[2]);
         }
-
-        public static Quaternion ToQuaternion(Vector3D v) => (0d, v.X, v.Y, v.Z);
 
         public void Deconstruct(out ddouble x, out ddouble y, out ddouble z)
             => (x, y, z) = (X, Y, Z);
