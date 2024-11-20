@@ -9,7 +9,9 @@ using System.Numerics;
 namespace DoubleDoubleGeometry {
     [DebuggerDisplay("{ToString(),nq}")]
     public class Connection : IEqualityOperators<Connection, Connection, bool>, IEquatable<Connection>, IEnumerable<(int i, int j)> {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly ReadOnlyCollection<ReadOnlyCollection<int>> map;
+
         public readonly long Vertices, Edges;
 
         public Connection(int n, params (int a, int b)[] connection_indexes) {

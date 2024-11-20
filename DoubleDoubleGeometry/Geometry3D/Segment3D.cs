@@ -9,6 +9,8 @@ namespace DoubleDoubleGeometry.Geometry3D {
     [DebuggerDisplay("{ToString(),nq}")]
     public class Segment3D : IGeometry<Segment3D, Vector3D>, IFormattable {
         public readonly Vector3D V0, V1;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly Vector3D dv;
 
         public Segment3D(Vector3D v0, Vector3D v1) {
@@ -123,6 +125,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static bool IsValid(Segment3D g) {
             return IsFinite(g) && g.V0 != g.V1;
+        }
+
+        public override string ToString() {
+            return $"{V0}, {V1}";
         }
 
         public string ToString([AllowNull] string format, [AllowNull] IFormatProvider formatProvider) {

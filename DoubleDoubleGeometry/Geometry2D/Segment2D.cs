@@ -9,6 +9,8 @@ namespace DoubleDoubleGeometry.Geometry2D {
     [DebuggerDisplay("{ToString(),nq}")]
     public class Segment2D : IGeometry<Segment2D, Vector2D>, IFormattable {
         public readonly Vector2D V0, V1;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly Vector2D dv;
 
         public Segment2D(Vector2D v0, Vector2D v1) {
