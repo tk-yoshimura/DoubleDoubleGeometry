@@ -1,6 +1,7 @@
 ﻿using Algebra;
 using DoubleDouble;
 using DoubleDoubleComplex;
+using DoubleDoubleGeometry.Geometry2D;
 using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 
@@ -195,6 +196,27 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual("[[1.00e0, 2.00e0, 3.00e0], [4.00e0, 5.00e0, 6.00e0], [7.00e0, 8.00e0, 9.00e0]]", matrix1.ToString("e2"));
             Assert.AreEqual("[[1, 2, 3], [4, 5, 6], [7, 8, 9]]", $"{matrix1}");
             Assert.AreEqual("[[1.00e0, 2.00e0, 3.00e0], [4.00e0, 5.00e0, 6.00e0], [7.00e0, 8.00e0, 9.00e0]]", $"{matrix1:e2}");
+        }
+
+        [TestMethod]
+        public void IOTest() {
+            const string filename_bin = "m3_iotest.bin";
+
+            Matrix3D v = new ddouble[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+
+            using (BinaryWriter stream = new BinaryWriter(File.Open(filename_bin, FileMode.Create))) {
+                stream.Write(v);
+            }
+
+            Matrix3D u;
+
+            using (BinaryReader stream = new BinaryReader(File.OpenRead(filename_bin))) {
+                u = stream.ReadMatrix3D();
+            }
+
+            Assert.AreEqual(v, u);
+
+            File.Delete(filename_bin);
         }
     }
 }

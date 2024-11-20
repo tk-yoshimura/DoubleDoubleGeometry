@@ -127,5 +127,26 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Assert.AreEqual("[[1, 2], [3, 4]]", $"{matrix1}");
             Assert.AreEqual("[[1.00e0, 2.00e0], [3.00e0, 4.00e0]]", $"{matrix1:e2}");
         }
+
+        [TestMethod]
+        public void IOTest() {
+            const string filename_bin = "m2_iotest.bin";
+
+            Matrix2D v = new ddouble[,] { { 1, 2 }, { 4, 5 } };
+
+            using (BinaryWriter stream = new BinaryWriter(File.Open(filename_bin, FileMode.Create))) {
+                stream.Write(v);
+            }
+
+            Matrix2D u;
+
+            using (BinaryReader stream = new BinaryReader(File.OpenRead(filename_bin))) {
+                u = stream.ReadMatrix2D();
+            }
+
+            Assert.AreEqual(v, u);
+
+            File.Delete(filename_bin);
+        }
     }
 }
