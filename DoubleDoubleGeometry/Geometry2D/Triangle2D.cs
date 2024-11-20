@@ -16,6 +16,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
             this.V2 = v2;
         }
 
+        public Vector2D Point(ddouble u, ddouble v) {
+            return V0 + u * (V1 - V0) + (1d - u) * v * (V2 - V0);
+        }
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Area {
             get {

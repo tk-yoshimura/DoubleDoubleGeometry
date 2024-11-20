@@ -23,6 +23,16 @@ namespace DoubleDoubleGeometry.Geometry3D {
             this.Radius = radius;
         }
 
+#pragma warning disable CS8632
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Quaternion? rot = null;
+#pragma warning restore CS8632
+        public Vector3D Point(ddouble t) {
+            rot ??= Vector3D.Rot((0d, 0d, 1d), Normal);
+
+            return Center + rot * new Vector3D(Radius * ddouble.Cos(t), Radius * ddouble.Sin(t), 0d);
+        }
+
         public static Circle3D FromIntersection(Vector3D v1, Vector3D v2, Vector3D v3) {
             return FromCircum((v1, v2, v3));
         }
@@ -67,7 +77,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Circle3D operator -(Circle3D g) {
-            return new(-g.Center, -g.Normal, g.Radius);
+            return new(-g.Center, -g.Normal, g.Radius, 0);
         }
 
         public static Circle3D operator +(Circle3D g, Vector3D v) {
@@ -110,11 +120,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Circle3D operator /(Circle3D g, ddouble r) {
-            return new(g.Center / r, g.Normal, g.Radius / r, 0);
+            return new(g.Center / r, g.Normal * ddouble.Sign(r), g.Radius / r, 0);
         }
 
         public static Circle3D operator /(Circle3D g, double r) {
-            return new(g.Center / r, g.Normal, g.Radius / r, 0);
+            return new(g.Center / r, g.Normal * ddouble.Sign(r), g.Radius / r, 0);
         }
 
         public static bool operator ==(Circle3D g1, Circle3D g2) {

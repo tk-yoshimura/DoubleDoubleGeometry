@@ -16,6 +16,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
             this.Radius = radius;
         }
 
+        public Vector2D Point(ddouble t) {
+            return new Vector2D(Center.X + Radius * ddouble.Cos(t), Center.Y + Radius * ddouble.Sin(t));
+        }
+
         public static Circle2D FromIntersection(Vector2D v1, Vector2D v2, Vector2D v3) {
             return FromCircum((v1, v2, v3));
         }

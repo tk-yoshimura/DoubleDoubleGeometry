@@ -16,6 +16,13 @@ namespace DoubleDoubleGeometry.Geometry3D {
             this.Radius = radius;
         }
 
+        public Vector3D Point(ddouble theta, ddouble phi) {
+            ddouble ct = ddouble.Cos(theta), st = ddouble.Sin(theta);
+            ddouble cp = ddouble.Cos(phi), sp = ddouble.Sin(phi);
+            
+            return Center + Radius * new Vector3D(st * cp, st * sp, ct);
+        }
+
         public static Sphere3D FromIntersection(Vector3D v1, Vector3D v2, Vector3D v3, Vector3D v4) {
             ddouble x1 = v1.X, y1 = v1.Y, z1 = v1.Z, t1 = v1.SquareNorm;
             ddouble x2 = v2.X, y2 = v2.Y, z2 = v2.Z, t2 = v2.SquareNorm;

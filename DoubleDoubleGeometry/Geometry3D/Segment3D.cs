@@ -9,10 +9,16 @@ namespace DoubleDoubleGeometry.Geometry3D {
     [DebuggerDisplay("{ToString(),nq}")]
     public class Segment3D : IGeometry<Segment3D, Vector3D>, IFormattable {
         public readonly Vector3D V0, V1;
+        private readonly Vector3D dv;
 
         public Segment3D(Vector3D v0, Vector3D v1) {
             this.V0 = v0;
             this.V1 = v1;
+            this.dv = v1 - v0;
+        }
+
+        public Vector3D Point(ddouble t) {
+            return V0 + t * dv;
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

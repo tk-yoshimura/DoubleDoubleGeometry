@@ -3,6 +3,7 @@ using DoubleDoubleComplex;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection.Metadata;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 
@@ -23,6 +24,16 @@ namespace DoubleDoubleGeometry.Geometry3D {
         private Plane3D(Vector3D normal, ddouble d) {
             this.Normal = normal;
             this.D = d;
+        }
+
+#pragma warning disable CS8632
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Quaternion? rot = null;
+#pragma warning restore CS8632
+        public Vector3D Point(ddouble u, ddouble v) {
+            rot ??= Vector3D.Rot((0d, 0d, 1d), Normal);
+
+            return rot * new Vector3D(u, v, -D);
         }
 
         public static Plane3D FromImplicit(ddouble a, ddouble b, ddouble c, ddouble d) {

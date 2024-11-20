@@ -16,6 +16,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
             this.V2 = v2;
         }
 
+        public Vector3D Point(ddouble u, ddouble v) {
+            return V0 + u * (V1 - V0) + (1d - u) * v * (V2 - V0);
+        }
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Area {
             get {
@@ -23,6 +27,13 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 ddouble inner_product_ab = Vector3D.Dot(a, b);
 
                 return ddouble.Ldexp(ddouble.Sqrt(a.SquareNorm * b.SquareNorm - inner_product_ab * inner_product_ab), -1);
+            }
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Vector3D Normal {
+            get {
+                return Vector3D.Cross(V1 - V0, V2 - V0).Normal;
             }
         }
 

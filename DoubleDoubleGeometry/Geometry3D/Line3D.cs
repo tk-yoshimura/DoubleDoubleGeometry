@@ -15,6 +15,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
             this.Direction = direction;
         }
 
+        public Vector3D Point(ddouble t) {
+            return Origin + t * Direction;
+        }
+
         public static Line3D FromDirection(Vector3D origin, Vector3D direction) {
             return new Line3D(origin, direction.Normal);
         }

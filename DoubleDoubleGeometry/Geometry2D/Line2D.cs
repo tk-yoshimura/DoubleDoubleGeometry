@@ -14,6 +14,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
             this.Direction = direction;
         }
 
+        public Vector2D Point(ddouble t) {
+            return Origin + t * Direction;
+        }
+
         public static Line2D FromImplicit(ddouble a, ddouble b, ddouble c) {
             Vector2D dir = new Vector2D(b, -a).Normal;
 

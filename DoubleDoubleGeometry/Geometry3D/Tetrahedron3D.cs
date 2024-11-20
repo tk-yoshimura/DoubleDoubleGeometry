@@ -17,6 +17,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
             this.V3 = v3;
         }
 
+        public Vector3D Point(ddouble u, ddouble v, ddouble w) {
+            return V0 + u * (V1 - V0) + (1d - u) * v * (V2 - V0) + (1d - u) * (1d - v) * w * (V3 - V0);
+        }
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Area {
             get {

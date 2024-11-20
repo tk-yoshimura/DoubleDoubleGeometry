@@ -18,6 +18,13 @@ namespace DoubleDoubleGeometry.Geometry2D {
             this.Angle = angle % ddouble.Pi;
         }
 
+        public Vector2D Point(ddouble t) {
+            ddouble cs = ddouble.Cos(Angle), sn = ddouble.Sin(Angle);
+            ddouble a = ddouble.Cos(t) * Axis.major, b = ddouble.Sin(t) * Axis.minor;
+
+            return new Vector2D(Center.X + cs * a - sn * b, Center.Y + sn * a + cs * b);
+        }
+
         public static Ellipse2D FromImplicit(ddouble a, ddouble b, ddouble c, ddouble d, ddouble e, ddouble f) {
             if (ddouble.Ldexp(a * c, 2) - b * b <= 0d) {
                 return Invalid;
@@ -61,13 +68,21 @@ namespace DoubleDoubleGeometry.Geometry2D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Eccentricity => ddouble.Sqrt(1d - ddouble.Square(Axis.minor / Axis.major));
 
+#pragma warning disable CS8632
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Matrix2D? matrix = null;
+#pragma warning restore CS8632
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public Matrix2D Matrix {
             get {
+                if (matrix is not null) {
+                    return matrix;
+                }
+
                 ddouble c = ddouble.Cos(Angle), s = ddouble.Sin(Angle);
                 ddouble sx = Axis.major, sy = Axis.minor;
 
-                return new Matrix2D(c * sx, -s * sx, s * sy, c * sy);
+                return matrix = new Matrix2D(c * sx, -s * sx, s * sy, c * sy);
             }
         }
 
