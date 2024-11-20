@@ -53,7 +53,23 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public ddouble Area => Axis.minor * Axis.major * ddouble.Pi;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble Perimeter => 4d * Axis.major * ddouble.EllipticE(ddouble.Sqrt(1d - ddouble.Square(Axis.minor / Axis.major)));
+        public ddouble Perimeter => 4d * Axis.major * ddouble.EllipticE(1d - ddouble.Square(Axis.minor / Axis.major));
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Focus => ddouble.Sqrt(ddouble.Square(Axis.major) - ddouble.Square(Axis.minor));
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Eccentricity => ddouble.Sqrt(1d - ddouble.Square(Axis.minor / Axis.major));
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Matrix2D Matrix {
+            get {
+                ddouble c = ddouble.Cos(Angle), s = ddouble.Sin(Angle);
+                ddouble sx = Axis.major, sy = Axis.minor;
+
+                return new Matrix2D(c * sx, -s * sx, s * sy, c * sy);
+            }
+        }
 
         public static Ellipse2D operator +(Ellipse2D g) {
             return g;
@@ -151,7 +167,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static bool IsValid(Ellipse2D g) {
-            return IsFinite(g) && g.Axis.major >= 0d && g.Axis.minor >= 0d;
+            return IsFinite(g) && g.Axis.major >= 0d && g.Axis.minor >= 0d && g.Axis.major >= g.Axis.minor;
         }
 
         public override string ToString() {

@@ -13,6 +13,19 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Assert.AreEqual(4d, ellipse.Axis.major);
             Assert.AreEqual(3d, ellipse.Axis.minor);
             PrecisionAssert.AreEqual(5d - ddouble.Pi, ellipse.Angle);
+
+            PrecisionAssert.AreEqual(4 * 3 * ddouble.Pi, ellipse.Area);
+            PrecisionAssert.AreEqual("22.1034921607095050452855864638724607782783", ellipse.Perimeter, 1e-30);
+            PrecisionAssert.AreEqual("2.64575131106459059050161575363926042571026", ellipse.Focus, 1e-30);
+            PrecisionAssert.AreEqual("0.661437827766147647625403938409815106427565", ellipse.Eccentricity, 1e-30);
+
+            Matrix2D expected = Matrix2D.Scale(4, 3) * Matrix2D.Rotate(ellipse.Angle);
+            Matrix2D actual = ellipse.Matrix;
+
+            PrecisionAssert.AreEqual(expected.E00, actual.E00, 1e-30);
+            PrecisionAssert.AreEqual(expected.E01, actual.E01, 1e-30);
+            PrecisionAssert.AreEqual(expected.E10, actual.E10, 1e-30);
+            PrecisionAssert.AreEqual(expected.E11, actual.E11, 1e-30);
         }
 
         [TestMethod]
