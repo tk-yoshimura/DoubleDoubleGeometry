@@ -1,6 +1,7 @@
 ﻿using Algebra;
 using DoubleDouble;
 using DoubleDoubleGeometry.Geometry2D;
+using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
@@ -9,11 +10,17 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         [TestMethod()]
         public void Matrix2DTest() {
             Matrix2D matrix1 = new(1, 2, 3, 4);
+            Matrix2D matrix2 = (Matrix2D)new Matrix3D(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
             Assert.AreEqual(1, matrix1.E00);
             Assert.AreEqual(2, matrix1.E01);
             Assert.AreEqual(3, matrix1.E10);
             Assert.AreEqual(4, matrix1.E11);
+
+            Assert.AreEqual(1, matrix2.E00);
+            Assert.AreEqual(2, matrix2.E01);
+            Assert.AreEqual(4, matrix2.E10);
+            Assert.AreEqual(5, matrix2.E11);
         }
 
         [TestMethod()]

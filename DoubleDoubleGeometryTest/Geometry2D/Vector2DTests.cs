@@ -2,6 +2,7 @@
 using DoubleDouble;
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
+using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
@@ -9,14 +10,16 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
     public class Vector2DTests {
         [TestMethod()]
         public void Vector2DTest() {
-            Vector2D vector = new(1, 2);
+            Vector2D vector1 = new(1, 2);
+            Vector2D vector2 = (Vector2D)new Vector3D(1, 2, 3);
 
-            Assert.AreEqual(1.0, vector.X);
-            Assert.AreEqual(2.0, vector.Y);
+            Assert.AreEqual(1.0, vector1.X);
+            Assert.AreEqual(2.0, vector1.Y);
 
-            Assert.AreEqual(new Vector(1, 2), (Vector)vector);
+            Assert.AreEqual(new Vector(1, 2), (Vector)vector1);
+            Assert.AreEqual(new Vector(1, 2), (Vector)vector2);
 
-            CollectionAssert.AreEqual(new ddouble[] { 1, 2 }, (ddouble[])vector);
+            CollectionAssert.AreEqual(new ddouble[] { 1, 2 }, (ddouble[])vector1);
         }
 
         [TestMethod()]

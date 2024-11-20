@@ -1,6 +1,7 @@
 ﻿using Algebra;
 using DoubleDouble;
 using DoubleDoubleComplex;
+using DoubleDoubleGeometry.Geometry3D;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -181,6 +182,13 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static implicit operator Matrix2D(Matrix m) {
             return new(m);
+        }
+
+        public static explicit operator Matrix2D(Matrix3D m) {
+            return new(
+                m.E00, m.E01,
+                m.E10, m.E11
+            );
         }
 
         public static implicit operator ddouble[,](Matrix2D m) {
