@@ -17,6 +17,13 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void EqualTest() {
+            Assert.IsTrue(new Segment3D((6, 1, 3), (-1, 2, 4)) == new Segment3D((6, 1, 3), (-1, 2, 4)));
+            Assert.IsTrue(new Segment3D((6, 1, 3), (-1, 3, 4)) != new Segment3D((6, 1, 3), (-1, 2, 4)));
+            Assert.IsTrue(new Segment3D((6, 2, 3), (-1, 2, 4)) != new Segment3D((6, 1, 3), (-1, 2, 4)));
+        }
+
+        [TestMethod()]
         public void OperatorTest() {
             Assert.AreEqual(new Segment3D((4, 5, 3), (1, 2, 7)), +(new Segment3D((4, 5, 3), (1, 2, 7))));
             Assert.AreEqual(new Segment3D((-4, -5, -3), (-1, -2, -7)), -(new Segment3D((4, 5, 3), (1, 2, 7))));

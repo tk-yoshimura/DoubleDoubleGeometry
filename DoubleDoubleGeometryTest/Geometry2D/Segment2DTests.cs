@@ -17,6 +17,14 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         }
 
         [TestMethod()]
+        public void EqualTest() {
+            Assert.IsTrue(new Segment2D((6, 1), (-1, 2)) == new Segment2D((6, 1), (-1, 2)));
+            Assert.IsTrue(new Segment2D((6, 1), (-2, 4)) != new Segment2D((6, 1), (-1, 2)));
+            Assert.IsTrue(new Segment2D((6, 1), (-1, 3)) != new Segment2D((6, 1), (-1, 2)));
+            Assert.IsTrue(new Segment2D((6, 2), (-1, 2)) != new Segment2D((6, 1), (-1, 2)));
+        }
+
+        [TestMethod()]
         public void OperatorTest() {
             Assert.AreEqual(new Segment2D((4, 5), (1, 2)), +(new Segment2D((4, 5), (1, 2))));
             Assert.AreEqual(new Segment2D((-4, -5), (-1, -2)), -(new Segment2D((4, 5), (1, 2))));

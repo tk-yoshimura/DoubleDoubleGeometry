@@ -17,6 +17,15 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void EqualTest() {
+            Assert.IsTrue(new Circle3D((4, 5, 7), (3, 2, 1), 3) == new Circle3D((4, 5, 7), (3, 2, 1), 3));
+            Assert.IsTrue(new Circle3D((4, 6, 7), (3, 2, 1), 3) != new Circle3D((4, 5, 7), (3, 2, 1), 3));
+            Assert.IsTrue(new Circle3D((4, 5, 7), (3, 2, 1), 4) != new Circle3D((4, 5, 7), (3, 2, 1), 3));
+            Assert.IsTrue(new Circle3D((4, 5, 7), (3, 2, 1), 7) != new Circle3D((4, 5, 7), (3, 2, 1), 3));
+            Assert.IsTrue(new Circle3D((-4, -5, 7), (3, 2, 1), 3) != new Circle3D((4, 5, 7), (3, 2, 1), 3));
+        }
+
+        [TestMethod()]
         public void CircumTest() {
             Vector3D v0 = new(3, 9, 1), v1 = new(4, 2, 1), v2 = new(12, 6, 1);
 

@@ -20,6 +20,14 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void EqualTest() {
+            Assert.IsTrue(new Sphere3D((4, 5, 7), 3) == new Sphere3D((4, 5, 7), 3));
+            Assert.IsTrue(new Sphere3D((4, 6, 7), 3) != new Sphere3D((4, 5, 7), 3));
+            Assert.IsTrue(new Sphere3D((4, 5, 7), 4) != new Sphere3D((4, 5, 7), 3));
+            Assert.IsTrue(new Sphere3D((-4, -5, 7), 3) != new Sphere3D((4, 5, 7), 3));
+        }
+
+        [TestMethod()]
         public void OperatorTest() {
             Assert.AreEqual(new Sphere3D((4, 5, 1), 3), +(new Sphere3D((4, 5, 1), 3)));
             Assert.AreEqual(new Sphere3D((-4, -5, -1), 3), -(new Sphere3D((4, 5, 1), 3)));

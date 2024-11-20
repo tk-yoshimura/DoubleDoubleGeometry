@@ -14,6 +14,14 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         }
 
         [TestMethod()]
+        public void EqualTest() {
+            Assert.IsTrue(Line2D.FromDirection((6, 1), (-1, 2)) == Line2D.FromDirection((6, 1), (-1, 2)));
+            Assert.IsTrue(Line2D.FromDirection((6, 1), (-2, 4)) == Line2D.FromDirection((6, 1), (-1, 2)));
+            Assert.IsTrue(Line2D.FromDirection((6, 1), (-1, 3)) != Line2D.FromDirection((6, 1), (-1, 2)));
+            Assert.IsTrue(Line2D.FromDirection((6, 2), (-1, 2)) != Line2D.FromDirection((6, 1), (-1, 2)));
+        }
+
+        [TestMethod()]
         public void OperatorTest() {
             Assert.AreEqual(Line2D.FromDirection((4, 5), (1, 2)), +(Line2D.FromDirection((4, 5), (1, 2))));
             Assert.AreEqual(Line2D.FromDirection((-4, -5), (-1, -2)), -(Line2D.FromDirection((4, 5), (1, 2))));

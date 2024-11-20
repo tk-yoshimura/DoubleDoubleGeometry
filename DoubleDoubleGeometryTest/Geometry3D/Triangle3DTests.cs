@@ -19,6 +19,14 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void EqualTest() {
+            Assert.IsTrue(new Triangle3D((6, 1, 3), (-1, 2, 4), (5, 7, 2)) == new Triangle3D((6, 1, 3), (-1, 2, 4), (5, 7, 2)));
+            Assert.IsTrue(new Triangle3D((6, 1, 3), (-1, 3, 4), (5, 7, 2)) != new Triangle3D((6, 1, 3), (-1, 2, 4), (5, 7, 2)));
+            Assert.IsTrue(new Triangle3D((6, 2, 3), (-1, 2, 4), (5, 7, 2)) != new Triangle3D((6, 1, 3), (-1, 2, 4), (5, 7, 2)));
+            Assert.IsTrue(new Triangle3D((6, 1, 3), (-1, 2, 4), (5, 8, 2)) != new Triangle3D((6, 1, 3), (-1, 2, 4), (5, 7, 2)));
+        }
+
+        [TestMethod()]
         public void OperatorTest() {
             Assert.AreEqual(new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2)), +(new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2))));
             Assert.AreEqual(new Triangle3D((-4, -5, -3), (-1, -2, -7), (-5, -1, -2)), -(new Triangle3D((4, 5, 3), (1, 2, 7), (5, 1, 2))));

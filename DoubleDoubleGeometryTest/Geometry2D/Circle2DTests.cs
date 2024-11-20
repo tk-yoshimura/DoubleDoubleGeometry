@@ -17,6 +17,14 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         }
 
         [TestMethod()]
+        public void EqualTest() {
+            Assert.IsTrue(new Circle2D((4, 5), 3) == new Circle2D((4, 5), 3));
+            Assert.IsTrue(new Circle2D((4, 6), 3) != new Circle2D((4, 5), 3));
+            Assert.IsTrue(new Circle2D((4, 5), 4) != new Circle2D((4, 5), 3));
+            Assert.IsTrue(new Circle2D((-4, -5), 3) != new Circle2D((4, 5), 3));
+        }
+
+        [TestMethod()]
         public void CircumTest() {
             Vector2D v0 = new(3, 9), v1 = new(4, 2), v2 = new(12, 6);
 

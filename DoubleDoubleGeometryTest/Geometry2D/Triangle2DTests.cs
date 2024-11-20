@@ -19,6 +19,14 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         }
 
         [TestMethod()]
+        public void EqualTest() {
+            Assert.IsTrue(new Triangle2D((6, 1), (-1, 2), (4, 5)) == new Triangle2D((6, 1), (-1, 2), (4, 5)));
+            Assert.IsTrue(new Triangle2D((6, 1), (-1, 3), (4, 5)) != new Triangle2D((6, 1), (-1, 2), (4, 5)));
+            Assert.IsTrue(new Triangle2D((6, 2), (-1, 2), (4, 5)) != new Triangle2D((6, 1), (-1, 2), (4, 5)));
+            Assert.IsTrue(new Triangle2D((6, 2), (-1, 2), (4, 6)) != new Triangle2D((6, 1), (-1, 2), (4, 5)));
+        }
+
+        [TestMethod()]
         public void OperatorTest() {
             Assert.AreEqual(new Triangle2D((4, 5), (1, 2), (3, 7)), +(new Triangle2D((4, 5), (1, 2), (3, 7))));
             Assert.AreEqual(new Triangle2D((-4, -5), (-1, -2), (-3, -7)), -(new Triangle2D((4, 5), (1, 2), (3, 7))));

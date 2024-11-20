@@ -25,6 +25,14 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void EqualTest() {
+            Assert.IsTrue(Plane3D.FromNormal((4, 5, 7), (3, 2, 1)) == Plane3D.FromNormal((4, 5, 7), (3, 2, 1)));
+            Assert.IsTrue(Plane3D.FromNormal((4, 6, 7), (3, 2, 1)) != Plane3D.FromNormal((4, 5, 7), (3, 2, 1)));
+            Assert.IsTrue(Plane3D.FromNormal((4, 5, 7), (3, 2, 2)) != Plane3D.FromNormal((4, 5, 7), (3, 2, 1)));
+            Assert.IsTrue(Plane3D.FromNormal((-4, -5, 7), (3, 2, 1)) != Plane3D.FromNormal((4, 5, 7), (3, 2, 1)));
+        }
+
+        [TestMethod()]
         public void MatrixTest() {
             Matrix3D m = new ddouble[,] { { 3, 5, 1 }, { 2, 7, -1 }, { 6, -2, 3 } };
             Vector3D v1 = (1, 2, 3), v2 = (4, 6, -2), v3 = (7, -3, 1), v4 = (5, -2, 4), v5 = (8, 2, 5);

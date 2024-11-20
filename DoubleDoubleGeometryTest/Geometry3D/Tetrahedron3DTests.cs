@@ -21,6 +21,15 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void EqualTest() {
+            Assert.IsTrue(new Tetrahedron3D((6, 1, 3), (-1, 2, 4), (5, 7, 2), (7, 1, 6)) == new Tetrahedron3D((6, 1, 3), (-1, 2, 4), (5, 7, 2), (7, 1, 6)));
+            Assert.IsTrue(new Tetrahedron3D((6, 1, 3), (-1, 3, 4), (5, 7, 2), (7, 1, 6)) != new Tetrahedron3D((6, 1, 3), (-1, 2, 4), (5, 7, 2), (7, 1, 6)));
+            Assert.IsTrue(new Tetrahedron3D((6, 2, 3), (-1, 2, 4), (5, 7, 2), (7, 1, 6)) != new Tetrahedron3D((6, 1, 3), (-1, 2, 4), (5, 7, 2), (7, 1, 6)));
+            Assert.IsTrue(new Tetrahedron3D((6, 1, 3), (-1, 2, 4), (5, 8, 2), (7, 1, 6)) != new Tetrahedron3D((6, 1, 3), (-1, 2, 4), (5, 7, 2), (7, 1, 6)));
+            Assert.IsTrue(new Tetrahedron3D((6, 1, 3), (-1, 2, 4), (5, 7, 2), (8, 1, 6)) != new Tetrahedron3D((6, 1, 3), (-1, 2, 4), (5, 7, 2), (7, 1, 6)));
+        }
+
+        [TestMethod()]
         public void OperatorTest() {
             Assert.AreEqual(new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5)), +(new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5))));
             Assert.AreEqual(new Tetrahedron3D((-4, -5, -3), (-1, -2, -7), (-5, -1, -2), (-3, -4, -5)), -(new Tetrahedron3D((4, 5, 3), (1, 2, 7), (5, 1, 2), (3, 4, 5))));
