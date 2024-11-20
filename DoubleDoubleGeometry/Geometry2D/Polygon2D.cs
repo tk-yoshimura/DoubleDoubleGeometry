@@ -16,11 +16,9 @@ namespace DoubleDoubleGeometry.Geometry2D {
             this.Vertex = vertex.AsReadOnly();
         }
 
-        public Polygon2D(IEnumerable<Vector2D> vertex) {
-            this.Vertex = vertex.ToArray().AsReadOnly();
-        }
+        public Polygon2D(IEnumerable<Vector2D> vertex) : this(vertex.ToArray()){ }
 
-        public int Count => Vertex.Count;
+        public int Vertices => Vertex.Count;
 
         public static Polygon2D operator +(Polygon2D g) {
             return g;
@@ -44,6 +42,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static Polygon2D operator -(Vector2D v, Polygon2D g) {
             return new(g.Vertex.Select(p => v - p));
+        }
+
+        public static Polygon2D operator *(Matrix2D m, Polygon2D g) {
+            return new(g.Vertex.Select(p => m * p));
         }
 
         public static Polygon2D operator *(Complex c, Polygon2D g) {
@@ -75,7 +77,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static bool operator ==(Polygon2D g1, Polygon2D g2) {
-            return g1.Vertex.Zip(g2.Vertex).All(item => item.First == item.Second);
+            return g1.Vertex.SequenceEqual(g2.Vertex);
         }
 
         public static bool operator !=(Polygon2D g1, Polygon2D g2) {
@@ -89,11 +91,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public static Polygon2D Zero { get; } = new(Vector2D.Zero);
 
         public static bool IsNaN(Polygon2D g) {
-            return g.Count < 1 || g.Vertex.Any(Vector2D.IsNaN);
+            return g.Vertices < 1 || g.Vertex.Any(Vector2D.IsNaN);
         }
 
         public static bool IsZero(Polygon2D g) {
-            return g.Count < 1 || g.Vertex.All(Vector2D.IsZero);
+            return g.Vertices < 1 || g.Vertex.All(Vector2D.IsZero);
         }
 
         public static bool IsFinite(Polygon2D g) {
@@ -105,23 +107,23 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static bool IsValid(Polygon2D g) {
-            return g.Count > 0 || IsFinite(g);
+            return g.Vertices > 0 || IsFinite(g);
         }
 
         public override string ToString() {
-            return $"polygon {Count}";
+            return $"polygon vertices={Vertices}";
         }
 
         public override bool Equals(object obj) {
-            return (obj is not null) && obj is Polygon2D geo && geo == this;
+            return ReferenceEquals(this, obj) || (obj is not null && obj is Polygon2D g && g == this);
         }
 
         public bool Equals(Polygon2D other) {
-            return other == this;
+            return ReferenceEquals(this, other) || (other is not null && other == this);
         }
 
         public override int GetHashCode() {
-            return Count > 0 ? Vertex[0].GetHashCode() : 0;
+            return Vertices > 0 ? Vertex[0].GetHashCode() : 0;
         }
 
         public static Polygon2D Regular(int n) {

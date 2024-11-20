@@ -1,5 +1,6 @@
 ﻿using DoubleDouble;
 using DoubleDoubleGeometry.Geometry2D;
+using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
@@ -9,7 +10,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         public void Polygon2DTest() {
             Polygon2D polygon = Polygon2D.Regular(6);
 
-            Assert.AreEqual(6, polygon.Count);
+            Assert.AreEqual(6, polygon.Vertices);
         }
 
         [TestMethod()]

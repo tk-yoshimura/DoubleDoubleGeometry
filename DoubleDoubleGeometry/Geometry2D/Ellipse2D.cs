@@ -202,11 +202,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public override bool Equals(object obj) {
-            return (obj is not null) && obj is Ellipse2D geo && geo == this;
+            return ReferenceEquals(this, obj) || (obj is not null && obj is Ellipse2D g && g == this);
         }
 
         public bool Equals(Ellipse2D other) {
-            return other == this;
+            return ReferenceEquals(this, other) || (other is not null && other == this);
         }
 
         public override int GetHashCode() {

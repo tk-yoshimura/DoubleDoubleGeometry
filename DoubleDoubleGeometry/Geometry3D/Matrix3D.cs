@@ -394,7 +394,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public override bool Equals(object obj) {
-            return (obj is not null) && obj is Matrix3D matrix && matrix == this;
+            return ReferenceEquals(this, obj) || (obj is not null && obj is Matrix3D m && m == this);
         }
 
         public bool Equals(Matrix3D other) {

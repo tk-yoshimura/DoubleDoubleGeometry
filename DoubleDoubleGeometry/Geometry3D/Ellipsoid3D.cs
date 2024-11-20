@@ -162,11 +162,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public override bool Equals(object obj) {
-            return (obj is not null) && obj is Ellipsoid3D geo && geo == this;
+            return ReferenceEquals(this, obj) || (obj is not null && obj is Ellipsoid3D g && g == this);
         }
 
         public bool Equals(Ellipsoid3D other) {
-            return other == this;
+            return ReferenceEquals(this, other) || (other is not null && other == this);
         }
 
         public override int GetHashCode() {

@@ -243,7 +243,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public override bool Equals(object obj) {
-            return (obj is not null) && obj is Vector2D v && v == this;
+            return ReferenceEquals(this, obj) || (obj is not null && obj is Vector2D v && v == this);
         }
 
         public bool Equals(Vector2D other) {
