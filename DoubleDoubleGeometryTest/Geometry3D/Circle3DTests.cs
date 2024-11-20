@@ -14,6 +14,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             PrecisionAssert.AreEqual(2.0, circle.Radius, 1e-30);
 
             PrecisionAssert.AreEqual(4 * ddouble.Pi, circle.Area, 1e-30);
+            PrecisionAssert.AreEqual(4 * ddouble.Pi, circle.Perimeter, 1e-30);
         }
 
         [TestMethod()]
