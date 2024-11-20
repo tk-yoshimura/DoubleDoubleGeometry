@@ -104,11 +104,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static Circle2D operator *(Circle2D g, ddouble r) {
-            return new(g.Center * r, g.Radius * r);
+            return new(g.Center * r, g.Radius * ddouble.Abs(r));
         }
 
         public static Circle2D operator *(Circle2D g, double r) {
-            return new(g.Center * r, g.Radius * r);
+            return new(g.Center * r, g.Radius * double.Abs(r));
         }
 
         public static Circle2D operator *(ddouble r, Circle2D g) {
@@ -120,11 +120,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static Circle2D operator /(Circle2D g, ddouble r) {
-            return new(g.Center / r, g.Radius / r);
+            return new(g.Center / r, g.Radius / ddouble.Abs(r));
         }
 
         public static Circle2D operator /(Circle2D g, double r) {
-            return new(g.Center / r, g.Radius / r);
+            return new(g.Center / r, g.Radius / double.Abs(r));
         }
 
         public static bool operator ==(Circle2D g1, Circle2D g2) {

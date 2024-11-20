@@ -82,11 +82,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Ellipse3D operator *(Ellipse3D g, ddouble r) {
-            return new(g.Center * r, g.Normal, (g.Axis.major * r, g.Axis.minor * r), g.Angle, 0);
+            return new(g.Center * r, g.Normal * ddouble.Sign(r), (g.Axis.major * ddouble.Abs(r), g.Axis.minor * ddouble.Abs(r)), g.Angle, 0);
         }
 
         public static Ellipse3D operator *(Ellipse3D g, double r) {
-            return new(g.Center * r, g.Normal, (g.Axis.major * r, g.Axis.minor * r), g.Angle, 0);
+            return new(g.Center * r, g.Normal * double.Sign(r), (g.Axis.major * double.Abs(r), g.Axis.minor * double.Abs(r)), g.Angle, 0);
         }
 
         public static Ellipse3D operator *(ddouble r, Ellipse3D g) {
@@ -98,11 +98,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Ellipse3D operator /(Ellipse3D g, ddouble r) {
-            return new(g.Center / r, g.Normal * ddouble.Sign(r), (g.Axis.major / r, g.Axis.minor / r), g.Angle, 0);
+            return new(g.Center / r, g.Normal * ddouble.Sign(r), (g.Axis.major / ddouble.Abs(r), g.Axis.minor / ddouble.Abs(r)), g.Angle, 0);
         }
 
         public static Ellipse3D operator /(Ellipse3D g, double r) {
-            return new(g.Center / r, g.Normal * ddouble.Sign(r), (g.Axis.major / r, g.Axis.minor / r), g.Angle, 0);
+            return new(g.Center / r, g.Normal * double.Sign(r), (g.Axis.major / double.Abs(r), g.Axis.minor / double.Abs(r)), g.Angle, 0);
         }
 
         public static bool operator ==(Ellipse3D g1, Ellipse3D g2) {

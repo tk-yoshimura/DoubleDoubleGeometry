@@ -104,11 +104,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Circle3D operator *(Circle3D g, ddouble r) {
-            return new(g.Center * r, g.Normal, g.Radius * r, 0);
+            return new(g.Center * r, g.Normal * ddouble.Sign(r), g.Radius * ddouble.Abs(r), 0);
         }
 
         public static Circle3D operator *(Circle3D g, double r) {
-            return new(g.Center * r, g.Normal, g.Radius * r, 0);
+            return new(g.Center * r, g.Normal * double.Sign(r), g.Radius * double.Abs(r), 0);
         }
 
         public static Circle3D operator *(ddouble r, Circle3D g) {
@@ -120,11 +120,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Circle3D operator /(Circle3D g, ddouble r) {
-            return new(g.Center / r, g.Normal * ddouble.Sign(r), g.Radius / r, 0);
+            return new(g.Center / r, g.Normal * ddouble.Sign(r), g.Radius / ddouble.Abs(r), 0);
         }
 
         public static Circle3D operator /(Circle3D g, double r) {
-            return new(g.Center / r, g.Normal * ddouble.Sign(r), g.Radius / r, 0);
+            return new(g.Center / r, g.Normal * ddouble.Sign(r), g.Radius / double.Abs(r), 0);
         }
 
         public static bool operator ==(Circle3D g1, Circle3D g2) {

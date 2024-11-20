@@ -117,11 +117,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static Ellipse2D operator *(Ellipse2D g, ddouble r) {
-            return new(g.Center * r, (g.Axis.major * r, g.Axis.minor * r), g.Angle);
+            return new(g.Center * r, (g.Axis.major * ddouble.Abs(r), g.Axis.minor * ddouble.Abs(r)), g.Angle);
         }
 
         public static Ellipse2D operator *(Ellipse2D g, double r) {
-            return new(g.Center * r, (g.Axis.major * r, g.Axis.minor * r), g.Angle);
+            return new(g.Center * r, (g.Axis.major * double.Abs(r), g.Axis.minor * double.Abs(r)), g.Angle);
         }
 
         public static Ellipse2D operator *(ddouble r, Ellipse2D g) {
@@ -133,11 +133,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static Ellipse2D operator /(Ellipse2D g, ddouble r) {
-            return new(g.Center / r, (g.Axis.major / r, g.Axis.minor / r), g.Angle);
+            return new(g.Center / r, (g.Axis.major / ddouble.Abs(r), g.Axis.minor / ddouble.Abs(r)), g.Angle);
         }
 
         public static Ellipse2D operator /(Ellipse2D g, double r) {
-            return new(g.Center / r, (g.Axis.major / r, g.Axis.minor / r), g.Angle);
+            return new(g.Center / r, (g.Axis.major / double.Abs(r), g.Axis.minor / double.Abs(r)), g.Angle);
         }
 
         public static bool operator ==(Ellipse2D g1, Ellipse2D g2) {
