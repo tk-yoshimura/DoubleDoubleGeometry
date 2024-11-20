@@ -1,7 +1,5 @@
 ﻿using DoubleDouble;
 using DoubleDoubleGeometry.Geometry2D;
-using DoubleDoubleGeometry.Geometry3D;
-using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
     [TestClass()]

@@ -16,7 +16,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
             this.Vertex = vertex.AsReadOnly();
         }
 
-        public Polygon2D(IEnumerable<Vector2D> vertex) : this(vertex.ToArray()){ }
+        public Polygon2D(IEnumerable<Vector2D> vertex) : this(vertex.ToArray()) { }
 
         public int Vertices => Vertex.Count;
 

@@ -1,5 +1,4 @@
-﻿using DoubleDoubleGeometry.Geometry2D;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -112,7 +111,7 @@ namespace DoubleDoubleGeometry {
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-                
+
         public override string ToString() {
             return $"connection vertices={Vertices}, edges={Edges}";
         }

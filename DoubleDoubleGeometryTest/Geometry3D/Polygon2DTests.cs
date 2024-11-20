@@ -1,5 +1,4 @@
 ﻿using DoubleDouble;
-using DoubleDoubleGeometry.Geometry2D;
 using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 
@@ -53,7 +52,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
-            foreach ((int i, int j) in p.Connection) { 
+            foreach ((int i, int j) in p.Connection) {
                 PrecisionAssert.AreEqual(2 * ddouble.Sqrt2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
             }
         }
@@ -75,7 +74,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
-            foreach ((int i, int j) in p.Connection) { 
+            foreach ((int i, int j) in p.Connection) {
                 PrecisionAssert.AreEqual(2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
             }
         }
@@ -97,13 +96,13 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
-            foreach ((int i, int j) in p.Connection) { 
+            foreach ((int i, int j) in p.Connection) {
                 PrecisionAssert.AreEqual(ddouble.Sqrt2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
             }
         }
 
         [TestMethod()]
-        public void Dodecahedron() {
+        public void DodecahedronTest() {
             Polyhedron3D p = Polyhedron3D.Dodecahedron;
 
             Assert.AreEqual(20, p.Vertices);
@@ -120,13 +119,13 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
-            foreach ((int i, int j) in p.Connection) { 
+            foreach ((int i, int j) in p.Connection) {
                 PrecisionAssert.AreEqual(2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
             }
         }
 
         [TestMethod()]
-        public void Icosahedron() {
+        public void IcosahedronTest() {
             Polyhedron3D p = Polyhedron3D.Icosahedron;
 
             Assert.AreEqual(12, p.Vertices);
@@ -143,7 +142,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
-            foreach ((int i, int j) in p.Connection) { 
+            foreach ((int i, int j) in p.Connection) {
                 PrecisionAssert.AreEqual(2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
             }
         }

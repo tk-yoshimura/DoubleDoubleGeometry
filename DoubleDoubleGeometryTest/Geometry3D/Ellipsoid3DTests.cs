@@ -13,7 +13,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(new Vector3D(1, 2, 7), ellipsoid.Center);
             Assert.AreEqual(new Vector3D(2, 3, 4), ellipsoid.Axis);
             Assert.AreEqual(new Quaternion(4, 3, 5, 6).Normal, ellipsoid.Rotation);
-            
+
             PrecisionAssert.AreEqual("100.53096491487338363080458826494409229", ellipsoid.Volume, 1e-29);
             PrecisionAssert.AreEqual("111.54576989401032252593683948373857471", ellipsoid.Area, 1e-29);
         }

@@ -3,7 +3,6 @@ using DoubleDoubleComplex;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection.Metadata;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 

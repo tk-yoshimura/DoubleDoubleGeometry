@@ -19,7 +19,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public Vector3D Point(ddouble theta, ddouble phi) {
             ddouble ct = ddouble.Cos(theta), st = ddouble.Sin(theta);
             ddouble cp = ddouble.Cos(phi), sp = ddouble.Sin(phi);
-            
+
             return Center + Radius * new Vector3D(st * cp, st * sp, ct);
         }
 
