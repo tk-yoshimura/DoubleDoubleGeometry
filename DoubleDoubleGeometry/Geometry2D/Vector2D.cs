@@ -3,9 +3,11 @@ using DoubleDouble;
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry3D;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 
 namespace DoubleDoubleGeometry.Geometry2D {
 
@@ -272,6 +274,56 @@ namespace DoubleDoubleGeometry.Geometry2D {
             ddouble y = reader.ReadDDouble();
 
             return (x, y);
+        }
+    }
+
+    public static class Vector2DEnumerableExpand {
+        public static Vector2D Sum(this IEnumerable<Vector2D> source) {
+            Vector2D acc = Vector2D.Zero, carry = Vector2D.Zero;
+
+            foreach (var v in source) {
+                Vector2D d = v - carry;
+                Vector2D acc_next = acc + d;
+
+                carry = (acc_next - acc) - d;
+                acc = acc_next;
+            }
+
+            return acc;
+        }
+
+        public static Vector2D Average(this IEnumerable<Vector2D> source) {
+            return source.Sum() / source.Count();
+        }
+
+        public static IEnumerable<ddouble> X(this IEnumerable<Vector2D> source) {
+            foreach (var v in source) {
+                yield return v.X;
+            }
+        }
+
+        public static IEnumerable<ddouble> Y(this IEnumerable<Vector2D> source) {
+            foreach (var v in source) {
+                yield return v.Y;
+            }
+        }
+
+        public static IEnumerable<ddouble> SquareNorm(this IEnumerable<Vector2D> source) {
+            foreach (var v in source) {
+                yield return v.SquareNorm;
+            }
+        }
+
+        public static IEnumerable<ddouble> Norm(this IEnumerable<Vector2D> source) {
+            foreach (var v in source) {
+                yield return v.Norm;
+            }
+        }
+
+        public static IEnumerable<Vector2D> Normal(this IEnumerable<Vector2D> source) {
+            foreach (var v in source) {
+                yield return v.Normal;
+            }
         }
     }
 }

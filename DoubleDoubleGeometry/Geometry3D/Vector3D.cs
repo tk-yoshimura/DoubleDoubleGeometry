@@ -3,9 +3,11 @@ using DoubleDouble;
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 
@@ -315,6 +317,62 @@ namespace DoubleDoubleGeometry.Geometry3D {
             ddouble z = reader.ReadDDouble();
 
             return (x, y, z);
+        }
+    }
+
+    public static class Vector3DEnumerableExpand {
+        public static Vector3D Sum(this IEnumerable<Vector3D> source) {
+            Vector3D acc = Vector3D.Zero, carry = Vector3D.Zero;
+
+            foreach (var v in source) {
+                Vector3D d = v - carry;
+                Vector3D acc_next = acc + d;
+
+                carry = (acc_next - acc) - d;
+                acc = acc_next;
+            }
+
+            return acc;
+        }
+
+        public static Vector3D Average(this IEnumerable<Vector3D> source) {
+            return source.Sum() / source.Count();
+        }
+
+        public static IEnumerable<ddouble> X(this IEnumerable<Vector3D> source) {
+            foreach (var v in source) {
+                yield return v.X;
+            }
+        }
+
+        public static IEnumerable<ddouble> Y(this IEnumerable<Vector3D> source) {
+            foreach (var v in source) {
+                yield return v.Y;
+            }
+        }
+
+        public static IEnumerable<ddouble> Z(this IEnumerable<Vector3D> source) {
+            foreach (var v in source) {
+                yield return v.Z;
+            }
+        }
+
+        public static IEnumerable<ddouble> SquareNorm(this IEnumerable<Vector3D> source) {
+            foreach (var v in source) {
+                yield return v.SquareNorm;
+            }
+        }
+
+        public static IEnumerable<ddouble> Norm(this IEnumerable<Vector3D> source) {
+            foreach (var v in source) {
+                yield return v.Norm;
+            }
+        }
+
+        public static IEnumerable<Vector3D> Normal(this IEnumerable<Vector3D> source) {
+            foreach (var v in source) {
+                yield return v.Normal;
+            }
         }
     }
 }
