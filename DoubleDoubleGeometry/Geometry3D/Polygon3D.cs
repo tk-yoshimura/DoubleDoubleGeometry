@@ -38,7 +38,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Polygon3D operator -(Polygon3D g) {
-            return new(-g.Polygon, -g.Translation, -g.Normal, 0);
+            return new(g.Polygon, -g.Translation, -g.Normal, 0);
         }
 
         public static Polygon3D operator +(Polygon3D g, Vector3D v) {
@@ -54,7 +54,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Polygon3D operator -(Vector3D v, Polygon3D g) {
-            return new(-g.Polygon, v - g.Translation, -g.Normal, 0);
+            return new(g.Polygon, v - g.Translation, -g.Normal, 0);
         }
 
         public static Polygon3D operator *(Quaternion q, Polygon3D g) {
@@ -64,11 +64,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Polygon3D operator *(Polygon3D g, ddouble r) {
-            return new(g.Polygon * r, g.Translation * r, g.Normal * ddouble.Sign(r), 0);
+            return new(g.Polygon * ddouble.Abs(r), g.Translation * r, g.Normal * ddouble.Sign(r), 0);
         }
 
         public static Polygon3D operator *(Polygon3D g, double r) {
-            return new(g.Polygon * r, g.Translation * r, g.Normal * double.Sign(r), 0);
+            return new(g.Polygon * double.Abs(r), g.Translation * r, g.Normal * double.Sign(r), 0);
         }
 
         public static Polygon3D operator *(ddouble r, Polygon3D g) {
@@ -80,11 +80,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Polygon3D operator /(Polygon3D g, ddouble r) {
-            return new(g.Polygon / r, g.Translation / r, g.Normal * ddouble.Sign(r), 0);
+            return new(g.Polygon / ddouble.Abs(r), g.Translation / r, g.Normal * ddouble.Sign(r), 0);
         }
 
         public static Polygon3D operator /(Polygon3D g, double r) {
-            return new(g.Polygon / r, g.Translation / r, g.Normal * double.Sign(r), 0);
+            return new(g.Polygon / double.Abs(r), g.Translation / r, g.Normal * double.Sign(r), 0);
         }
 
         public static bool operator ==(Polygon3D g1, Polygon3D g2) {
