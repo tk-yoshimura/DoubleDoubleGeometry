@@ -89,7 +89,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static bool operator ==(Polygon3D g1, Polygon3D g2) {
-            return g1.Vertex.SequenceEqual(g2.Vertex) && g1.Translation == g2.Translation && g1.Normal == g2.Normal;
+            return g1.Polygon == g2.Polygon && g1.Translation == g2.Translation && g1.Normal == g2.Normal;
         }
 
         public static bool operator !=(Polygon3D g1, Polygon3D g2) {
