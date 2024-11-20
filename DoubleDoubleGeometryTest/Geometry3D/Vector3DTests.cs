@@ -10,15 +10,17 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
     public class Vector3DTests {
         [TestMethod()]
         public void Vector3DTest() {
-            Vector3D vector = new(1, 2, 3);
+            Vector3D vector1 = new(1, 2, 3);
+            Vector3D vector2 = new Vector2D(1, 2);
 
-            Assert.AreEqual(1.0, vector.X);
-            Assert.AreEqual(2.0, vector.Y);
-            Assert.AreEqual(3.0, vector.Z);
+            Assert.AreEqual(1.0, vector1.X);
+            Assert.AreEqual(2.0, vector1.Y);
+            Assert.AreEqual(3.0, vector1.Z);
 
-            Assert.AreEqual(new Vector(1, 2, 3), (Vector)vector);
+            Assert.AreEqual(new Vector(1, 2, 3), (Vector)vector1);
+            Assert.AreEqual(new Vector(1, 2, 0), (Vector)vector2);
 
-            CollectionAssert.AreEqual(new ddouble[] { 1, 2, 3 }, (ddouble[])vector);
+            CollectionAssert.AreEqual(new ddouble[] { 1, 2, 3 }, (ddouble[])vector1);
         }
 
         [TestMethod()]

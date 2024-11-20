@@ -1,6 +1,7 @@
 ﻿using Algebra;
 using DoubleDouble;
 using DoubleDoubleComplex;
+using DoubleDoubleGeometry.Geometry2D;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -136,6 +137,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static implicit operator Vector3D(Vector v) {
             return new(v);
+        }
+
+        public static implicit operator Vector3D(Vector2D v) {
+            return new(v.X, v.Y, 0d);
         }
 
         public static implicit operator ddouble[](Vector3D v) {
