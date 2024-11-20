@@ -46,7 +46,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public ddouble Area => 4d * Radius * Radius * ddouble.Pi;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble Volume => 4d * Radius * Radius * Radius * ddouble.Pi / 3d;
+        public ddouble Volume => Radius * Radius * Radius * ddouble.Pi / 0.75d;
 
         public static Sphere3D operator +(Sphere3D g) {
             return g;

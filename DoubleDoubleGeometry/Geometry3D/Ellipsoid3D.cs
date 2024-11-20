@@ -43,7 +43,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble Volume => 4d * Axis.X * Axis.Y * Axis.Z * ddouble.Pi / 3d;
+        public ddouble Volume => Axis.X * Axis.Y * Axis.Z * ddouble.Pi / 0.75d;
 
         public static Ellipsoid3D operator +(Ellipsoid3D g) {
             return g;
