@@ -55,6 +55,22 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         }
 
         [TestMethod()]
+        public void OperatorTest() {
+            Assert.AreEqual(new Ellipse2D((4, 5), (1, 2), 3), +(new Ellipse2D((4, 5), (1, 2), 3)));
+            Assert.AreEqual(new Ellipse2D((-4, -5), (1, 2), 3), -(new Ellipse2D((4, 5), (1, 2), 3)));
+            Assert.AreEqual(new Ellipse2D((5, 9), (1, 2), 3), new Ellipse2D((4, 5), (1, 2), 3) + (1, 4));
+            Assert.AreEqual(new Ellipse2D((3, 1), (1, 2), 3), new Ellipse2D((4, 5), (1, 2), 3) - (1, 4));
+            Assert.AreEqual(new Ellipse2D((5, 9), (1, 2), 3), (1, 4) + new Ellipse2D((4, 5), (1, 2), 3));
+            Assert.AreEqual(new Ellipse2D((-3, -1), (1, 2), 3), (1, 4) - new Ellipse2D((4, 5), (1, 2), 3));
+            Assert.AreEqual(new Ellipse2D((8, 10), (2, 4), 3), new Ellipse2D((4, 5), (1, 2), 3) * (ddouble)2);
+            Assert.AreEqual(new Ellipse2D((8, 10), (2, 4), 3), new Ellipse2D((4, 5), (1, 2), 3) * (double)2);
+            Assert.AreEqual(new Ellipse2D((8, 10), (2, 4), 3), (ddouble)2 * new Ellipse2D((4, 5), (1, 2), 3));
+            Assert.AreEqual(new Ellipse2D((8, 10), (2, 4), 3), (double)2 * new Ellipse2D((4, 5), (1, 2), 3));
+            Assert.AreEqual(new Ellipse2D((2, 2.5), (0.5, 1), 3), new Ellipse2D((4, 5), (1, 2), 3) / (ddouble)2);
+            Assert.AreEqual(new Ellipse2D((2, 2.5), (0.5, 1), 3), new Ellipse2D((4, 5), (1, 2), 3) / (double)2);
+        }
+
+        [TestMethod()]
         public void ValidTest() {
             Assert.IsTrue(Ellipse2D.IsValid(new Ellipse2D(new Vector2D(1, 2), (4, 3), 5)));
             Assert.IsFalse(Ellipse2D.IsValid(Ellipse2D.Invalid));
