@@ -20,6 +20,13 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public int Vertices => Vertex.Count;
 
+#pragma warning disable CS8632
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Vector2D? center = null;
+#pragma warning restore CS8632
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Vector2D Center => center ??= new Vector2D(Vertex.X().Max() + Vertex.X().Min(), Vertex.Y().Max() + Vertex.Y().Min()) / 2d;
+
         public static Polygon2D operator +(Polygon2D g) {
             return g;
         }

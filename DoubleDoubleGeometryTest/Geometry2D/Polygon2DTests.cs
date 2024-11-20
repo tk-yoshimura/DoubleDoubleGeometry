@@ -32,5 +32,10 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Assert.AreEqual(Polygon2D.Regular(6).Vertex[0] / (ddouble)2, (Polygon2D.Regular(6) / (ddouble)2).Vertex[0]);
             Assert.AreEqual(Polygon2D.Regular(6).Vertex[0] / (double)2, (Polygon2D.Regular(6) / (double)2).Vertex[0]);
         }
+
+        [TestMethod()]
+        public void CenterTest() {
+            Assert.AreEqual((1, 4), (Polygon2D.Regular(6) + (1, 4)).Center);
+        }
     }
 }
