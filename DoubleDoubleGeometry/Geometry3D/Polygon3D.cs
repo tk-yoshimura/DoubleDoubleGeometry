@@ -39,23 +39,23 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Polygon3D operator -(Polygon3D g) {
-            return new(-g.Polygon, -g.Translation, -g.Normal);
+            return new(-g.Polygon, -g.Translation, -g.Normal, 0);
         }
 
         public static Polygon3D operator +(Polygon3D g, Vector3D v) {
-            return new(g.Polygon, g.Translation + v, g.Normal);
+            return new(g.Polygon, g.Translation + v, g.Normal, 0);
         }
 
         public static Polygon3D operator +(Vector3D v, Polygon3D g) {
-            return new(g.Polygon, v + g.Translation, g.Normal);
+            return new(g.Polygon, v + g.Translation, g.Normal, 0);
         }
 
         public static Polygon3D operator -(Polygon3D g, Vector3D v) {
-            return new(g.Polygon, g.Translation - v, g.Normal);
+            return new(g.Polygon, g.Translation - v, g.Normal, 0);
         }
 
         public static Polygon3D operator -(Vector3D v, Polygon3D g) {
-            return new(-g.Polygon, v - g.Translation, -g.Normal);
+            return new(-g.Polygon, v - g.Translation, -g.Normal, 0);
         }
 
         public static Polygon3D operator *(Quaternion q, Polygon3D g) {
