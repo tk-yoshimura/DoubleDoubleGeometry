@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace DoubleDoubleGeometry.Geometry2D {
@@ -123,6 +122,19 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public override int GetHashCode() {
             return Count > 0 ? Vertex[0].GetHashCode() : 0;
+        }
+
+        public static Polygon2D Regular(int n) {
+            ArgumentOutOfRangeException.ThrowIfLessThan(n, 3, nameof(n));
+
+            Vector2D[] vs = new Vector2D[n];
+
+            for (int i = 0; i < vs.Length; i++) {
+                ddouble theta = 2 * (ddouble)i / n;
+                vs[i] = (ddouble.CosPi(theta), ddouble.SinPi(theta));
+            }
+
+            return new(vs);
         }
     }
 }

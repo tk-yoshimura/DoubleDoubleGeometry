@@ -8,31 +8,31 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
     public class Ellipsoid3DTests {
         [TestMethod()]
         public void Ellipsoid3DTest() {
-            Ellipsoid3D ellipse = new((1, 2, 7), (2, 3, 4), (4, 3, 5, 6));
+            Ellipsoid3D ellipsoid = new((1, 2, 7), (2, 3, 4), (4, 3, 5, 6));
 
-            Assert.AreEqual(new Vector3D(1, 2, 7), ellipse.Center);
-            Assert.AreEqual(new Vector3D(2, 3, 4), ellipse.Axis);
-            Assert.AreEqual(new Quaternion(4, 3, 5, 6).Normal, ellipse.Rotation);
+            Assert.AreEqual(new Vector3D(1, 2, 7), ellipsoid.Center);
+            Assert.AreEqual(new Vector3D(2, 3, 4), ellipsoid.Axis);
+            Assert.AreEqual(new Quaternion(4, 3, 5, 6).Normal, ellipsoid.Rotation);
             
-            PrecisionAssert.AreEqual("100.53096491487338363080458826494409229", ellipse.Volume, 1e-29);
-            PrecisionAssert.AreEqual("111.54576989401032252593683948373857471", ellipse.Area, 1e-29);
+            PrecisionAssert.AreEqual("100.53096491487338363080458826494409229", ellipsoid.Volume, 1e-29);
+            PrecisionAssert.AreEqual("111.54576989401032252593683948373857471", ellipsoid.Area, 1e-29);
         }
 
         [TestMethod]
         public void EqualTest() {
-            Ellipsoid3D ellipse1 = new(new Vector3D(1, 2, 7), (2, 3, 4), (4, 3, 5, 6));
-            Ellipsoid3D ellipse2 = new((1, 2, 7), (2, 3, 4), (4, 3, 5, 6));
-            Ellipsoid3D ellipse3 = new((1, 3, 7), (2, 3, 4), (4, 3, 5, 6));
-            Ellipsoid3D ellipse4 = new((1, 2, 7), (2, 3, 5), (4, 3, 5, 6));
-            Ellipsoid3D ellipse5 = new((1, 2, 7), (2, 3, 4), (4, 3, 5, 7));
+            Ellipsoid3D ellipsoid1 = new(new Vector3D(1, 2, 7), (2, 3, 4), (4, 3, 5, 6));
+            Ellipsoid3D ellipsoid2 = new((1, 2, 7), (2, 3, 4), (4, 3, 5, 6));
+            Ellipsoid3D ellipsoid3 = new((1, 3, 7), (2, 3, 4), (4, 3, 5, 6));
+            Ellipsoid3D ellipsoid4 = new((1, 2, 7), (2, 3, 5), (4, 3, 5, 6));
+            Ellipsoid3D ellipsoid5 = new((1, 2, 7), (2, 3, 4), (4, 3, 5, 7));
 
-            Assert.AreEqual(ellipse1, ellipse2);
-            Assert.AreNotEqual(ellipse1, ellipse3);
+            Assert.AreEqual(ellipsoid1, ellipsoid2);
+            Assert.AreNotEqual(ellipsoid1, ellipsoid3);
 
-            Assert.IsTrue(ellipse1 == ellipse2);
-            Assert.IsTrue(ellipse1 != ellipse3);
-            Assert.IsTrue(ellipse1 != ellipse4);
-            Assert.IsTrue(ellipse1 != ellipse5);
+            Assert.IsTrue(ellipsoid1 == ellipsoid2);
+            Assert.IsTrue(ellipsoid1 != ellipsoid3);
+            Assert.IsTrue(ellipsoid1 != ellipsoid4);
+            Assert.IsTrue(ellipsoid1 != ellipsoid5);
         }
 
         [TestMethod()]
