@@ -13,62 +13,59 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public readonly ReadOnlyCollection<Vector3D> Vertex;
 
         public readonly Polygon2D Polygon;
-        public readonly Vector3D Translation, Normal;
+        public readonly Vector3D Center, Normal;
 
-        private Polygon3D(Polygon2D polygon, Vector3D translation, Vector3D normal, int _) {
+        private Polygon3D(Polygon2D polygon, Vector3D center, Vector3D normal, int _) {
             this.Polygon = polygon;
-            this.Translation = translation;
+            this.Center = center;
             this.Normal = normal;
 
             Quaternion rot = Vector3D.Rot((0, 0, 1), normal);
 
-            this.Vertex = polygon.Vertex.Select(v => translation + rot * (Vector3D)v).ToArray().AsReadOnly();
+            this.Vertex = polygon.Vertex.Select(v => center + rot * (Vector3D)v).ToArray().AsReadOnly();
         }
 
-        public Polygon3D(Polygon2D polygon, Vector3D translation, Vector3D normal)
-            : this(polygon - polygon.Center, translation + (Vector3D)polygon.Center, normal.Normal, 0) { }
+        public Polygon3D(Polygon2D polygon, Vector3D center, Vector3D normal)
+            : this(polygon - polygon.Center, center + (Vector3D)polygon.Center, normal.Normal, 0) { }
 
         public int Vertices => Polygon.Vertex.Count;
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Vector3D Center => Translation;
 
         public static Polygon3D operator +(Polygon3D g) {
             return g;
         }
 
         public static Polygon3D operator -(Polygon3D g) {
-            return new(g.Polygon, -g.Translation, -g.Normal, 0);
+            return new(g.Polygon, -g.Center, -g.Normal, 0);
         }
 
         public static Polygon3D operator +(Polygon3D g, Vector3D v) {
-            return new(g.Polygon, g.Translation + v, g.Normal, 0);
+            return new(g.Polygon, g.Center + v, g.Normal, 0);
         }
 
         public static Polygon3D operator +(Vector3D v, Polygon3D g) {
-            return new(g.Polygon, v + g.Translation, g.Normal, 0);
+            return new(g.Polygon, v + g.Center, g.Normal, 0);
         }
 
         public static Polygon3D operator -(Polygon3D g, Vector3D v) {
-            return new(g.Polygon, g.Translation - v, g.Normal, 0);
+            return new(g.Polygon, g.Center - v, g.Normal, 0);
         }
 
         public static Polygon3D operator -(Vector3D v, Polygon3D g) {
-            return new(g.Polygon, v - g.Translation, -g.Normal, 0);
+            return new(g.Polygon, v - g.Center, -g.Normal, 0);
         }
 
         public static Polygon3D operator *(Quaternion q, Polygon3D g) {
             ddouble norm = q.Norm;
 
-            return new(g.Polygon * norm, q * g.Translation, (q / norm) * g.Normal);
+            return new(g.Polygon * norm, q * g.Center, (q / norm) * g.Normal);
         }
 
         public static Polygon3D operator *(Polygon3D g, ddouble r) {
-            return new(g.Polygon * ddouble.Abs(r), g.Translation * r, g.Normal * ddouble.Sign(r), 0);
+            return new(g.Polygon * ddouble.Abs(r), g.Center * r, g.Normal * ddouble.Sign(r), 0);
         }
 
         public static Polygon3D operator *(Polygon3D g, double r) {
-            return new(g.Polygon * double.Abs(r), g.Translation * r, g.Normal * double.Sign(r), 0);
+            return new(g.Polygon * double.Abs(r), g.Center * r, g.Normal * double.Sign(r), 0);
         }
 
         public static Polygon3D operator *(ddouble r, Polygon3D g) {
@@ -80,15 +77,15 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Polygon3D operator /(Polygon3D g, ddouble r) {
-            return new(g.Polygon / ddouble.Abs(r), g.Translation / r, g.Normal * ddouble.Sign(r), 0);
+            return new(g.Polygon / ddouble.Abs(r), g.Center / r, g.Normal * ddouble.Sign(r), 0);
         }
 
         public static Polygon3D operator /(Polygon3D g, double r) {
-            return new(g.Polygon / double.Abs(r), g.Translation / r, g.Normal * double.Sign(r), 0);
+            return new(g.Polygon / double.Abs(r), g.Center / r, g.Normal * double.Sign(r), 0);
         }
 
         public static bool operator ==(Polygon3D g1, Polygon3D g2) {
-            return g1.Polygon == g2.Polygon && g1.Translation == g2.Translation && g1.Normal == g2.Normal;
+            return g1.Polygon == g2.Polygon && g1.Center == g2.Center && g1.Normal == g2.Normal;
         }
 
         public static bool operator !=(Polygon3D g1, Polygon3D g2) {
@@ -102,15 +99,15 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public static Polygon3D Zero { get; } = new(Polygon2D.Zero, Vector3D.Zero, Vector3D.Zero, 0);
 
         public static bool IsNaN(Polygon3D g) {
-            return Polygon2D.IsNaN(g.Polygon) || Vector3D.IsNaN(g.Translation) || Vector3D.IsNaN(g.Normal);
+            return Polygon2D.IsNaN(g.Polygon) || Vector3D.IsNaN(g.Center) || Vector3D.IsNaN(g.Normal);
         }
 
         public static bool IsZero(Polygon3D g) {
-            return Polygon2D.IsZero(g.Polygon) || Vector3D.IsZero(g.Translation) || Vector3D.IsZero(g.Normal);
+            return Polygon2D.IsZero(g.Polygon) || Vector3D.IsZero(g.Center) || Vector3D.IsZero(g.Normal);
         }
 
         public static bool IsFinite(Polygon3D g) {
-            return Polygon2D.IsFinite(g.Polygon) && Vector3D.IsFinite(g.Translation) && Vector3D.IsFinite(g.Normal);
+            return Polygon2D.IsFinite(g.Polygon) && Vector3D.IsFinite(g.Center) && Vector3D.IsFinite(g.Normal);
         }
 
         public static bool IsInfinity(Polygon3D g) {
