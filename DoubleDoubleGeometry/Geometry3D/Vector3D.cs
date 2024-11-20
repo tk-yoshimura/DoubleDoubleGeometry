@@ -139,7 +139,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return new(v);
         }
 
-        public static implicit operator Vector3D(Vector2D v) {
+        public static explicit operator Vector3D(Vector2D v) {
             return new(v.X, v.Y, 0d);
         }
 

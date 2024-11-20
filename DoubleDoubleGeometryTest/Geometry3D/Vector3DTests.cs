@@ -11,7 +11,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         [TestMethod()]
         public void Vector3DTest() {
             Vector3D vector1 = new(1, 2, 3);
-            Vector3D vector2 = new Vector2D(1, 2);
+            Vector3D vector2 = (Vector3D)new Vector2D(1, 2);
 
             Assert.AreEqual(1.0, vector1.X);
             Assert.AreEqual(2.0, vector1.Y);

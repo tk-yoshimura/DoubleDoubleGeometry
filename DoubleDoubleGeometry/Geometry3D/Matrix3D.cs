@@ -268,7 +268,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return new(m);
         }
 
-        public static implicit operator Matrix3D(Matrix2D m) {
+        public static explicit operator Matrix3D(Matrix2D m) {
             return new(
                  m.E00, m.E01, 0d,
                  m.E10, m.E11, 0d,

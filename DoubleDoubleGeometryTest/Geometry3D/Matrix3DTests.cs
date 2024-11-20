@@ -11,7 +11,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         [TestMethod()]
         public void Matrix3DTest() {
             Matrix3D matrix1 = new(1, 2, 3, 4, 5, 6, 7, 8, 9);
-            Matrix3D matrix2 = new Matrix2D(1, 2, 3, 4);
+            Matrix3D matrix2 = (Matrix3D)new Matrix2D(1, 2, 3, 4);
 
             Assert.AreEqual(1, matrix1.E00);
             Assert.AreEqual(2, matrix1.E01);
