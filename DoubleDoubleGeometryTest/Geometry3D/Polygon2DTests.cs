@@ -137,16 +137,6 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             }
 
             for (int i = 0; i < p.Vertices; i++) {
-                for (int j = 0; j < p.Vertices; j++) {
-                    if (i==j || Vector3D.Distance(p.Vertex[i], p.Vertex[j]) > 2.1) {
-                        continue;
-                    }
-
-                    Console.WriteLine($"{i}, {j}");
-                }
-            }
-
-            for (int i = 0; i < p.Vertices; i++) {
                 foreach (int j in p.Connection[i]) {
                     Console.WriteLine($"{i}, {j}");
                     PrecisionAssert.AreEqual(2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
