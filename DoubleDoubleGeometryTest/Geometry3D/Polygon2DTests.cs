@@ -46,6 +46,9 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 Assert.AreEqual(3, p.Connection[i].Count);
             }
 
+            Assert.AreEqual(Vector3D.Zero, p.Center);
+            Assert.AreEqual((2, 2, 2), p.Size);
+
             for (int i = 0; i < p.Vertices; i++) {
                 foreach (int j in p.Connection[i]) {
                     PrecisionAssert.AreEqual(2 * ddouble.Sqrt2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
@@ -67,6 +70,9 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             for (int i = 0; i < p.Vertices; i++) {
                 Assert.AreEqual(3, p.Connection[i].Count);
             }
+
+            Assert.AreEqual(Vector3D.Zero, p.Center);
+            Assert.AreEqual((2, 2, 2), p.Size);
 
             for (int i = 0; i < p.Vertices; i++) {
                 foreach (int j in p.Connection[i]) {
@@ -90,6 +96,9 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 Assert.AreEqual(4, p.Connection[i].Count);
             }
 
+            Assert.AreEqual(Vector3D.Zero, p.Center);
+            Assert.AreEqual((2, 2, 2), p.Size);
+
             for (int i = 0; i < p.Vertices; i++) {
                 foreach (int j in p.Connection[i]) {
                     PrecisionAssert.AreEqual(ddouble.Sqrt2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
@@ -112,15 +121,18 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 Assert.AreEqual(3, p.Connection[i].Count);
             }
 
+            Assert.AreEqual(Vector3D.Zero, p.Center);
+            Assert.AreEqual((2, 2, 2), p.Size);
+
             for (int i = 0; i < p.Vertices; i++) {
                 foreach (int j in p.Connection[i]) {
                     Console.WriteLine($"{i}, {j}");
-                    PrecisionAssert.AreEqual(2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
+                    PrecisionAssert.AreEqual(4 / (3 + ddouble.Sqrt(5)), Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
                 }
             }
 
             foreach ((int i, int j) in p.Connection) {
-                PrecisionAssert.AreEqual(2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
+                PrecisionAssert.AreEqual(4 / (3 + ddouble.Sqrt(5)), Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
             }
         }
 
@@ -135,15 +147,18 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 Assert.AreEqual(5, p.Connection[i].Count);
             }
 
+            Assert.AreEqual(Vector3D.Zero, p.Center);
+            Assert.AreEqual((2, 2, 2), p.Size);
+
             for (int i = 0; i < p.Vertices; i++) {
                 foreach (int j in p.Connection[i]) {
                     Console.WriteLine($"{i}, {j}");
-                    PrecisionAssert.AreEqual(2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
+                    PrecisionAssert.AreEqual(4 / (1 + ddouble.Sqrt(5)), Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
                 }
             }
 
             foreach ((int i, int j) in p.Connection) {
-                PrecisionAssert.AreEqual(2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
+                PrecisionAssert.AreEqual(4 / (1 + ddouble.Sqrt(5)), Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
             }
         }
     }

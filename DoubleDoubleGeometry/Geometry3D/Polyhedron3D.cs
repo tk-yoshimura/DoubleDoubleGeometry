@@ -179,8 +179,8 @@ namespace DoubleDoubleGeometry.Geometry3D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Polyhedron3D Dodecahedron {
             get {
-                ddouble p1 = (1d + ddouble.Sqrt(5)) * 0.5d;
-                ddouble p2 = (3d + ddouble.Sqrt(5)) * 0.5d;
+                ddouble p1 = (ddouble.Sqrt(5) - 1d) * 0.5d;
+                ddouble p2 = (3d - ddouble.Sqrt(5)) * 0.5d;
 
                 return new(
                     new Connection(20,
@@ -189,11 +189,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
                         (8, 15), (9, 16), (10, 12), (10, 17), (11, 13), (11, 18), (12, 14), (13, 14),
                         (14, 19), (15, 16), (15, 17), (16, 18), (17, 19), (18, 19)
                     ),
-                    (0, -1, -p2), (0, 1, -p2), (-p1, -p1, -p1), (p1, -p1, -p1),
-                    (-p1, p1, -p1), (1, -p2, 0), (p1, p1, -p1), (p2, 0, -1),
-                    (-p2, 0, -1), (-1, -p2, 0), (-1, p2, 0), (p1, -p1, p1),
-                    (1, p2, 0), (p2, 0, 1), (p1, p1, p1), (-p2, 0, 1),
-                    (-p1, -p1, p1), (-p1, p1, p1), (0, -1, p2), (0, 1, p2)
+                    (0, -p2, -1), (0, p2, -1), (-p1, -p1, -p1), (p1, -p1, -p1),
+                    (-p1, p1, -p1), (p2, -1, 0), (p1, p1, -p1), (1, 0, -p2),
+                    (-1, 0, -p2), (-p2, -1, 0), (-p2, 1, 0), (p1, -p1, p1),
+                    (p2, 1, 0), (1, 0, p2), (p1, p1, p1), (-1, 0, p2),
+                    (-p1, -p1, p1), (-p1, p1, p1), (0, -p2, 1), (0, p2, 1)
                 );
             }
         }
@@ -201,7 +201,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Polyhedron3D Icosahedron {
             get {
-                ddouble p1 = (1d + ddouble.Sqrt(5)) * 0.5d;
+                ddouble p1 = (ddouble.Sqrt(5) - 1d) * 0.5d;
 
                 return new(
                     new Connection(12,
@@ -210,9 +210,9 @@ namespace DoubleDoubleGeometry.Geometry3D {
                         (4, 9), (4, 10), (5, 8), (5, 10), (6, 7), (6, 9), (6, 11), (7, 8),
                         (7, 11), (8, 10), (8, 11), (9, 10), (9, 11), (10, 11)
                     ),
-                    (0, -1, -p1), (0, 1, -p1), (-p1, 0, -1), (p1, 0, -1),
-                    (1, -p1, 0), (-1, -p1, 0), (1, p1, 0), (-1, p1, 0),
-                    (-p1, 0, 1), (p1, 0, 1), (0, -1, p1), (0, 1, p1)
+                    (0, -p1, -1), (0, p1, -1), (-1, 0, -p1), (1, 0, -p1),
+                    (p1, -1, 0), (-p1, -1, 0), (p1, 1, 0), (-p1, 1, 0),
+                    (-1, 0, p1), (1, 0, p1), (0, -p1, 1), (0, p1, 1)
                 );
             }
         }
