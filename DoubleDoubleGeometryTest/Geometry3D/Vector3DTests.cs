@@ -274,13 +274,13 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Vector3D v = (ddouble.Pi, ddouble.E, ddouble.RcpE);
 
-            using (BinaryWriter stream = new BinaryWriter(File.Open(filename_bin, FileMode.Create))) {
+            using (BinaryWriter stream = new(File.Open(filename_bin, FileMode.Create))) {
                 stream.Write(v);
             }
 
             Vector3D u;
 
-            using (BinaryReader stream = new BinaryReader(File.OpenRead(filename_bin))) {
+            using (BinaryReader stream = new(File.OpenRead(filename_bin))) {
                 u = stream.ReadVector3D();
             }
 

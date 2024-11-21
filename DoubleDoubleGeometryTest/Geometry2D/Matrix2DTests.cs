@@ -32,7 +32,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
         [TestMethod()]
         public void InverseTest() {
-            Matrix2D matrix1 = new Matrix2D(1, 2, 3, 4);
+            Matrix2D matrix1 = new(1, 2, 3, 4);
             Matrix2D matrix2 = matrix1.Inverse.Inverse;
 
             PrecisionAssert.AreEqual(matrix1.E00, matrix2.E00, 1e-30);
@@ -120,7 +120,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
         [TestMethod()]
         public void DetTest() {
-            Matrix2D matrix = new Matrix2D(5, 2, 3, 4);
+            Matrix2D matrix = new(5, 2, 3, 4);
 
             PrecisionAssert.AreEqual(((Matrix)matrix).Det, matrix.Det, 1e-30);
         }
@@ -141,13 +141,13 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
             Matrix2D v = new ddouble[,] { { 1, 2 }, { 4, 5 } };
 
-            using (BinaryWriter stream = new BinaryWriter(File.Open(filename_bin, FileMode.Create))) {
+            using (BinaryWriter stream = new(File.Open(filename_bin, FileMode.Create))) {
                 stream.Write(v);
             }
 
             Matrix2D u;
 
-            using (BinaryReader stream = new BinaryReader(File.OpenRead(filename_bin))) {
+            using (BinaryReader stream = new(File.OpenRead(filename_bin))) {
                 u = stream.ReadMatrix2D();
             }
 
