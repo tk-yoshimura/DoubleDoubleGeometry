@@ -170,7 +170,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static bool IsZero(Ellipse2D g) {
-            return Vector2D.IsZero(g.Center) && ddouble.IsZero(g.Axis.major) && ddouble.IsZero(g.Axis.minor) && ddouble.IsZero(g.Rotation);
+            return Vector2D.IsZero(g.Center) && ddouble.IsZero(g.Axis.major) && ddouble.IsZero(g.Axis.minor) && ddouble.IsFinite(g.Rotation);
         }
 
         public static bool IsFinite(Ellipse2D g) {
