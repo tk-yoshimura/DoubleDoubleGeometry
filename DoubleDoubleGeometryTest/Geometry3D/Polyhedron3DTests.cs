@@ -58,6 +58,14 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             foreach ((int i, int j) in p.Connection) {
                 PrecisionAssert.AreEqual(2 * ddouble.Sqrt2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
             }
+
+            for (int i = 0; i < p.Vertices; i++) {
+                for (int j = i + 1; j < p.Vertices; j++) {
+                    Assert.IsTrue(Vector3D.Distance(p.Vertex[i], p.Vertex[j]) > 0.125);
+                }
+            }
+
+            Assert.AreEqual(4, p.Connection.EnumerateTriangle().Count());
         }
 
         [TestMethod()]
@@ -83,6 +91,14 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             foreach ((int i, int j) in p.Connection) {
                 PrecisionAssert.AreEqual(2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
             }
+
+            for (int i = 0; i < p.Vertices; i++) {
+                for (int j = i + 1; j < p.Vertices; j++) {
+                    Assert.IsTrue(Vector3D.Distance(p.Vertex[i], p.Vertex[j]) > 0.125);
+                }
+            }
+
+            Assert.AreEqual(0, p.Connection.EnumerateTriangle().Count());
         }
 
         [TestMethod()]
@@ -108,6 +124,14 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             foreach ((int i, int j) in p.Connection) {
                 PrecisionAssert.AreEqual(ddouble.Sqrt2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
             }
+
+            for (int i = 0; i < p.Vertices; i++) {
+                for (int j = i + 1; j < p.Vertices; j++) {
+                    Assert.IsTrue(Vector3D.Distance(p.Vertex[i], p.Vertex[j]) > 0.125);
+                }
+            }
+
+            Assert.AreEqual(8, p.Connection.EnumerateTriangle().Count());
         }
 
         [TestMethod()]
@@ -126,7 +150,6 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             for (int i = 0; i < p.Vertices; i++) {
                 foreach (int j in p.Connection[i]) {
-                    Console.WriteLine($"{i}, {j}");
                     PrecisionAssert.AreEqual(4 / (3 + ddouble.Sqrt(5)), Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
                 }
             }
@@ -134,6 +157,14 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             foreach ((int i, int j) in p.Connection) {
                 PrecisionAssert.AreEqual(4 / (3 + ddouble.Sqrt(5)), Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
             }
+
+            for (int i = 0; i < p.Vertices; i++) {
+                for (int j = i + 1; j < p.Vertices; j++) {
+                    Assert.IsTrue(Vector3D.Distance(p.Vertex[i], p.Vertex[j]) > 0.125);
+                }
+            }
+
+            Assert.AreEqual(0, p.Connection.EnumerateTriangle().Count());
         }
 
         [TestMethod()]
@@ -152,13 +183,24 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             for (int i = 0; i < p.Vertices; i++) {
                 foreach (int j in p.Connection[i]) {
-                    Console.WriteLine($"{i}, {j}");
                     PrecisionAssert.AreEqual(4 / (1 + ddouble.Sqrt(5)), Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
                 }
             }
 
             foreach ((int i, int j) in p.Connection) {
                 PrecisionAssert.AreEqual(4 / (1 + ddouble.Sqrt(5)), Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
+            }
+
+            for (int i = 0; i < p.Vertices; i++) {
+                for (int j = i + 1; j < p.Vertices; j++) {
+                    Assert.IsTrue(Vector3D.Distance(p.Vertex[i], p.Vertex[j]) > 0.125);
+                }
+            }
+
+            Assert.AreEqual(20, p.Connection.EnumerateTriangle().Count());
+
+            foreach ((int i, int j, int k) in p.Connection.EnumerateTriangle()) {
+                Console.WriteLine($"{i}, {j}, {k}");
             }
         }
     }

@@ -102,17 +102,39 @@ namespace DoubleDoubleGeometry {
             return ReferenceEquals(this, other) || (other is not null && other == this);
         }
 
-        public IEnumerator<(int i, int j)> GetEnumerator() {
+        public IEnumerator<(int i, int j)> GetEnumerator() => (IEnumerator<(int i, int j)>)EnumerateEdge();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public IEnumerable<(int i, int j)> EnumerateEdge() {
             for (int i = 0; i < Vertices; i++) {
                 foreach (int j in map[i]) {
-                    if (i < j) {
-                        yield return (i, j);
+                    if (i >= j) {
+                        continue;
                     }
+
+                    yield return (i, j);
                 }
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerable<(int i, int j, int k)> EnumerateTriangle() { 
+            for (int i = 0; i < Vertices; i++) {
+                foreach (int j in map[i]) {
+                    if (i >= j) {
+                        continue;
+                    }
+
+                    foreach (int k in map[j]) {
+                        if (j >= k || !map[k].Contains(i)) {
+                            continue;
+                        }
+
+                        yield return (i, j, k);
+                    }
+                }
+            }
+        }
 
         public override string ToString() {
             return $"connection vertices={Vertices}, edges={Edges}";
