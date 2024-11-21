@@ -339,6 +339,30 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return source.Sum() / source.Count();
         }
 
+        public static Vector3D Max(this IEnumerable<Vector3D> source) {
+            ddouble xmax = ddouble.NaN, ymax = ddouble.NaN, zmax = ddouble.NaN;
+
+            foreach (var v in source) {
+                xmax = !(xmax >= v.X) ? v.X : xmax;
+                ymax = !(ymax >= v.Y) ? v.Y : ymax;
+                zmax = !(zmax >= v.Z) ? v.Z : zmax;
+            }
+
+            return (xmax, ymax, zmax);
+        }
+
+        public static Vector3D Min(this IEnumerable<Vector3D> source) {
+            ddouble xmin = ddouble.NaN, ymin = ddouble.NaN, zmin = ddouble.NaN;
+
+            foreach (var v in source) {
+                xmin = !(xmin <= v.X) ? v.X : xmin;
+                ymin = !(ymin <= v.Y) ? v.Y : ymin;
+                zmin = !(zmin <= v.Z) ? v.Z : zmin;
+            }
+
+            return (xmin, ymin, zmin);
+        }
+
         public static IEnumerable<ddouble> X(this IEnumerable<Vector3D> source) {
             foreach (var v in source) {
                 yield return v.X;

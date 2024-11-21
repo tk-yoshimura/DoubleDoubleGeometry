@@ -1,5 +1,6 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
+using DoubleDoubleGeometry.Geometry2D;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,6 +27,20 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public int Vertices => Vertex.Count;
         public long Edges => Connection.Edges;
+
+#pragma warning disable CS8632
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Vector3D? center = null;
+#pragma warning restore CS8632
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Vector3D Center => center ??= (Vertex.Max() + Vertex.Min()) / 2d;
+
+#pragma warning disable CS8632
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Vector3D? size = null;
+#pragma warning restore CS8632
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Vector3D Size => size ??= Vertex.Max() - Vertex.Min();
 
         public static Polyhedron3D operator +(Polyhedron3D g) {
             return g;

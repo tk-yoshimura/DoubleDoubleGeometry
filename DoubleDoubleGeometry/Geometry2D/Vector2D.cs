@@ -296,6 +296,28 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return source.Sum() / source.Count();
         }
 
+        public static Vector2D Max(this IEnumerable<Vector2D> source) {
+            ddouble xmax = ddouble.NaN, ymax = ddouble.NaN;
+
+            foreach (var v in source) {
+                xmax = !(xmax >= v.X) ? v.X : xmax;
+                ymax = !(ymax >= v.Y) ? v.Y : ymax;
+            }
+
+            return (xmax, ymax);
+        }
+
+        public static Vector2D Min(this IEnumerable<Vector2D> source) {
+            ddouble xmin = ddouble.NaN, ymin = ddouble.NaN;
+
+            foreach (var v in source) {
+                xmin = !(xmin <= v.X) ? v.X : xmin;
+                ymin = !(ymin <= v.Y) ? v.Y : ymin;
+            }
+
+            return (xmin, ymin);
+        }
+
         public static IEnumerable<ddouble> X(this IEnumerable<Vector2D> source) {
             foreach (var v in source) {
                 yield return v.X;

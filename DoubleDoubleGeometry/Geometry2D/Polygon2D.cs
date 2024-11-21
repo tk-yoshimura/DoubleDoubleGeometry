@@ -25,7 +25,14 @@ namespace DoubleDoubleGeometry.Geometry2D {
         private Vector2D? center = null;
 #pragma warning restore CS8632
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Vector2D Center => center ??= new Vector2D(Vertex.X().Max() + Vertex.X().Min(), Vertex.Y().Max() + Vertex.Y().Min()) / 2d;
+        public Vector2D Center => center ??= (Vertex.Max() + Vertex.Min()) / 2d;
+
+#pragma warning disable CS8632
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Vector2D? size = null;
+#pragma warning restore CS8632
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Vector2D Size => size ??= Vertex.Max() - Vertex.Min();
 
         public static Polygon2D operator +(Polygon2D g) {
             return g;
