@@ -12,14 +12,14 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Assert.AreEqual(new Vector2D(1, 2), ellipse.Center);
             Assert.AreEqual(4d, ellipse.Axis.major);
             Assert.AreEqual(3d, ellipse.Axis.minor);
-            PrecisionAssert.AreEqual(5d - ddouble.Pi, ellipse.Angle);
+            PrecisionAssert.AreEqual(5d - ddouble.Pi, ellipse.Rotation);
 
             PrecisionAssert.AreEqual(4 * 3 * ddouble.Pi, ellipse.Area);
             PrecisionAssert.AreEqual("22.1034921607095050452855864638724607782783", ellipse.Perimeter, 1e-30);
             PrecisionAssert.AreEqual("2.64575131106459059050161575363926042571026", ellipse.Focus, 1e-30);
             PrecisionAssert.AreEqual("0.661437827766147647625403938409815106427565", ellipse.Eccentricity, 1e-30);
 
-            Matrix2D expected = Matrix2D.Scale(4, 3) * Matrix2D.Rotate(ellipse.Angle);
+            Matrix2D expected = Matrix2D.Scale(4, 3) * Matrix2D.Rotate(ellipse.Rotation);
             Matrix2D actual = ellipse.Matrix;
 
             PrecisionAssert.AreEqual(expected.E00, actual.E00, 1e-30);
@@ -51,7 +51,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             PrecisionAssert.AreEqual(-2.8709677419, ellipse.Center.Y, 1e-10);
             PrecisionAssert.AreEqual(4.52471777797, ellipse.Axis.major, 1e-10);
             PrecisionAssert.AreEqual(2.24080472704, ellipse.Axis.minor, 1e-10);
-            PrecisionAssert.AreEqual(1.96349540849, ellipse.Angle, 1e-10);
+            PrecisionAssert.AreEqual(1.96349540849, ellipse.Rotation, 1e-10);
         }
 
         [TestMethod()]
@@ -64,7 +64,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             PrecisionAssert.AreEqual(-1.1, ellipse.Center.Y, 1e-10);
             PrecisionAssert.AreEqual(2.07364413533, ellipse.Axis.major, 1e-10);
             PrecisionAssert.AreEqual(2.07364413533, ellipse.Axis.minor, 1e-10);
-            PrecisionAssert.AreEqual(0.0, ellipse.Angle, 1e-10);
+            PrecisionAssert.AreEqual(0.0, ellipse.Rotation, 1e-10);
         }
 
         [TestMethod()]

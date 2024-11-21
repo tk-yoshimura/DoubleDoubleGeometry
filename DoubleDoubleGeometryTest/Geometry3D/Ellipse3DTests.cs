@@ -13,7 +13,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(new Vector3D(2, 3, 4).Normal, ellipse.Normal);
             Assert.AreEqual(4d, ellipse.Axis.major);
             Assert.AreEqual(3d, ellipse.Axis.minor);
-            PrecisionAssert.AreEqual(5d - ddouble.Pi, ellipse.Angle);
+            PrecisionAssert.AreEqual(5d - ddouble.Pi, ellipse.Rotation);
 
             PrecisionAssert.AreEqual(4 * 3 * ddouble.Pi, ellipse.Area);
             PrecisionAssert.AreEqual("22.1034921607095050452855864638724607782783", ellipse.Perimeter, 1e-30);
