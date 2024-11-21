@@ -77,7 +77,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Circle3D operator -(Circle3D g) {
-            return new(-g.Center, -g.Normal, g.Radius, 0);
+            return new(-g.Center, g.Normal, g.Radius, 0);
         }
 
         public static Circle3D operator +(Circle3D g, Vector3D v) {
@@ -93,7 +93,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Circle3D operator -(Vector3D v, Circle3D g) {
-            return new(v - g.Center, -g.Normal, g.Radius, 0);
+            return new(v - g.Center, g.Normal, g.Radius, 0);
         }
 
         public static Circle3D operator *(Quaternion q, Circle3D g) {

@@ -35,7 +35,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Polygon3D operator -(Polygon3D g) {
-            return new(-g.Polygon, -g.Center, -g.Normal, 0);
+            return new(-g.Polygon, -g.Center, g.Normal, 0);
         }
 
         public static Polygon3D operator +(Polygon3D g, Vector3D v) {
@@ -51,7 +51,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Polygon3D operator -(Vector3D v, Polygon3D g) {
-            return new(-g.Polygon, v - g.Center, -g.Normal, 0);
+            return new(-g.Polygon, v - g.Center, g.Normal, 0);
         }
 
         public static Polygon3D operator *(Quaternion q, Polygon3D g) {
