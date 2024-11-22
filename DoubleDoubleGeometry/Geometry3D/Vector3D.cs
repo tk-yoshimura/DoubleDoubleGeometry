@@ -178,15 +178,35 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static Quaternion Rot(Vector3D v1, Vector3D v2) {
             Vector3D axis = Cross(v1, v2).Normal;
+            ddouble dot = Dot(v1, v2);
 
             if (!IsFinite(axis)) {
-                ddouble dot = Dot(v1, v2);
-
-                if (dot > 0) {
+                if (dot > 0d) {
                     return Quaternion.One;
                 }
-                else if (dot < 0) {
-                    return Quaternion.IOne;
+                else if (dot < 0d) {
+                    Vector v = v1.Norm > v2.Norm ? v1 : v2;
+
+                    int index = MaxAbsIndex(v);
+
+                    if (index == 0) {
+                        axis = (v.Y, -v.X, 0d);
+                    }
+                    else if (index == 1) {
+                        axis = (0d, v.Z, -v.Y);
+                    }
+                    else {
+                        axis = (-v.Z, 0d, v.X);
+                    }
+
+                    axis = axis.Normal;
+
+                    ddouble v1_norm = v1.Norm, v2_norm = v2.Norm;
+
+                    return new Quaternion(0d, axis.X, axis.Y, axis.Z) * ddouble.Sqrt(v2_norm / v1_norm);
+                }
+                else if (IsZero(v2)) {
+                    return Quaternion.Zero;
                 }
                 else {
                     return Quaternion.NaN;
@@ -196,7 +216,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 ddouble v1_norm = v1.Norm, v2_norm = v2.Norm;
 
                 return Quaternion.FromAxisAngle(
-                    axis, ddouble.Acos(ddouble.Clamp(Dot(v1, v2) / (v1_norm * v2_norm), -1d, 1d))
+                    axis, ddouble.Acos(ddouble.Clamp(dot / (v1_norm * v2_norm), -1d, 1d))
                 ) * ddouble.Sqrt(v2_norm / v1_norm);
             }
         }

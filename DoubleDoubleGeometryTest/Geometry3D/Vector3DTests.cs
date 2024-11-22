@@ -290,6 +290,31 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Vector3DAssert.AreEqual(vector2, Vector3D.Rot(vector5, vector2) * vector5, 1e-30);
             Vector3DAssert.AreEqual(vector3, Vector3D.Rot(vector5, vector3) * vector5, 1e-30);
             Vector3DAssert.AreEqual(vector4, Vector3D.Rot(vector5, vector4) * vector5, 1e-30);
+
+            Vector3DAssert.AreEqual((1, 0, 0), Vector3D.Rot((1, 0, 0), (1, 0, 0)) * new Vector3D(1, 0, 0), 1e-30);
+            Vector3DAssert.AreEqual((-1, 0, 0), Vector3D.Rot((1, 0, 0), (-1, 0, 0)) * new Vector3D(1, 0, 0), 1e-30);
+            Vector3DAssert.AreEqual((1, 0, 0), Vector3D.Rot((-1, 0, 0), (1, 0, 0)) * new Vector3D(-1, 0, 0), 1e-30);
+            Vector3DAssert.AreEqual((-1, 0, 0), Vector3D.Rot((-1, 0, 0), (-1, 0, 0)) * new Vector3D(-1, 0, 0), 1e-30);
+
+            Vector3DAssert.AreEqual((0, 1, 0), Vector3D.Rot((0, 1, 0), (0, 1, 0)) * new Vector3D(0, 1, 0), 1e-30);
+            Vector3DAssert.AreEqual((0, -1, 0), Vector3D.Rot((0, 1, 0), (0, -1, 0)) * new Vector3D(0, 1, 0), 1e-30);
+            Vector3DAssert.AreEqual((0, 1, 0), Vector3D.Rot((0, -1, 0), (0, 1, 0)) * new Vector3D(0, -1, 0), 1e-30);
+            Vector3DAssert.AreEqual((0, -1, 0), Vector3D.Rot((0, -1, 0), (0, -1, 0)) * new Vector3D(0, -1, 0), 1e-30);
+
+            Vector3DAssert.AreEqual((0, 0, 1), Vector3D.Rot((0, 0, 1), (0, 0, 1)) * new Vector3D(0, 0, 1), 1e-30);
+            Vector3DAssert.AreEqual((0, 0, -1), Vector3D.Rot((0, 0, 1), (0, 0, -1)) * new Vector3D(0, 0, 1), 1e-30);
+            Vector3DAssert.AreEqual((0, 0, 1), Vector3D.Rot((0, 0, -1), (0, 0, 1)) * new Vector3D(0, 0, -1), 1e-30);
+            Vector3DAssert.AreEqual((0, 0, -1), Vector3D.Rot((0, 0, -1), (0, 0, -1)) * new Vector3D(0, 0, -1), 1e-30);
+
+            Vector3DAssert.AreEqual((2, 3, 4), Vector3D.Rot((-2, -3, -4), (2, 3, 4)) * new Vector3D(-2, -3, -4), 1e-30);
+            Vector3DAssert.AreEqual((3, 4, 2), Vector3D.Rot((-3, -4, -2), (3, 4, 2)) * new Vector3D(-3, -4, -2), 1e-30);
+            Vector3DAssert.AreEqual((4, 2, 3), Vector3D.Rot((-4, -2, -3), (4, 2, 3)) * new Vector3D(-4, -2, -3), 1e-30);
+
+            Vector3DAssert.AreEqual((4, 6, 8), Vector3D.Rot((-2, -3, -4), (4, 6, 8)) * new Vector3D(-2, -3, -4), 1e-30);
+            Vector3DAssert.AreEqual((6, 8, 4), Vector3D.Rot((-3, -4, -2), (6, 8, 4)) * new Vector3D(-3, -4, -2), 1e-30);
+            Vector3DAssert.AreEqual((8, 4, 6), Vector3D.Rot((-4, -2, -3), (8, 4, 6)) * new Vector3D(-4, -2, -3), 1e-30);
+
+            Vector3DAssert.AreEqual((0, 0, 0), Vector3D.Rot((-4, -2, -3), (0, 0, 0)) * new Vector3D(-4, -2, -3), 1e-30);
         }
 
         [TestMethod()]
