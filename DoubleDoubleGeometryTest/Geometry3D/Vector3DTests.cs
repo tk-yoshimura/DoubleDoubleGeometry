@@ -259,6 +259,40 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void RotTest() {
+            Vector3D vector1 = new(0, 0, 1);
+            Vector3D vector2 = new(2, 3, 4);
+            Vector3D vector3 = new(0, 0, 1);
+            Vector3D vector4 = new(0, 1, 0);
+            Vector3D vector5 = new(0, 0, -1);
+
+            Vector3DAssert.AreEqual(vector2, Vector3D.Rot(vector1, vector2) * vector1, 1e-30);
+            Vector3DAssert.AreEqual(vector3, Vector3D.Rot(vector1, vector3) * vector1, 1e-30);
+            Vector3DAssert.AreEqual(vector4, Vector3D.Rot(vector1, vector4) * vector1, 1e-30);
+            Vector3DAssert.AreEqual(vector5, Vector3D.Rot(vector1, vector5) * vector1, 1e-30);
+
+            Vector3DAssert.AreEqual(vector1, Vector3D.Rot(vector2, vector1) * vector2, 1e-30);
+            Vector3DAssert.AreEqual(vector3, Vector3D.Rot(vector2, vector3) * vector2, 1e-30);
+            Vector3DAssert.AreEqual(vector4, Vector3D.Rot(vector2, vector4) * vector2, 1e-30);
+            Vector3DAssert.AreEqual(vector5, Vector3D.Rot(vector2, vector5) * vector2, 1e-30);
+
+            Vector3DAssert.AreEqual(vector1, Vector3D.Rot(vector3, vector1) * vector3, 1e-30);
+            Vector3DAssert.AreEqual(vector2, Vector3D.Rot(vector3, vector2) * vector3, 1e-30);
+            Vector3DAssert.AreEqual(vector4, Vector3D.Rot(vector3, vector4) * vector3, 1e-30);
+            Vector3DAssert.AreEqual(vector5, Vector3D.Rot(vector3, vector5) * vector3, 1e-30);
+
+            Vector3DAssert.AreEqual(vector1, Vector3D.Rot(vector4, vector1) * vector4, 1e-30);
+            Vector3DAssert.AreEqual(vector2, Vector3D.Rot(vector4, vector2) * vector4, 1e-30);
+            Vector3DAssert.AreEqual(vector3, Vector3D.Rot(vector4, vector3) * vector4, 1e-30);
+            Vector3DAssert.AreEqual(vector5, Vector3D.Rot(vector4, vector5) * vector4, 1e-30);
+
+            Vector3DAssert.AreEqual(vector1, Vector3D.Rot(vector5, vector1) * vector5, 1e-30);
+            Vector3DAssert.AreEqual(vector2, Vector3D.Rot(vector5, vector2) * vector5, 1e-30);
+            Vector3DAssert.AreEqual(vector3, Vector3D.Rot(vector5, vector3) * vector5, 1e-30);
+            Vector3DAssert.AreEqual(vector4, Vector3D.Rot(vector5, vector4) * vector5, 1e-30);
+        }
+
+        [TestMethod()]
         public void ToStringTest() {
             Vector3D vector1 = new(1, 2, 3);
 

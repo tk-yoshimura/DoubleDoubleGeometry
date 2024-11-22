@@ -177,10 +177,20 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Quaternion Rot(Vector3D v1, Vector3D v2) {
-            Vector3D axis = Cross(v1, v2);
+            Vector3D axis = Cross(v1, v2).Normal;
 
-            if (v1 == v2 || IsZero(axis)) {
-                return Quaternion.One;
+            if (!IsFinite(axis)) {
+                ddouble dot = Dot(v1, v2);
+
+                if (dot > 0) {
+                    return Quaternion.One;
+                }
+                else if (dot < 0) {
+                    return Quaternion.IOne;
+                }
+                else {
+                    return Quaternion.NaN;
+                }
             }
             else {
                 ddouble v1_norm = v1.Norm, v2_norm = v2.Norm;
