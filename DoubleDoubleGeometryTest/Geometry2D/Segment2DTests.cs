@@ -41,6 +41,38 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         }
 
         [TestMethod()]
+        public void PointTest() {
+            Segment2D segment1 = new Segment2D(Vector2D.Zero, (1, 1));
+            Segment2D segment2 = new Segment2D(Vector2D.Zero, (1, 1)) * 2;
+            Segment2D segment3 = new Segment2D(Vector2D.Zero, (1, 1)) * -2;
+            Segment2D segment4 = new Segment2D(Vector2D.Zero, (1, 1)) + (2, 3);
+            Segment2D segment5 = new Segment2D(Vector2D.Zero, (3, 4));
+            Segment2D segment6 = new Segment2D(Vector2D.Zero, (4, 3));
+
+            Vector2DAssert.AreEqual((0, 0), segment1.Point(0), 1e-30);
+            Vector2DAssert.AreEqual((1, 1), segment1.Point(1), 1e-30);
+            Vector2DAssert.AreEqual((2, 2), segment1.Point(2), 1e-30);
+
+            Vector2DAssert.AreEqual(segment1.Point(0) * 2, segment2.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(segment1.Point(ddouble.Pi / 4) * 2, segment2.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual(segment1.Point(ddouble.Pi / 2) * 2, segment2.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector2DAssert.AreEqual(segment1.Point(0) * -2, segment3.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(segment1.Point(ddouble.Pi / 4) * -2, segment3.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual(segment1.Point(ddouble.Pi / 2) * -2, segment3.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector2DAssert.AreEqual(segment1.Point(0) + (2, 3), segment4.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(segment1.Point(ddouble.Pi / 4) + (2, 3), segment4.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual(segment1.Point(ddouble.Pi / 2) + (2, 3), segment4.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector2DAssert.AreEqual((3, 4), segment5.Point(1), 1e-30);
+            Vector2DAssert.AreEqual((6, 8), segment5.Point(2), 1e-30);
+
+            Vector2DAssert.AreEqual((4, 3), segment6.Point(1), 1e-30);
+            Vector2DAssert.AreEqual((8, 6), segment6.Point(2), 1e-30);
+        }
+
+        [TestMethod()]
         public void ValidTest() {
             Assert.IsTrue(Segment2D.IsValid(new Segment2D(new Vector2D(6, 1), new Vector2D(-1, 2))));
             Assert.IsFalse(Segment2D.IsValid(Segment2D.Invalid));

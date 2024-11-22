@@ -38,6 +38,38 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         }
 
         [TestMethod()]
+        public void PointTest() {
+            Line2D line1 = Line2D.FromDirection(Vector2D.Zero, (1, 1));
+            Line2D line2 = Line2D.FromDirection(Vector2D.Zero, (1, 1)) * 2;
+            Line2D line3 = Line2D.FromDirection(Vector2D.Zero, (1, 1)) * -2;
+            Line2D line4 = Line2D.FromDirection((2, 3), (1, 1));
+            Line2D line5 = Line2D.FromDirection(Vector2D.Zero, (3, 4));
+            Line2D line6 = Line2D.FromDirection(Vector2D.Zero, (4, 3));
+
+            Vector2DAssert.AreEqual((0, 0), line1.Point(0), 1e-30);
+            Vector2DAssert.AreEqual((1, 1), line1.Point(ddouble.Sqrt2), 1e-30);
+            Vector2DAssert.AreEqual((2, 2), line1.Point(ddouble.Sqrt2 * 2), 1e-30);
+
+            Vector2DAssert.AreEqual(line1.Point(0) * 2, line2.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(line1.Point(ddouble.Pi / 4), line2.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual(line1.Point(ddouble.Pi / 2), line2.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector2DAssert.AreEqual(-line1.Point(0), line3.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(-line1.Point(ddouble.Pi / 4), line3.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual(-line1.Point(ddouble.Pi / 2), line3.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector2DAssert.AreEqual(line1.Point(0) + (2, 3), line4.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(line1.Point(ddouble.Pi / 4) + (2, 3), line4.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual(line1.Point(ddouble.Pi / 2) + (2, 3), line4.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector2DAssert.AreEqual((3, 4), line5.Point(5), 1e-30);
+            Vector2DAssert.AreEqual((6, 8), line5.Point(10), 1e-30);
+
+            Vector2DAssert.AreEqual((4, 3), line6.Point(5), 1e-30);
+            Vector2DAssert.AreEqual((8, 6), line6.Point(10), 1e-30);
+        }
+
+        [TestMethod()]
         public void ValidTest() {
             Assert.IsTrue(Line2D.IsValid(Line2D.FromIntersection(new Vector2D(6, 1), new Vector2D(-1, 2))));
             Assert.IsFalse(Line2D.IsValid(Line2D.Invalid));

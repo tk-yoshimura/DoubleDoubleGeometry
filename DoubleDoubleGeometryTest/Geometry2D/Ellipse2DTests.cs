@@ -1,6 +1,7 @@
 ﻿using DoubleDouble;
 using DoubleDoubleGeometry.Geometry2D;
 using PrecisionTestTools;
+using System.Numerics;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
     [TestClass()]
@@ -81,6 +82,42 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Assert.AreEqual(new Ellipse2D((8, 10), (2, 4), 3), (double)2 * new Ellipse2D((4, 5), (1, 2), 3));
             Assert.AreEqual(new Ellipse2D((2, 2.5), (0.5, 1), 3), new Ellipse2D((4, 5), (1, 2), 3) / (ddouble)2);
             Assert.AreEqual(new Ellipse2D((2, 2.5), (0.5, 1), 3), new Ellipse2D((4, 5), (1, 2), 3) / (double)2);
+        }
+
+        [TestMethod()]
+        public void PointTest() {
+            Ellipse2D ellipse1 = new Ellipse2D(Vector2D.Zero, (3, 2), 0);
+            Ellipse2D ellipse2 = new Ellipse2D(Vector2D.Zero, (3, 2), 0) * 2;
+            Ellipse2D ellipse3 = new Ellipse2D(Vector2D.Zero, (3, 2), 0) * -2;
+            Ellipse2D ellipse4 = new Ellipse2D((2, 3), (3, 2), 0);
+            Ellipse2D ellipse5 = new Ellipse2D(Vector2D.Zero, (3, 2), ddouble.Pi / 2);
+            Ellipse2D ellipse6 = new Ellipse2D((2, 3), (3, 2), ddouble.Pi / 2);
+
+            Complex c = Complex.ImaginaryOne;
+
+            Vector2DAssert.AreEqual((3, 0), ellipse1.Point(0), 1e-30);
+            Vector2DAssert.AreEqual((3 * ddouble.Sqrt2 / 2, ddouble.Sqrt2), ellipse1.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual((0, 2), ellipse1.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector2DAssert.AreEqual(ellipse1.Point(0) * 2, ellipse2.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(ellipse1.Point(ddouble.Pi / 4) * 2, ellipse2.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual(ellipse1.Point(ddouble.Pi / 2) * 2, ellipse2.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector2DAssert.AreEqual(ellipse1.Point(0) * 2, ellipse3.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(ellipse1.Point(ddouble.Pi / 4) * 2, ellipse3.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual(ellipse1.Point(ddouble.Pi / 2) * 2, ellipse3.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector2DAssert.AreEqual(ellipse1.Point(0) + (2, 3), ellipse4.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(ellipse1.Point(ddouble.Pi / 4) + (2, 3), ellipse4.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual(ellipse1.Point(ddouble.Pi / 2) + (2, 3), ellipse4.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector2DAssert.AreEqual(c * ellipse1.Point(0), ellipse5.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(c * ellipse1.Point(ddouble.Pi / 4), ellipse5.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual(c * ellipse1.Point(ddouble.Pi / 2), ellipse5.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector2DAssert.AreEqual(c * ellipse1.Point(0) + (2, 3), ellipse6.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(c * ellipse1.Point(ddouble.Pi / 4) + (2, 3), ellipse6.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual(c * ellipse1.Point(ddouble.Pi / 2) + (2, 3), ellipse6.Point(ddouble.Pi / 2), 1e-30);
         }
 
         [TestMethod()]

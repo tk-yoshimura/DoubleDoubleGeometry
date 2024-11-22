@@ -118,7 +118,7 @@ namespace DoubleDoubleGeometry {
             }
         }
 
-        public IEnumerable<(int i, int j, int k)> EnumerateTriangle() { 
+        public IEnumerable<(int i, int j, int k)> EnumerateTriangle() {
             for (int i = 0; i < Vertices; i++) {
                 foreach (int j in map[i]) {
                     if (i >= j) {
