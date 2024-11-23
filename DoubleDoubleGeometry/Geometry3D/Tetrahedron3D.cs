@@ -1,8 +1,8 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 

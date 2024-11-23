@@ -1,4 +1,5 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 
@@ -37,6 +38,50 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(new Segment3D((8, 10, 6), (2, 4, 14)), (double)2 * new Segment3D((4, 5, 3), (1, 2, 7)));
             Assert.AreEqual(new Segment3D((2, 2.5, 1.5), (0.5, 1, 3.5)), new Segment3D((4, 5, 3), (1, 2, 7)) / (ddouble)2);
             Assert.AreEqual(new Segment3D((2, 2.5, 1.5), (0.5, 1, 3.5)), new Segment3D((4, 5, 3), (1, 2, 7)) / (double)2);
+        }
+
+        [TestMethod()]
+        public void PointTest() {
+            Segment3D segment1 = new(Vector3D.Zero, (1, 1, 1));
+            Segment3D segment2 = new Segment3D(Vector3D.Zero, (1, 1, 1)) * 2;
+            Segment3D segment3 = new Segment3D(Vector3D.Zero, (1, 1, 1)) * -2;
+            Segment3D segment4 = new Segment3D(Vector3D.Zero, (1, 1, 1)) + (2, 3, 4);
+            Segment3D segment5 = new(Vector3D.Zero, (3, 4, 5));
+            Segment3D segment6 = new(Vector3D.Zero, (4, 3, 5));
+
+            Quaternion q = new Quaternion(2, 5, 3, 4).Normal;
+            Matrix3D m = new(q);
+
+            Segment3D segment7 = q * segment4;
+            Segment3D segment8 = m * segment4;
+
+            Vector3DAssert.AreEqual((0, 0, 0), segment1.Point(0), 1e-30);
+            Vector3DAssert.AreEqual((1, 1, 1), segment1.Point(1), 1e-30);
+            Vector3DAssert.AreEqual((2, 2, 2), segment1.Point(2), 1e-30);
+
+            Vector3DAssert.AreEqual(segment1.Point(0) * 2, segment2.Point(0), 1e-30);
+            Vector3DAssert.AreEqual(segment1.Point(ddouble.Pi / 4) * 2, segment2.Point(ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual(segment1.Point(ddouble.Pi / 2) * 2, segment2.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector3DAssert.AreEqual(segment1.Point(0) * -2, segment3.Point(0), 1e-30);
+            Vector3DAssert.AreEqual(segment1.Point(ddouble.Pi / 4) * -2, segment3.Point(ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual(segment1.Point(ddouble.Pi / 2) * -2, segment3.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector3DAssert.AreEqual(segment1.Point(0) + (2, 3, 4), segment4.Point(0), 1e-30);
+            Vector3DAssert.AreEqual(segment1.Point(ddouble.Pi / 4) + (2, 3, 4), segment4.Point(ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual(segment1.Point(ddouble.Pi / 2) + (2, 3, 4), segment4.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector3DAssert.AreEqual((3, 4, 5), segment5.Point(1), 1e-30);
+            Vector3DAssert.AreEqual((6, 8, 10), segment5.Point(2), 1e-30);
+
+            Vector3DAssert.AreEqual((4, 3, 5), segment6.Point(1), 1e-30);
+            Vector3DAssert.AreEqual((8, 6, 10), segment6.Point(2), 1e-30);
+
+            Vector3DAssert.AreEqual(q * segment4.Point(0), segment7.Point(0), 1e-30);
+            Vector3DAssert.AreEqual(q * segment4.Point(1), segment7.Point(1), 1e-30);
+
+            Vector3DAssert.AreEqual(m * segment4.Point(0), segment8.Point(0), 1e-30);
+            Vector3DAssert.AreEqual(m * segment4.Point(1), segment8.Point(1), 1e-30);
         }
 
         [TestMethod()]
