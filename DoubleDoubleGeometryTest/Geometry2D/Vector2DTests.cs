@@ -3,6 +3,7 @@ using DoubleDouble;
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
 using DoubleDoubleGeometry.Geometry3D;
+using DoubleDoubleGeometryTest.Geometry3D;
 using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
@@ -226,6 +227,56 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
                     }
                 }
             }
+        }
+
+        [TestMethod()]
+        public void RotTest() {
+            Vector2D vector1 = new(0, 1);
+            Vector2D vector2 = new(3, 4);
+            Vector2D vector3 = new(0, 1);
+            Vector2D vector4 = new(1, 0);
+            Vector2D vector5 = new(0, -1);
+
+            Vector2DAssert.AreEqual(vector2, Vector2D.Rot(vector1, vector2) * vector1, 1e-30);
+            Vector2DAssert.AreEqual(vector3, Vector2D.Rot(vector1, vector3) * vector1, 1e-30);
+            Vector2DAssert.AreEqual(vector4, Vector2D.Rot(vector1, vector4) * vector1, 1e-30);
+            Vector2DAssert.AreEqual(vector5, Vector2D.Rot(vector1, vector5) * vector1, 1e-30);
+
+            Vector2DAssert.AreEqual(vector1, Vector2D.Rot(vector2, vector1) * vector2, 1e-30);
+            Vector2DAssert.AreEqual(vector3, Vector2D.Rot(vector2, vector3) * vector2, 1e-30);
+            Vector2DAssert.AreEqual(vector4, Vector2D.Rot(vector2, vector4) * vector2, 1e-30);
+            Vector2DAssert.AreEqual(vector5, Vector2D.Rot(vector2, vector5) * vector2, 1e-30);
+
+            Vector2DAssert.AreEqual(vector1, Vector2D.Rot(vector3, vector1) * vector3, 1e-30);
+            Vector2DAssert.AreEqual(vector2, Vector2D.Rot(vector3, vector2) * vector3, 1e-30);
+            Vector2DAssert.AreEqual(vector4, Vector2D.Rot(vector3, vector4) * vector3, 1e-30);
+            Vector2DAssert.AreEqual(vector5, Vector2D.Rot(vector3, vector5) * vector3, 1e-30);
+
+            Vector2DAssert.AreEqual(vector1, Vector2D.Rot(vector4, vector1) * vector4, 1e-30);
+            Vector2DAssert.AreEqual(vector2, Vector2D.Rot(vector4, vector2) * vector4, 1e-30);
+            Vector2DAssert.AreEqual(vector3, Vector2D.Rot(vector4, vector3) * vector4, 1e-30);
+            Vector2DAssert.AreEqual(vector5, Vector2D.Rot(vector4, vector5) * vector4, 1e-30);
+
+            Vector2DAssert.AreEqual(vector1, Vector2D.Rot(vector5, vector1) * vector5, 1e-30);
+            Vector2DAssert.AreEqual(vector2, Vector2D.Rot(vector5, vector2) * vector5, 1e-30);
+            Vector2DAssert.AreEqual(vector3, Vector2D.Rot(vector5, vector3) * vector5, 1e-30);
+            Vector2DAssert.AreEqual(vector4, Vector2D.Rot(vector5, vector4) * vector5, 1e-30);
+
+            Vector2DAssert.AreEqual((1, 0), Vector2D.Rot((1, 0), (1, 0)) * new Vector2D(1, 0), 1e-30);
+            Vector2DAssert.AreEqual((-1, 0), Vector2D.Rot((1, 0), (-1, 0)) * new Vector2D(1, 0), 1e-30);
+            Vector2DAssert.AreEqual((1, 0), Vector2D.Rot((-1, 0), (1, 0)) * new Vector2D(-1, 0), 1e-30);
+            Vector2DAssert.AreEqual((-1, 0), Vector2D.Rot((-1, 0), (-1, 0)) * new Vector2D(-1, 0), 1e-30);
+
+            Vector2DAssert.AreEqual((0, 1), Vector2D.Rot((0, 1), (0, 1)) * new Vector2D(0, 1), 1e-30);
+            Vector2DAssert.AreEqual((0, -1), Vector2D.Rot((0, 1), (0, -1)) * new Vector2D(0, 1), 1e-30);
+            Vector2DAssert.AreEqual((0, 1), Vector2D.Rot((0, -1), (0, 1)) * new Vector2D(0, -1), 1e-30);
+            Vector2DAssert.AreEqual((0, -1), Vector2D.Rot((0, -1), (0, -1)) * new Vector2D(0, -1), 1e-30);
+
+            Vector2DAssert.AreEqual((2, 3), Vector2D.Rot((-2, -3), (2, 3)) * new Vector2D(-2, -3), 1e-30);
+            Vector2DAssert.AreEqual((3, 4), Vector2D.Rot((-3, -4), (3, 4)) * new Vector2D(-3, -4), 1e-30);
+
+            Vector2DAssert.AreEqual((4, 6), Vector2D.Rot((-2, -3), (4, 6)) * new Vector2D(-2, -3), 1e-30);
+            Vector2DAssert.AreEqual((6, 8), Vector2D.Rot((-3, -4), (6, 8)) * new Vector2D(-3, -4), 1e-30);
         }
 
         [TestMethod()]

@@ -163,6 +163,18 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return v1.X * v2.X + v1.Y * v2.Y;
         }
 
+        public static Complex Rot(Vector2D v1, Vector2D v2) {
+            ddouble v1_norm = v1.Norm, v2_norm = v2.Norm;
+
+            ddouble n = v2_norm / v1_norm;
+            ddouble c = v1_norm * v2_norm;
+
+            ddouble r = (v1.X * v2.X + v1.Y * v2.Y) / c;
+            ddouble i = (v1.X * v2.Y - v1.Y * v2.X) / c;
+
+            return (n * r, n * i);
+        }
+
         public static Vector2D ScaleB(Vector2D v, int n) {
             return new(ddouble.Ldexp(v.X, n), ddouble.Ldexp(v.Y, n));
         }
