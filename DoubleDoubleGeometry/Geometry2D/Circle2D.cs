@@ -62,7 +62,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public ddouble Area => Radius * Radius * ddouble.Pi;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble Perimeter => 2d * Radius * ddouble.Pi;
+        public ddouble Perimeter => 2d * ddouble.Abs(Radius) * ddouble.Pi;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble A => -2d * Center.X;
@@ -78,7 +78,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static Circle2D operator -(Circle2D g) {
-            return new(-g.Center, g.Radius);
+            return new(-g.Center, -g.Radius);
         }
 
         public static Circle2D operator +(Circle2D g, Vector2D v) {
@@ -94,7 +94,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static Circle2D operator -(Vector2D v, Circle2D g) {
-            return new(v - g.Center, g.Radius);
+            return new(v - g.Center, -g.Radius);
         }
 
         public static Circle2D operator *(Complex c, Circle2D g) {
@@ -104,11 +104,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static Circle2D operator *(Circle2D g, ddouble r) {
-            return new(g.Center * r, g.Radius * ddouble.Abs(r));
+            return new(g.Center * r, g.Radius * r);
         }
 
         public static Circle2D operator *(Circle2D g, double r) {
-            return new(g.Center * r, g.Radius * double.Abs(r));
+            return new(g.Center * r, g.Radius * r);
         }
 
         public static Circle2D operator *(ddouble r, Circle2D g) {
@@ -120,11 +120,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static Circle2D operator /(Circle2D g, ddouble r) {
-            return new(g.Center / r, g.Radius / ddouble.Abs(r));
+            return new(g.Center / r, g.Radius / r);
         }
 
         public static Circle2D operator /(Circle2D g, double r) {
-            return new(g.Center / r, g.Radius / double.Abs(r));
+            return new(g.Center / r, g.Radius / r);
         }
 
         public static bool operator ==(Circle2D g1, Circle2D g2) {
@@ -169,7 +169,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static bool IsValid(Circle2D g) {
-            return IsFinite(g) && g.Radius >= 0d;
+            return IsFinite(g);
         }
 
         public override string ToString() {

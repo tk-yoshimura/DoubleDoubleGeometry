@@ -10,62 +10,72 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
     [DebuggerDisplay("{ToString(),nq}")]
     public class Polygon3D : IGeometry<Polygon3D, Vector3D> {
-        public readonly ReadOnlyCollection<Vector3D> Vertex;
-
         public readonly Polygon2D Polygon;
-        public readonly Vector3D Center, Normal;
+        public readonly Vector3D Center;
+        public readonly Quaternion Rotation;
 
-        private Polygon3D(Polygon2D polygon, Vector3D center, Vector3D normal, int _) {
+        private Polygon3D(Polygon2D polygon, Vector3D center, Quaternion rotation, int _) {
             this.Polygon = polygon;
             this.Center = center;
-            this.Normal = normal;
-
-            Quaternion rot = Vector3D.Rot((0, 0, 1), normal);
-
-            this.Vertex = polygon.Vertex.Select(v => center + rot * (Vector3D)v).ToArray().AsReadOnly();
+            this.Rotation = rotation;
         }
 
         public Polygon3D(Polygon2D polygon, Vector3D center, Vector3D normal)
-            : this(polygon, center, normal.Normal, 0) { }
+            : this(polygon, center, Vector3D.Rot((0, 0, 1), normal.Normal), 0) { }
+
+        public Polygon3D(Polygon2D polygon, Vector3D center, Quaternion rotation) {
+            this.Center = center;
+            this.Polygon = polygon;
+            this.Rotation = rotation.Normal;
+        }
 
         public int Vertices => Polygon.Vertex.Count;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ReadOnlyCollection<Vector3D> vertex = null;
+
+        public ReadOnlyCollection<Vector3D> Vertex
+            => vertex ??= Polygon.Vertex.Select(v => Center + Rotation * (Vector3D)v).ToArray().AsReadOnly();
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Vector3D Normal => Rotation * new Vector3D(0, 0, 1);
 
         public static Polygon3D operator +(Polygon3D g) {
             return g;
         }
 
         public static Polygon3D operator -(Polygon3D g) {
-            return new(-g.Polygon, -g.Center, g.Normal, 0);
+            return new(-g.Polygon, -g.Center, g.Rotation, 0);
         }
 
         public static Polygon3D operator +(Polygon3D g, Vector3D v) {
-            return new(g.Polygon, g.Center + v, g.Normal, 0);
+            return new(g.Polygon, g.Center + v, g.Rotation, 0);
         }
 
         public static Polygon3D operator +(Vector3D v, Polygon3D g) {
-            return new(g.Polygon, v + g.Center, g.Normal, 0);
+            return new(g.Polygon, v + g.Center, g.Rotation, 0);
         }
 
         public static Polygon3D operator -(Polygon3D g, Vector3D v) {
-            return new(g.Polygon, g.Center - v, g.Normal, 0);
+            return new(g.Polygon, g.Center - v, g.Rotation, 0);
         }
 
         public static Polygon3D operator -(Vector3D v, Polygon3D g) {
-            return new(-g.Polygon, v - g.Center, g.Normal, 0);
+            return new(-g.Polygon, v - g.Center, g.Rotation, 0);
         }
 
         public static Polygon3D operator *(Quaternion q, Polygon3D g) {
             ddouble norm = q.Norm;
 
-            return new(g.Polygon * norm, q * g.Center, (q / norm) * g.Normal);
+            return new(norm * g.Polygon, q * g.Center, (q / norm) * g.Rotation, 0);
         }
 
         public static Polygon3D operator *(Polygon3D g, ddouble r) {
-            return new(g.Polygon * r, g.Center * r, g.Normal, 0);
+            return new(g.Polygon * r, g.Center * r, g.Rotation, 0);
         }
 
         public static Polygon3D operator *(Polygon3D g, double r) {
-            return new(g.Polygon * r, g.Center * r, g.Normal, 0);
+            return new(g.Polygon * r, g.Center * r, g.Rotation, 0);
         }
 
         public static Polygon3D operator *(ddouble r, Polygon3D g) {
@@ -77,15 +87,15 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Polygon3D operator /(Polygon3D g, ddouble r) {
-            return new(g.Polygon / r, g.Center / r, g.Normal, 0);
+            return new(g.Polygon / r, g.Center / r, g.Rotation, 0);
         }
 
         public static Polygon3D operator /(Polygon3D g, double r) {
-            return new(g.Polygon / r, g.Center / r, g.Normal, 0);
+            return new(g.Polygon / r, g.Center / r, g.Rotation, 0);
         }
 
         public static bool operator ==(Polygon3D g1, Polygon3D g2) {
-            return g1.Polygon == g2.Polygon && g1.Center == g2.Center && g1.Normal == g2.Normal;
+            return g1.Polygon == g2.Polygon && g1.Center == g2.Center && g1.Rotation == g2.Rotation;
         }
 
         public static bool operator !=(Polygon3D g1, Polygon3D g2) {
@@ -93,21 +103,21 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public static Polygon3D Invalid { get; } = new(Polygon2D.Invalid, Vector3D.Invalid, Vector3D.Invalid, 0);
+        public static Polygon3D Invalid { get; } = new(Polygon2D.Invalid, Vector3D.Invalid, Quaternion.NaN, 0);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public static Polygon3D Zero { get; } = new(Polygon2D.Zero, Vector3D.Zero, Vector3D.Zero, 0);
+        public static Polygon3D Zero { get; } = new(Polygon2D.Zero, Vector3D.Zero, Quaternion.Zero, 0);
 
         public static bool IsNaN(Polygon3D g) {
-            return Polygon2D.IsNaN(g.Polygon) || Vector3D.IsNaN(g.Center) || Vector3D.IsNaN(g.Normal);
+            return Polygon2D.IsNaN(g.Polygon) || Vector3D.IsNaN(g.Center) || Quaternion.IsNaN(g.Rotation);
         }
 
         public static bool IsZero(Polygon3D g) {
-            return Polygon2D.IsZero(g.Polygon) || Vector3D.IsZero(g.Center) || Vector3D.IsZero(g.Normal);
+            return Polygon2D.IsZero(g.Polygon) || Vector3D.IsZero(g.Center) || Quaternion.IsZero(g.Rotation);
         }
 
         public static bool IsFinite(Polygon3D g) {
-            return Polygon2D.IsFinite(g.Polygon) && Vector3D.IsFinite(g.Center) && Vector3D.IsFinite(g.Normal);
+            return Polygon2D.IsFinite(g.Polygon) && Vector3D.IsFinite(g.Center) && Quaternion.IsFinite(g.Rotation);
         }
 
         public static bool IsInfinity(Polygon3D g) {

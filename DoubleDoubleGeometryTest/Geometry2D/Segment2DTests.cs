@@ -42,12 +42,12 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
         [TestMethod()]
         public void PointTest() {
-            Segment2D segment1 = new Segment2D(Vector2D.Zero, (1, 1));
+            Segment2D segment1 = new(Vector2D.Zero, (1, 1));
             Segment2D segment2 = new Segment2D(Vector2D.Zero, (1, 1)) * 2;
             Segment2D segment3 = new Segment2D(Vector2D.Zero, (1, 1)) * -2;
             Segment2D segment4 = new Segment2D(Vector2D.Zero, (1, 1)) + (2, 3);
-            Segment2D segment5 = new Segment2D(Vector2D.Zero, (3, 4));
-            Segment2D segment6 = new Segment2D(Vector2D.Zero, (4, 3));
+            Segment2D segment5 = new(Vector2D.Zero, (3, 4));
+            Segment2D segment6 = new(Vector2D.Zero, (4, 3));
 
             Vector2DAssert.AreEqual((0, 0), segment1.Point(0), 1e-30);
             Vector2DAssert.AreEqual((1, 1), segment1.Point(1), 1e-30);

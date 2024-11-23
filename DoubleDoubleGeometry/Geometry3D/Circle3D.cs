@@ -8,29 +8,27 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
     [DebuggerDisplay("{ToString(),nq}")]
     public class Circle3D : IGeometry<Circle3D, Vector3D>, IFormattable {
-        public readonly Vector3D Center, Normal;
+        public readonly Vector3D Center;
         public readonly ddouble Radius;
+        public readonly Quaternion Rotation;
 
-        private Circle3D(Vector3D center, Vector3D normal, ddouble radius, int _) {
+        private Circle3D(Vector3D center, ddouble radius, Quaternion rotation, int _) {
             this.Center = center;
-            this.Normal = normal;
             this.Radius = radius;
+            this.Rotation = rotation;
         }
 
-        public Circle3D(Vector3D center, Vector3D normal, ddouble radius) {
+        public Circle3D(Vector3D center, ddouble radius, Vector3D normal)
+            : this(center, radius, Vector3D.Rot((0, 0, 1), normal.Normal), 0) { }
+
+        public Circle3D(Vector3D center, ddouble radius, Quaternion rotation) {
             this.Center = center;
-            this.Normal = normal.Normal;
             this.Radius = radius;
+            this.Rotation = rotation.Normal;
         }
 
-#pragma warning disable CS8632
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Quaternion? rot = null;
-#pragma warning restore CS8632
         public Vector3D Point(ddouble t) {
-            rot ??= Vector3D.Rot((0d, 0d, 1d), Normal);
-
-            return Center + rot * new Vector3D(Radius * ddouble.Cos(t), Radius * ddouble.Sin(t), 0d);
+            return Center + Rotation * new Vector3D(Radius * ddouble.Cos(t), Radius * ddouble.Sin(t), 0d);
         }
 
         public static Circle3D FromIntersection(Vector3D v1, Vector3D v2, Vector3D v3) {
@@ -51,7 +49,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
             Vector3D normal = Vector3D.NormalizeSign(Vector3D.Cross(c, a));
             ddouble radius = a_norm * b_norm * c_norm / ddouble.Sqrt((a_norm + b_norm + c_norm) * (-a_norm + b_norm + c_norm) * (a_norm - b_norm + c_norm) * (a_norm + b_norm - c_norm));
 
-            return new Circle3D(center, normal, radius);
+            return new Circle3D(center, radius, normal);
         }
 
         public static Circle3D FromIncircle(Triangle3D triangle) {
@@ -63,52 +61,54 @@ namespace DoubleDoubleGeometry.Geometry3D {
             Vector3D normal = Vector3D.NormalizeSign(Vector3D.Cross(c, a));
             ddouble radius = 2d * s / sum_norm;
 
-            return new Circle3D(center, normal, radius);
+            return new Circle3D(center, radius, normal);
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Area => Radius * Radius * ddouble.Pi;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble Perimeter => 2d * Radius * ddouble.Pi;
+        public ddouble Perimeter => 2d * ddouble.Abs(Radius) * ddouble.Pi;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Vector3D Normal => Rotation * new Vector3D(0, 0, 1);
 
         public static Circle3D operator +(Circle3D g) {
             return g;
         }
 
         public static Circle3D operator -(Circle3D g) {
-            return new(-g.Center, g.Normal, g.Radius, 0);
+            return new(-g.Center, -g.Radius, g.Rotation, 0);
         }
 
         public static Circle3D operator +(Circle3D g, Vector3D v) {
-            return new(g.Center + v, g.Normal, g.Radius, 0);
+            return new(g.Center + v, g.Radius, g.Rotation, 0);
         }
 
         public static Circle3D operator +(Vector3D v, Circle3D g) {
-            return new(g.Center + v, g.Normal, g.Radius, 0);
+            return new(g.Center + v, g.Radius, g.Rotation, 0);
         }
 
         public static Circle3D operator -(Circle3D g, Vector3D v) {
-            return new(g.Center - v, g.Normal, g.Radius, 0);
+            return new(g.Center - v, g.Radius, g.Rotation, 0);
         }
 
         public static Circle3D operator -(Vector3D v, Circle3D g) {
-            return new(v - g.Center, g.Normal, g.Radius, 0);
+            return new(v - g.Center, -g.Radius, g.Rotation, 0);
         }
 
         public static Circle3D operator *(Quaternion q, Circle3D g) {
-            Vector3D normal = q * g.Normal;
-            ddouble norm = normal.Norm;
+            ddouble norm = q.Norm;
 
-            return new(g.Center * norm, normal / norm, g.Radius * norm, 0);
+            return new(q * g.Center, norm * g.Radius, (q / norm) * g.Rotation, 0);
         }
 
         public static Circle3D operator *(Circle3D g, ddouble r) {
-            return new(g.Center * r, g.Normal * ddouble.Sign(r), g.Radius * ddouble.Abs(r), 0);
+            return new(g.Center * r, g.Radius * r, g.Rotation, 0);
         }
 
         public static Circle3D operator *(Circle3D g, double r) {
-            return new(g.Center * r, g.Normal * double.Sign(r), g.Radius * double.Abs(r), 0);
+            return new(g.Center * r, g.Radius * r, g.Rotation, 0);
         }
 
         public static Circle3D operator *(ddouble r, Circle3D g) {
@@ -120,48 +120,48 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Circle3D operator /(Circle3D g, ddouble r) {
-            return new(g.Center / r, g.Normal * ddouble.Sign(r), g.Radius / ddouble.Abs(r), 0);
+            return new(g.Center / r, g.Radius / r, g.Rotation, 0);
         }
 
         public static Circle3D operator /(Circle3D g, double r) {
-            return new(g.Center / r, g.Normal * ddouble.Sign(r), g.Radius / double.Abs(r), 0);
+            return new(g.Center / r, g.Radius / r, g.Rotation, 0);
         }
 
         public static bool operator ==(Circle3D g1, Circle3D g2) {
-            return (g1.Center == g2.Center) && (g1.Normal == g2.Normal) && (g1.Radius == g2.Radius);
+            return (g1.Center == g2.Center) && (g1.Radius == g2.Radius) && (g1.Rotation == g2.Rotation);
         }
 
         public static bool operator !=(Circle3D g1, Circle3D g2) {
             return !(g1 == g2);
         }
 
-        public static implicit operator Circle3D((Vector3D center, Vector3D normal, ddouble radius) g) {
-            return new(g.center, g.normal, g.radius);
+        public static implicit operator Circle3D((Vector3D center, ddouble radius, Quaternion rotation) g) {
+            return new(g.center, g.radius, g.rotation);
         }
 
-        public static implicit operator (Vector3D center, Vector3D normal, ddouble radius)(Circle3D g) {
-            return (g.Center, g.Normal, g.Radius);
+        public static implicit operator (Vector3D center, ddouble radius, Quaternion rotation)(Circle3D g) {
+            return (g.Center, g.Radius, g.Rotation);
         }
 
-        public void Deconstruct(out Vector3D center, out Vector3D normal, out ddouble radius)
-            => (center, normal, radius) = (Center, Normal, Radius);
+        public void Deconstruct(out Vector3D center, out ddouble radius, out Quaternion rotation)
+            => (center, radius, rotation) = (Center, Radius, Rotation);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public static Circle3D Invalid { get; } = new(Vector3D.Invalid, Vector3D.Invalid, ddouble.NaN, 0);
+        public static Circle3D Invalid { get; } = new(Vector3D.Invalid, ddouble.NaN, Quaternion.NaN, 0);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public static Circle3D Zero { get; } = new(Vector3D.Zero, Vector3D.Zero, ddouble.Zero, 0);
+        public static Circle3D Zero { get; } = new(Vector3D.Zero, ddouble.Zero, Quaternion.Zero, 0);
 
         public static bool IsNaN(Circle3D g) {
-            return Vector3D.IsNaN(g.Center) || Vector3D.IsNaN(g.Normal) || ddouble.IsNaN(g.Radius);
+            return Vector3D.IsNaN(g.Center) || ddouble.IsNaN(g.Radius) || Quaternion.IsNaN(g.Rotation);
         }
 
         public static bool IsZero(Circle3D g) {
-            return Vector3D.IsZero(g.Center) && Vector3D.IsZero(g.Normal) && ddouble.IsZero(g.Radius);
+            return Vector3D.IsZero(g.Center) && ddouble.IsZero(g.Radius) && Quaternion.IsZero(g.Rotation);
         }
 
         public static bool IsFinite(Circle3D g) {
-            return Vector3D.IsFinite(g.Center) && Vector3D.IsFinite(g.Normal) && ddouble.IsFinite(g.Radius);
+            return Vector3D.IsFinite(g.Center) && ddouble.IsFinite(g.Radius) && Quaternion.IsFinite(g.Rotation);
         }
 
         public static bool IsInfinity(Circle3D g) {
@@ -169,11 +169,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static bool IsValid(Circle3D g) {
-            return IsFinite(g) && !Vector3D.IsZero(g.Normal) && g.Radius >= 0d;
+            return IsFinite(g);
         }
 
         public override string ToString() {
-            return $"center={Center}, normal={Normal}, radius={Radius}";
+            return $"center={Center}, radius={Radius}, rotation={Rotation}";
         }
 
         public string ToString([AllowNull] string format, [AllowNull] IFormatProvider formatProvider) {
@@ -181,7 +181,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 return ToString();
             }
 
-            return $"center={Center.ToString(format)}, normal={Normal.ToString(format)}, radius={Radius.ToString(format)}";
+            return $"center={Center.ToString(format)}, radius={Radius.ToString(format)}, rotation={Rotation.ToString(format)}";
         }
 
         public string ToString(string format) {
@@ -197,7 +197,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public override int GetHashCode() {
-            return Center.GetHashCode() ^ Normal.GetHashCode() ^ Radius.GetHashCode();
+            return Center.GetHashCode() ^ Radius.GetHashCode() ^ Rotation.GetHashCode();
         }
     }
 }

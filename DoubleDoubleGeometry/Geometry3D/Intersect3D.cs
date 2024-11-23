@@ -172,8 +172,8 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
             Circle3D y = new(
                 sphere.Center + plane.Normal * t,
-                plane.Normal,
-                ddouble.Sqrt(sphere.Radius * sphere.Radius - t * t)
+                ddouble.Sqrt(sphere.Radius * sphere.Radius - t * t),
+                plane.Normal
             );
 
             return y;
@@ -199,7 +199,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
             Vector3D center = c0 + c01 * x * inv_d;
 
-            Circle3D y = new(center, c01, h);
+            Circle3D y = new(center, h, c01);
 
             return y;
         }

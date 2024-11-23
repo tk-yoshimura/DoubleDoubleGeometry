@@ -142,7 +142,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Sphere3D sphere1 = new(v0, 3);
             Sphere3D sphere2 = new(v1, 4);
-            Circle3D circle = new(v2, matrix * new Vector3D(1, 0, 0), "2.4");
+            Circle3D circle = new(v2, "2.4", matrix * new Vector3D(1, 0, 0));
 
             Circle3D cross = Intersect3D.SphereSphere(sphere1, sphere2);
 

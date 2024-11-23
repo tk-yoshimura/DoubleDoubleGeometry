@@ -8,11 +8,11 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
     public class Ellipsoid3DTests {
         [TestMethod()]
         public void Ellipsoid3DTest() {
-            Ellipsoid3D ellipsoid = new((1, 2, 7), (2, 3, 4), (4, 3, 5, 6));
+            Ellipsoid3D ellipsoid = new((1, 2, 7), (2, 3, 4), new Quaternion(4, 3, 5, 6).Normal);
 
-            Assert.AreEqual(new Vector3D(1, 2, 7), ellipsoid.Center);
-            Assert.AreEqual(new Vector3D(2, 3, 4), ellipsoid.Axis);
-            Assert.AreEqual(new Quaternion(4, 3, 5, 6).Normal, ellipsoid.Rotation);
+            Vector3DAssert.AreEqual(new Vector3D(1, 2, 7), ellipsoid.Center, 1e-30);
+            Vector3DAssert.AreEqual(new Vector3D(2, 3, 4), ellipsoid.Axis, 1e-30);
+            Assert.IsTrue((new Quaternion(4, 3, 5, 6).Normal - ellipsoid.Rotation).Norm < 1e-30);
 
             PrecisionAssert.AreEqual("100.53096491487338363080458826494409229", ellipsoid.Volume, 1e-29);
             PrecisionAssert.AreEqual("111.54576989401032252593683948373857471", ellipsoid.Area, 1e-29);

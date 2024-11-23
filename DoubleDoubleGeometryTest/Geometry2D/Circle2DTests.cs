@@ -58,11 +58,11 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         [TestMethod()]
         public void OperatorTest() {
             Assert.AreEqual(new Circle2D((4, 5), 3), +(new Circle2D((4, 5), 3)));
-            Assert.AreEqual(new Circle2D((-4, -5), 3), -(new Circle2D((4, 5), 3)));
+            Assert.AreEqual(new Circle2D((-4, -5), -3), -(new Circle2D((4, 5), 3)));
             Assert.AreEqual(new Circle2D((5, 9), 3), new Circle2D((4, 5), 3) + (1, 4));
             Assert.AreEqual(new Circle2D((3, 1), 3), new Circle2D((4, 5), 3) - (1, 4));
             Assert.AreEqual(new Circle2D((5, 9), 3), (1, 4) + new Circle2D((4, 5), 3));
-            Assert.AreEqual(new Circle2D((-3, -1), 3), (1, 4) - new Circle2D((4, 5), 3));
+            Assert.AreEqual(new Circle2D((-3, -1), -3), (1, 4) - new Circle2D((4, 5), 3));
             Assert.AreEqual(new Circle2D((8, 10), 6), new Circle2D((4, 5), 3) * (ddouble)2);
             Assert.AreEqual(new Circle2D((8, 10), 6), new Circle2D((4, 5), 3) * (double)2);
             Assert.AreEqual(new Circle2D((8, 10), 6), (ddouble)2 * new Circle2D((4, 5), 3));
@@ -73,10 +73,10 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
         [TestMethod()]
         public void PointTest() {
-            Circle2D circle1 = new Circle2D(Vector2D.Zero, 1);
+            Circle2D circle1 = new(Vector2D.Zero, 1);
             Circle2D circle2 = new Circle2D(Vector2D.Zero, 1) * 2;
             Circle2D circle3 = new Circle2D(Vector2D.Zero, 1) * -2;
-            Circle2D circle4 = new Circle2D((2, 3), 1);
+            Circle2D circle4 = new((2, 3), 1);
 
             Vector2DAssert.AreEqual((1, 0), circle1.Point(0), 1e-30);
             Vector2DAssert.AreEqual((ddouble.Sqrt2 / 2, ddouble.Sqrt2 / 2), circle1.Point(ddouble.Pi / 4), 1e-30);
@@ -86,9 +86,9 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Vector2DAssert.AreEqual(circle1.Point(ddouble.Pi / 4) * 2, circle2.Point(ddouble.Pi / 4), 1e-30);
             Vector2DAssert.AreEqual(circle1.Point(ddouble.Pi / 2) * 2, circle2.Point(ddouble.Pi / 2), 1e-30);
 
-            Vector2DAssert.AreEqual(circle1.Point(0) * 2, circle3.Point(0), 1e-30);
-            Vector2DAssert.AreEqual(circle1.Point(ddouble.Pi / 4) * 2, circle3.Point(ddouble.Pi / 4), 1e-30);
-            Vector2DAssert.AreEqual(circle1.Point(ddouble.Pi / 2) * 2, circle3.Point(ddouble.Pi / 2), 1e-30);
+            Vector2DAssert.AreEqual(circle1.Point(0) * -2, circle3.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(circle1.Point(ddouble.Pi / 4) * -2, circle3.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual(circle1.Point(ddouble.Pi / 2) * -2, circle3.Point(ddouble.Pi / 2), 1e-30);
 
             Vector2DAssert.AreEqual(circle1.Point(0) + (2, 3), circle4.Point(0), 1e-30);
             Vector2DAssert.AreEqual(circle1.Point(ddouble.Pi / 4) + (2, 3), circle4.Point(ddouble.Pi / 4), 1e-30);

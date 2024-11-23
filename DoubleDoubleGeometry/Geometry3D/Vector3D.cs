@@ -215,8 +215,8 @@ namespace DoubleDoubleGeometry.Geometry3D {
             else {
                 ddouble v1_norm = v1.Norm, v2_norm = v2.Norm;
 
-                return Quaternion.FromAxisAngle(
-                    axis, ddouble.Acos(ddouble.Clamp(dot / (v1_norm * v2_norm), -1d, 1d))
+                return Quaternion.FromAxisAnglePi(
+                    axis, ddouble.AcosPi(ddouble.Clamp(dot / (v1_norm * v2_norm), -1d, 1d))
                 ) * ddouble.Sqrt(v2_norm / v1_norm);
             }
         }

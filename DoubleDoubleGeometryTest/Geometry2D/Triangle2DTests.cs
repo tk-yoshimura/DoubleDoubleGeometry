@@ -44,7 +44,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
         [TestMethod()]
         public void PointTest() {
-            Triangle2D triangle1 = new Triangle2D(Vector2D.Zero, (1, 1), (2, 0));
+            Triangle2D triangle1 = new(Vector2D.Zero, (1, 1), (2, 0));
             Triangle2D triangle2 = new Triangle2D(Vector2D.Zero, (1, 1), (2, 0)) * 2;
             Triangle2D triangle3 = new Triangle2D(Vector2D.Zero, (1, 1), (2, 0)) * -2;
             Triangle2D triangle4 = new Triangle2D(Vector2D.Zero, (1, 1), (2, 0)) + (2, 3);
