@@ -29,6 +29,12 @@ namespace DoubleDoubleGeometry.Geometry3D {
             this.Rotation = rotation.Normal;
         }
 
+        public Polygon3D(Polygon2D polygon) {
+            this.Center = Vector3D.Zero;
+            this.Polygon = polygon;
+            this.Rotation = Quaternion.One;
+        }
+
         public int Vertices => Polygon.Vertex.Count;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

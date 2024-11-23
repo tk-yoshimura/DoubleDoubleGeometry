@@ -1,5 +1,6 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
+using DoubleDoubleGeometry.Geometry2D;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -25,6 +26,12 @@ namespace DoubleDoubleGeometry.Geometry3D {
             this.Center = center;
             this.Radius = radius;
             this.Rotation = rotation.Normal;
+        }
+
+        public Circle3D(Circle2D circle) {
+            this.Center = (Vector3D)circle.Center;
+            this.Radius = circle.Radius;
+            this.Rotation = Quaternion.One;
         }
 
         public Vector3D Point(ddouble t) {

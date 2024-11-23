@@ -28,6 +28,12 @@ namespace DoubleDoubleGeometry.Geometry3D {
             this.Rotation = rotation.Normal;
         }
 
+        public Ellipse3D(Ellipse2D ellipse) {
+            this.Center = (Vector3D)ellipse.Center;
+            this.Axis = ellipse.Axis;
+            this.Rotation = Quaternion.One;
+        }
+
         public Vector3D Point(ddouble t) {
             return Center + Rotation * new Vector3D(ddouble.Cos(t) * Axis.X, ddouble.Sin(t) * Axis.Y, 0d);
         }
