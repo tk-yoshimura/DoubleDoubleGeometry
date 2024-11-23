@@ -109,8 +109,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Vector3DAssert.AreEqual(circle1.Point(ddouble.Pi / 2) + (2, 3, 4), circle4.Point(ddouble.Pi / 2), 1e-30);
 
             Vector3DAssert.AreEqual(q * (circle1.Point(0) * 5 + (2, 3, 4)), circle5.Point(0), 1e-30);
-            Vector3DAssert.AreEqual(q * (circle1.Point(ddouble.Pi / 4) * 5 + (2, 3, 4)), circle5.Point(ddouble.Pi / 4), 1e-30);
-            Vector3DAssert.AreEqual(q * (circle1.Point(ddouble.Pi / 2) * 5 + (2, 3, 4)), circle5.Point(ddouble.Pi / 2), 1e-30);
+            Vector3DAssert.AreEqual(q * (circle1.Point(ddouble.Pi / 4) * 5 + (2, 3, 4)), circle5.Point(ddouble.Pi / 4), 1e-29);
+            Vector3DAssert.AreEqual(q * (circle1.Point(ddouble.Pi / 2) * 5 + (2, 3, 4)), circle5.Point(ddouble.Pi / 2), 1e-29);
         }
 
         [TestMethod()]

@@ -100,7 +100,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public static Circle3D operator *(Quaternion q, Circle3D g) {
             ddouble norm = q.Norm;
 
-            return new(q * g.Center, norm * g.Radius, (q / norm) * g.Rotation, 0);
+            return new(q * g.Center, q.SquareNorm * g.Radius, (q / norm) * g.Rotation, 0);
         }
 
         public static Circle3D operator *(Circle3D g, ddouble r) {
