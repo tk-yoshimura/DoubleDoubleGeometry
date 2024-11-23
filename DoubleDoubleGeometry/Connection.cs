@@ -98,6 +98,7 @@ namespace DoubleDoubleGeometry {
         public ReadOnlyCollection<int> this[int index] => map[index];
 
         public bool this[int a, int b] => map[a].Contains(b);
+
         public static bool operator ==(Connection c1, Connection c2) {
             if (c1.Vertices != c2.Vertices || c1.Edges != c2.Edges) {
                 return false;
@@ -159,6 +160,19 @@ namespace DoubleDoubleGeometry {
                         yield return (i, j, k);
                     }
                 }
+            }
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public bool[,] AdjacencyMatrix {
+            get {
+                bool[,] matrix = new bool[Vertices, Vertices];
+
+                foreach ((int i, int j) in EnumerateEdge()) {
+                    matrix[i, j] = matrix[j, i] = true;
+                }
+
+                return matrix;
             }
         }
 
