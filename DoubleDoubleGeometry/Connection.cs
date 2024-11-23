@@ -67,6 +67,32 @@ namespace DoubleDoubleGeometry {
             this.Edges = count;
         }
 
+        public Connection(int n, int[,] adjacency_matrix) {
+            if ((adjacency_matrix.GetLength(0), adjacency_matrix.GetLength(1)) != (n, n)) {
+                throw new ArgumentException("mismatch size", nameof(adjacency_matrix));
+            }
+
+            List<int>[] map = (new List<int>[n]).Select(_ => new List<int>()).ToArray();
+
+            long count = 0;
+
+            for (int i = 0; i < n; i++) {
+                for (int j = i; j < n; j++) {
+                    if ((i == j && adjacency_matrix[i, j] > 0) || (i != j && adjacency_matrix[i, j] > 0 != adjacency_matrix[j, i] > 0)) {
+                        throw new ArgumentOutOfRangeException(nameof(adjacency_matrix), "contains invalid index");
+                    }
+
+                    map[i].Add(j);
+                    map[j].Add(i);
+                    count++;
+                }
+            }
+
+            this.map = map.Select(item => item.AsReadOnly()).ToArray().AsReadOnly();
+            this.Vertices = n;
+            this.Edges = count;
+        }
+
         public Connection(int n, IEnumerable<(int a, int b)> connection_indexes) : this(n, connection_indexes.ToArray()) { }
 
         public ReadOnlyCollection<int> this[int index] => map[index];
