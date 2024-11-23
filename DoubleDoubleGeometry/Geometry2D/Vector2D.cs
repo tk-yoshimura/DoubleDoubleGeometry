@@ -166,6 +166,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public static Complex Rot(Vector2D v1, Vector2D v2) {
             ddouble v1_norm = v1.Norm, v2_norm = v2.Norm;
 
+            if (v2_norm == 0d) {
+                return Complex.Zero;
+            }
+
             ddouble n = v2_norm / v1_norm;
             ddouble c = v1_norm * v2_norm;
 

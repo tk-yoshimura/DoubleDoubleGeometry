@@ -277,6 +277,8 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
             Vector2DAssert.AreEqual((4, 6), Vector2D.Rot((-2, -3), (4, 6)) * new Vector2D(-2, -3), 1e-30);
             Vector2DAssert.AreEqual((6, 8), Vector2D.Rot((-3, -4), (6, 8)) * new Vector2D(-3, -4), 1e-30);
+
+            Vector2DAssert.AreEqual((0, 0), Vector2D.Rot((-3, -4), (0, 0)) * new Vector2D(-3, -4), 1e-30);
         }
 
         [TestMethod()]
