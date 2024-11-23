@@ -55,6 +55,10 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
+            for (int i = 0; i < p.Vertices; i++) {
+                PrecisionAssert.AreEqual(ddouble.Sqrt(3), p.Vertex[i].Norm, 1e-30);
+            }
+
             foreach ((int i, int j) in p.Connection) {
                 PrecisionAssert.AreEqual(2 * ddouble.Sqrt2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
             }
@@ -86,6 +90,10 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 foreach (int j in p.Connection[i]) {
                     PrecisionAssert.AreEqual(2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
                 }
+            }
+
+            for (int i = 0; i < p.Vertices; i++) {
+                PrecisionAssert.AreEqual(ddouble.Sqrt(3), p.Vertex[i].Norm, 1e-30);
             }
 
             foreach ((int i, int j) in p.Connection) {
@@ -121,6 +129,10 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
+            for (int i = 0; i < p.Vertices; i++) {
+                PrecisionAssert.AreEqual(1, p.Vertex[i].Norm);
+            }
+
             foreach ((int i, int j) in p.Connection) {
                 PrecisionAssert.AreEqual(ddouble.Sqrt2, Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
             }
@@ -154,6 +166,10 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
+            for (int i = 0; i < p.Vertices; i++) {
+                PrecisionAssert.AreEqual(ddouble.Sqrt(3) / ddouble.GoldenRatio, p.Vertex[i].Norm, 1e-30);
+            }
+
             foreach ((int i, int j) in p.Connection) {
                 PrecisionAssert.AreEqual(4 / (3 + ddouble.Sqrt(5)), Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
             }
@@ -185,6 +201,10 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 foreach (int j in p.Connection[i]) {
                     PrecisionAssert.AreEqual(4 / (1 + ddouble.Sqrt(5)), Vector3D.Distance(p.Vertex[i], p.Vertex[j]), 1e-30);
                 }
+            }
+
+            for (int i = 0; i < p.Vertices; i++) {
+                PrecisionAssert.AreEqual(ddouble.Sqrt(ddouble.Sqrt(5) / ddouble.GoldenRatio), p.Vertex[i].Norm, 1e-30);
             }
 
             foreach ((int i, int j) in p.Connection) {
