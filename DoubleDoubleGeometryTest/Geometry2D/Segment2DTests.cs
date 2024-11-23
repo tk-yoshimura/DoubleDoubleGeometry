@@ -1,4 +1,5 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
 using PrecisionTestTools;
 
@@ -49,6 +50,12 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Segment2D segment5 = new(Vector2D.Zero, (3, 4));
             Segment2D segment6 = new(Vector2D.Zero, (4, 3));
 
+            Complex c = new Complex(3, 4).Normal;
+            Matrix2D m = new(c);
+
+            Segment2D segment7 = c * segment4;
+            Segment2D segment8 = m * segment4;
+
             Vector2DAssert.AreEqual((0, 0), segment1.Point(0), 1e-30);
             Vector2DAssert.AreEqual((1, 1), segment1.Point(1), 1e-30);
             Vector2DAssert.AreEqual((2, 2), segment1.Point(2), 1e-30);
@@ -70,6 +77,12 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
             Vector2DAssert.AreEqual((4, 3), segment6.Point(1), 1e-30);
             Vector2DAssert.AreEqual((8, 6), segment6.Point(2), 1e-30);
+
+            Vector2DAssert.AreEqual(c * segment4.Point(0), segment7.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(c * segment4.Point(1), segment7.Point(1), 1e-30);
+
+            Vector2DAssert.AreEqual(m * segment4.Point(0), segment8.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(m * segment4.Point(1), segment8.Point(1), 1e-30);
         }
 
         [TestMethod()]

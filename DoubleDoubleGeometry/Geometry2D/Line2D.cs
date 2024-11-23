@@ -1,4 +1,5 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -83,6 +84,12 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static Line2D operator /(Line2D g, double r) {
             return new(g.Origin / r, g.Direction * double.Sign(r));
+        }
+
+        public static Line2D operator *(Complex c, Line2D g) {
+            Vector2D v0 = c * g.Origin, v1 = c * (g.Origin + g.Direction);
+
+            return FromIntersection(v0, v1);
         }
 
         public static Line2D operator *(Matrix2D m, Line2D g) {

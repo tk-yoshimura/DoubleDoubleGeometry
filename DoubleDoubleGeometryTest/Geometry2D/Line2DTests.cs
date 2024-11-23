@@ -1,4 +1,5 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
@@ -46,6 +47,12 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Line2D line5 = Line2D.FromDirection(Vector2D.Zero, (3, 4));
             Line2D line6 = Line2D.FromDirection(Vector2D.Zero, (4, 3));
 
+            Complex c = new Complex(3, 4).Normal;
+            Matrix2D m = new(c);
+
+            Line2D line7 = c * line4;
+            Line2D line8 = m * line4;
+
             Vector2DAssert.AreEqual((0, 0), line1.Point(0), 1e-30);
             Vector2DAssert.AreEqual((1, 1), line1.Point(ddouble.Sqrt2), 1e-30);
             Vector2DAssert.AreEqual((2, 2), line1.Point(ddouble.Sqrt2 * 2), 1e-30);
@@ -67,6 +74,12 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
             Vector2DAssert.AreEqual((4, 3), line6.Point(5), 1e-30);
             Vector2DAssert.AreEqual((8, 6), line6.Point(10), 1e-30);
+
+            Vector2DAssert.AreEqual(c * line4.Point(0), line7.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(c * line4.Point(1), line7.Point(1), 1e-30);
+
+            Vector2DAssert.AreEqual(m * line4.Point(0), line8.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(m * line4.Point(1), line8.Point(1), 1e-30);
         }
 
         [TestMethod()]

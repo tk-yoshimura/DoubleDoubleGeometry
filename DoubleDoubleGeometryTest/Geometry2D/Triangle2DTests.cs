@@ -1,4 +1,5 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
 using PrecisionTestTools;
 
@@ -49,6 +50,12 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Triangle2D triangle3 = new Triangle2D(Vector2D.Zero, (1, 1), (2, 0)) * -2;
             Triangle2D triangle4 = new Triangle2D(Vector2D.Zero, (1, 1), (2, 0)) + (2, 3);
 
+            Complex c = new Complex(3, 4).Normal;
+            Matrix2D m = new(c);
+
+            Triangle2D triangle5 = c * triangle4;
+            Triangle2D triangle6 = m * triangle4;
+
             Vector2DAssert.AreEqual((0, 0), triangle1.Point(0, 0), 1e-30);
             Vector2DAssert.AreEqual((1, 1), triangle1.Point(1, 0), 1e-30);
             Vector2DAssert.AreEqual((1, 0.5), triangle1.Point(0.5, 0.5), 1e-30);
@@ -72,6 +79,18 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Vector2DAssert.AreEqual(triangle1.Point(0.5, 0.5) + (2, 3), triangle4.Point(0.5, 0.5), 1e-30);
             Vector2DAssert.AreEqual(triangle1.Point(1, 1) + (2, 3), triangle4.Point(1, 1), 1e-30);
             Vector2DAssert.AreEqual(triangle1.Point(0, 1) + (2, 3), triangle4.Point(0, 1), 1e-30);
+
+            Vector2DAssert.AreEqual(c * triangle4.Point(0, 0), triangle5.Point(0, 0), 1e-30);
+            Vector2DAssert.AreEqual(c * triangle4.Point(1, 0), triangle5.Point(1, 0), 1e-30);
+            Vector2DAssert.AreEqual(c * triangle4.Point(0.5, 0.5), triangle5.Point(0.5, 0.5), 1e-30);
+            Vector2DAssert.AreEqual(c * triangle4.Point(1, 1), triangle5.Point(1, 1), 1e-30);
+            Vector2DAssert.AreEqual(c * triangle4.Point(0, 1), triangle5.Point(0, 1), 1e-30);
+
+            Vector2DAssert.AreEqual(m * triangle4.Point(0, 0), triangle6.Point(0, 0), 1e-30);
+            Vector2DAssert.AreEqual(m * triangle4.Point(1, 0), triangle6.Point(1, 0), 1e-30);
+            Vector2DAssert.AreEqual(m * triangle4.Point(0.5, 0.5), triangle6.Point(0.5, 0.5), 1e-30);
+            Vector2DAssert.AreEqual(m * triangle4.Point(1, 1), triangle6.Point(1, 1), 1e-30);
+            Vector2DAssert.AreEqual(m * triangle4.Point(0, 1), triangle6.Point(0, 1), 1e-30);
         }
 
         [TestMethod()]
