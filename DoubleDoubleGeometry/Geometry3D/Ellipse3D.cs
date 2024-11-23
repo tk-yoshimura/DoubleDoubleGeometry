@@ -42,7 +42,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public Vector3D Normal => Rotation * new Vector3D(0, 0, 1);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble Area => ddouble.Abs(Axis.X) * ddouble.Abs(Axis.Y) * ddouble.Pi;
+        public ddouble Area => ddouble.Abs(Axis.X * Axis.Y) * ddouble.Pi;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Perimeter => 4d * MajorAxis * ddouble.EllipticE(1d - ddouble.Square(MinorAxis / MajorAxis));
