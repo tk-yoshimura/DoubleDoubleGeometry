@@ -53,6 +53,9 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Quaternion q = (1, 2, 3, 4);
 
+            Sphere3D sphere5 = q * sphere4;
+            Sphere3D sphere6 = Sphere3D.FromIntersection(q * sphere4.Point(0, 2), q * sphere4.Point(1, 1), q * sphere4.Point(1, 2), q * sphere4.Point(3, 3));
+
             Vector3DAssert.AreEqual((4, 0, 0), sphere1.Point(ddouble.Pi / 2, 0), 1e-30);
             Vector3DAssert.AreEqual((ddouble.Sqrt2 * 2, ddouble.Sqrt2 * 2, 0), sphere1.Point(ddouble.Pi / 2, ddouble.Pi / 4), 1e-30);
             Vector3DAssert.AreEqual((0, 4, 0), sphere1.Point(ddouble.Pi / 2, ddouble.Pi / 2), 1e-30);
@@ -72,6 +75,9 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Vector3DAssert.AreEqual(sphere1.Point(ddouble.Pi / 2, 0) + (2, 3, 4), sphere4.Point(ddouble.Pi / 2, 0), 1e-30);
             Vector3DAssert.AreEqual(sphere1.Point(ddouble.Pi / 2, ddouble.Pi / 4) + (2, 3, 4), sphere4.Point(ddouble.Pi / 2, ddouble.Pi / 4), 1e-30);
             Vector3DAssert.AreEqual(sphere1.Point(ddouble.Pi / 2, ddouble.Pi / 2) + (2, 3, 4), sphere4.Point(ddouble.Pi / 2, ddouble.Pi / 2), 1e-30);
+
+            Vector3DAssert.AreEqual(sphere6.Center, sphere5.Center, 2e-29);
+            PrecisionAssert.AreEqual(sphere6.Radius, sphere5.Radius, 2e-29);
         }
 
         [TestMethod()]
