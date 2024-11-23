@@ -65,9 +65,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Polygon3D operator *(Quaternion q, Polygon3D g) {
-            ddouble norm = q.Norm;
-
-            return new(norm * g.Polygon, q * g.Center, (q / norm) * g.Rotation, 0);
+            return new(q.SquareNorm * g.Polygon, q * g.Center, q.Normal * g.Rotation, 0);
         }
 
         public static Polygon3D operator *(Polygon3D g, ddouble r) {

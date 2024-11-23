@@ -70,9 +70,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Ellipsoid3D operator *(Quaternion q, Ellipsoid3D g) {
-            ddouble norm = q.Norm;
-
-            return new(g.Center * norm, g.Axis * norm, (q / norm) * g.Rotation);
+            return new(q * g.Center, q.SquareNorm * g.Axis, q.Normal * g.Rotation, 0);
         }
 
         public static Ellipsoid3D operator *(Ellipsoid3D g, ddouble r) {

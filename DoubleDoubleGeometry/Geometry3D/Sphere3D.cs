@@ -73,9 +73,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Sphere3D operator *(Quaternion q, Sphere3D g) {
-            ddouble norm = q.Norm;
-
-            return new(g.Center * norm, g.Radius * norm);
+            return new(q * g.Center, q.SquareNorm * g.Radius);
         }
 
         public static Sphere3D operator *(Sphere3D g, ddouble r) {
