@@ -59,46 +59,46 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Tetrahedron3D tetrahedron5 = q * tetrahedron4;
             Tetrahedron3D tetrahedron6 = m * tetrahedron4;
 
-            Vector3DAssert.AreEqual((0, 0, 0),   tetrahedron1.Point(0, 0, 0),       1e-30);
-            Vector3DAssert.AreEqual((1, 1, 1),   tetrahedron1.Point(1, 0, 0),       1e-30);
-            Vector3DAssert.AreEqual((1, 1, 1),   tetrahedron1.Point(1, 1, 0.5),     1e-30);
-            Vector3DAssert.AreEqual((2, 0, 2),   tetrahedron1.Point(0, 1, 0.5),     1e-30);
-            Vector3DAssert.AreEqual((3, 4, 5),   tetrahedron1.Point(0, 0, 1),       1e-30);
+            Vector3DAssert.AreEqual((0, 0, 0), tetrahedron1.Point(0, 0, 0), 1e-30);
+            Vector3DAssert.AreEqual((1, 1, 1), tetrahedron1.Point(1, 0, 0), 1e-30);
+            Vector3DAssert.AreEqual((1, 1, 1), tetrahedron1.Point(1, 1, 0.5), 1e-30);
+            Vector3DAssert.AreEqual((2, 0, 2), tetrahedron1.Point(0, 1, 0.5), 1e-30);
+            Vector3DAssert.AreEqual((3, 4, 5), tetrahedron1.Point(0, 0, 1), 1e-30);
 
-            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 0, 0)       * 2, tetrahedron2.Point(0, 0, 0),       1e-30);
-            Vector3DAssert.AreEqual(tetrahedron1.Point(1, 0, 0)       * 2, tetrahedron2.Point(1, 0, 0),       1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 0, 0) * 2, tetrahedron2.Point(0, 0, 0), 1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(1, 0, 0) * 2, tetrahedron2.Point(1, 0, 0), 1e-30);
             Vector3DAssert.AreEqual(tetrahedron1.Point(0.5, 0.5, 0.5) * 2, tetrahedron2.Point(0.5, 0.5, 0.5), 1e-30);
-            Vector3DAssert.AreEqual(tetrahedron1.Point(1, 1, 0.5)     * 2, tetrahedron2.Point(1, 1, 0.5),     1e-30);
-            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 1, 0.5)     * 2, tetrahedron2.Point(0, 1, 0.5),     1e-30);
-            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 0, 1)       * 2, tetrahedron2.Point(0, 0, 1),       1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(1, 1, 0.5) * 2, tetrahedron2.Point(1, 1, 0.5), 1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 1, 0.5) * 2, tetrahedron2.Point(0, 1, 0.5), 1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 0, 1) * 2, tetrahedron2.Point(0, 0, 1), 1e-30);
 
-            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 0, 0)       * -2, tetrahedron3.Point(0, 0, 0),       1e-30);
-            Vector3DAssert.AreEqual(tetrahedron1.Point(1, 0, 0)       * -2, tetrahedron3.Point(1, 0, 0),       1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 0, 0) * -2, tetrahedron3.Point(0, 0, 0), 1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(1, 0, 0) * -2, tetrahedron3.Point(1, 0, 0), 1e-30);
             Vector3DAssert.AreEqual(tetrahedron1.Point(0.5, 0.5, 0.5) * -2, tetrahedron3.Point(0.5, 0.5, 0.5), 1e-30);
-            Vector3DAssert.AreEqual(tetrahedron1.Point(1, 1, 0.5)     * -2, tetrahedron3.Point(1, 1, 0.5),     1e-30);
-            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 1, 0.5)     * -2, tetrahedron3.Point(0, 1, 0.5),     1e-30);
-            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 0, 1)       * -2, tetrahedron3.Point(0, 0, 1),       1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(1, 1, 0.5) * -2, tetrahedron3.Point(1, 1, 0.5), 1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 1, 0.5) * -2, tetrahedron3.Point(0, 1, 0.5), 1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 0, 1) * -2, tetrahedron3.Point(0, 0, 1), 1e-30);
 
-            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 0, 0)        + (2, 3, 4), tetrahedron4.Point(0, 0, 0),       1e-30);
-            Vector3DAssert.AreEqual(tetrahedron1.Point(1, 0, 0)        + (2, 3, 4), tetrahedron4.Point(1, 0, 0),       1e-30);
-            Vector3DAssert.AreEqual(tetrahedron1.Point(0.5, 0.5, 0.5)  + (2, 3, 4), tetrahedron4.Point(0.5, 0.5, 0.5), 1e-30);
-            Vector3DAssert.AreEqual(tetrahedron1.Point(1, 1, 0.5)      + (2, 3, 4), tetrahedron4.Point(1, 1, 0.5),     1e-30);
-            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 1, 0.5)      + (2, 3, 4), tetrahedron4.Point(0, 1, 0.5),     1e-30);
-            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 0, 1)        + (2, 3, 4), tetrahedron4.Point(0, 0, 1),       1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 0, 0) + (2, 3, 4), tetrahedron4.Point(0, 0, 0), 1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(1, 0, 0) + (2, 3, 4), tetrahedron4.Point(1, 0, 0), 1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(0.5, 0.5, 0.5) + (2, 3, 4), tetrahedron4.Point(0.5, 0.5, 0.5), 1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(1, 1, 0.5) + (2, 3, 4), tetrahedron4.Point(1, 1, 0.5), 1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 1, 0.5) + (2, 3, 4), tetrahedron4.Point(0, 1, 0.5), 1e-30);
+            Vector3DAssert.AreEqual(tetrahedron1.Point(0, 0, 1) + (2, 3, 4), tetrahedron4.Point(0, 0, 1), 1e-30);
 
-            Vector3DAssert.AreEqual(q * tetrahedron4.Point(0, 0, 0)       , tetrahedron5.Point(0, 0, 0),       1e-30);
-            Vector3DAssert.AreEqual(q * tetrahedron4.Point(1, 0, 0)       , tetrahedron5.Point(1, 0, 0),       1e-30);
-            Vector3DAssert.AreEqual(q * tetrahedron4.Point(0.5, 0.5, 0.5) , tetrahedron5.Point(0.5, 0.5, 0.5), 1e-30);
-            Vector3DAssert.AreEqual(q * tetrahedron4.Point(1, 1, 0.5)     , tetrahedron5.Point(1, 1, 0.5),     1e-30);
-            Vector3DAssert.AreEqual(q * tetrahedron4.Point(0, 1, 0.5)     , tetrahedron5.Point(0, 1, 0.5),     1e-30);
-            Vector3DAssert.AreEqual(q * tetrahedron4.Point(0, 0, 1)       , tetrahedron5.Point(0, 0, 1),       1e-30);
+            Vector3DAssert.AreEqual(q * tetrahedron4.Point(0, 0, 0), tetrahedron5.Point(0, 0, 0), 1e-30);
+            Vector3DAssert.AreEqual(q * tetrahedron4.Point(1, 0, 0), tetrahedron5.Point(1, 0, 0), 1e-30);
+            Vector3DAssert.AreEqual(q * tetrahedron4.Point(0.5, 0.5, 0.5), tetrahedron5.Point(0.5, 0.5, 0.5), 1e-30);
+            Vector3DAssert.AreEqual(q * tetrahedron4.Point(1, 1, 0.5), tetrahedron5.Point(1, 1, 0.5), 1e-30);
+            Vector3DAssert.AreEqual(q * tetrahedron4.Point(0, 1, 0.5), tetrahedron5.Point(0, 1, 0.5), 1e-30);
+            Vector3DAssert.AreEqual(q * tetrahedron4.Point(0, 0, 1), tetrahedron5.Point(0, 0, 1), 1e-30);
 
-            Vector3DAssert.AreEqual(m * tetrahedron4.Point(0, 0, 0)       , tetrahedron6.Point(0, 0, 0),       1e-30);
-            Vector3DAssert.AreEqual(m * tetrahedron4.Point(1, 0, 0)       , tetrahedron6.Point(1, 0, 0),       1e-30);
-            Vector3DAssert.AreEqual(m * tetrahedron4.Point(0.5, 0.5, 0.5) , tetrahedron6.Point(0.5, 0.5, 0.5), 1e-30);
-            Vector3DAssert.AreEqual(m * tetrahedron4.Point(1, 1, 0.5)     , tetrahedron6.Point(1, 1, 0.5),     1e-30);
-            Vector3DAssert.AreEqual(m * tetrahedron4.Point(0, 1, 0.5)     , tetrahedron6.Point(0, 1, 0.5),     1e-30);
-            Vector3DAssert.AreEqual(m * tetrahedron4.Point(0, 0, 1)       , tetrahedron6.Point(0, 0, 1),       1e-30);
+            Vector3DAssert.AreEqual(m * tetrahedron4.Point(0, 0, 0), tetrahedron6.Point(0, 0, 0), 1e-30);
+            Vector3DAssert.AreEqual(m * tetrahedron4.Point(1, 0, 0), tetrahedron6.Point(1, 0, 0), 1e-30);
+            Vector3DAssert.AreEqual(m * tetrahedron4.Point(0.5, 0.5, 0.5), tetrahedron6.Point(0.5, 0.5, 0.5), 1e-30);
+            Vector3DAssert.AreEqual(m * tetrahedron4.Point(1, 1, 0.5), tetrahedron6.Point(1, 1, 0.5), 1e-30);
+            Vector3DAssert.AreEqual(m * tetrahedron4.Point(0, 1, 0.5), tetrahedron6.Point(0, 1, 0.5), 1e-30);
+            Vector3DAssert.AreEqual(m * tetrahedron4.Point(0, 0, 1), tetrahedron6.Point(0, 0, 1), 1e-30);
         }
 
         [TestMethod()]

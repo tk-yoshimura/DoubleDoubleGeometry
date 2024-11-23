@@ -82,9 +82,9 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Ellipse2D ellipse3 = new Ellipse2D(Vector2D.Zero, (3, 2), 0) * -2;
             Ellipse2D ellipse4 = new((2, 3), (3, 2), 0);
             Ellipse2D ellipse5 = new((2, 3), (3, 2), ddouble.Pi / 2);
-            
+
             Complex c = (3, 4);
-            
+
             Ellipse2D ellipse6 = c * ellipse5;
 
             Vector2DAssert.AreEqual((3, 0), ellipse1.Point(0), 1e-30);

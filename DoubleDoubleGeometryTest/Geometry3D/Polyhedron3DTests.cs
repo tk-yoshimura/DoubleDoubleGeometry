@@ -1,4 +1,5 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 
@@ -20,6 +21,9 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void OperatorTest() {
+            Quaternion q = new Quaternion(2, 3, 5, 3).Normal;
+            Matrix3D m = new Matrix3D(q);
+
             Assert.AreEqual(Polyhedron3D.Cube, +Polyhedron3D.Cube);
             Assert.AreEqual(-(Polyhedron3D.Cube.Vertex[0]), -(Polyhedron3D.Cube).Vertex[0]);
             Assert.AreEqual(Polyhedron3D.Cube.Vertex[0] + (1, 4, 3), (Polyhedron3D.Cube + (1, 4, 3)).Vertex[0]);
@@ -33,6 +37,9 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual((double)2 * Polyhedron3D.Cube.Vertex[0], ((double)2 * Polyhedron3D.Cube).Vertex[0]);
             Assert.AreEqual(Polyhedron3D.Cube.Vertex[0] / (ddouble)2, (Polyhedron3D.Cube / (ddouble)2).Vertex[0]);
             Assert.AreEqual(Polyhedron3D.Cube.Vertex[0] / (double)2, (Polyhedron3D.Cube / (double)2).Vertex[0]);
+
+            Assert.AreEqual(q * Polyhedron3D.Dodecahedron.Vertex[0], (q * Polyhedron3D.Dodecahedron).Vertex[0]);
+            Assert.AreEqual(m * Polyhedron3D.Dodecahedron.Vertex[0], (m * Polyhedron3D.Dodecahedron).Vertex[0]);
         }
 
         [TestMethod()]
