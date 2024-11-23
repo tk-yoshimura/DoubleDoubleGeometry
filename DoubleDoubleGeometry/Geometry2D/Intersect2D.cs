@@ -18,7 +18,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static Vector2D[] CircleLine(Circle2D circle, Line2D line) {
             Vector2D ev = circle.Center - line.Origin, dv = line.Direction;
-            ddouble dv_sqnorm = dv.SquareNorm, radius = circle.Radius;
+            ddouble dv_sqnorm = dv.SquareNorm, radius = ddouble.Abs(circle.Radius);
 
             ddouble v = radius * radius * dv_sqnorm - dv.X * dv.X * ev.Y * ev.Y - dv.Y * dv.Y * ev.X * ev.X + 2 * dv.X * dv.Y * ev.X * ev.Y;
 

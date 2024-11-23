@@ -166,7 +166,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public static Circle3D PlaneSphere(Plane3D plane, Sphere3D sphere) {
             ddouble t = -(Vector3D.Dot(sphere.Center, plane.Normal) + plane.D);
 
-            if (ddouble.Abs(t) > sphere.Radius) {
+            if (ddouble.Abs(t) > ddouble.Abs(sphere.Radius)) {
                 return Circle3D.Invalid;
             }
 
@@ -180,7 +180,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Circle3D SphereSphere(Sphere3D sphere1, Sphere3D sphere2) {
-            ddouble r0 = sphere1.Radius, r1 = sphere2.Radius;
+            ddouble r0 = ddouble.Abs(sphere1.Radius), r1 = ddouble.Abs(sphere2.Radius);
             Vector3D c0 = sphere1.Center, c1 = sphere2.Center;
 
             Vector3D c01 = c1 - c0;
