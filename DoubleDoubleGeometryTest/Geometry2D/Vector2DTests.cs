@@ -3,7 +3,6 @@ using DoubleDouble;
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
 using DoubleDoubleGeometry.Geometry3D;
-using DoubleDoubleGeometryTest.Geometry3D;
 using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {

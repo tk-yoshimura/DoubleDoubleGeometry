@@ -8,8 +8,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
     public class Plane3DTests {
         [TestMethod()]
         public void Plane3DTest() {
-            Plane3D plane1 = Plane3D.FromIntercept(new Vector3D(1, 2, 3), 4);
-            Plane3D plane2 = Plane3D.FromIntersection(new Vector3D(1, 0, 0), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1));
+            Plane3D plane1 = Plane3D.FromIntercept((1, 2, 3), 4);
+            Plane3D plane2 = Plane3D.FromIntersection((1, 0, 0), (0, 1, 0), (0, 0, 1));
 
             Vector3D normal1 = new Vector3D(1, 2, 3).Normal;
             Vector3D normal2 = new Vector3D(1, 1, 1).Normal;
@@ -127,7 +127,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void ValidTest() {
-            Assert.IsTrue(Plane3D.IsValid(Plane3D.FromIntersection(new Vector3D(1, 0, 0), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1))));
+            Assert.IsTrue(Plane3D.IsValid(Plane3D.FromIntersection((1, 0, 0), (0, 1, 0), (0, 0, 1))));
             Assert.IsFalse(Plane3D.IsValid(Plane3D.Invalid));
         }
     }

@@ -7,9 +7,9 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
     public class Circle2DTests {
         [TestMethod()]
         public void Circle2DTest() {
-            Circle2D circle = new(new Vector2D(1, 3), 2);
+            Circle2D circle = new((1, 3), 2);
 
-            Vector2DAssert.AreEqual(new Vector2D(1, 3), circle.Center, 1e-30);
+            Vector2DAssert.AreEqual((1, 3), circle.Center, 1e-30);
             PrecisionAssert.AreEqual(2.0, circle.Radius, 1e-30);
 
             PrecisionAssert.AreEqual(4 * ddouble.Pi, circle.Area, 1e-30);
@@ -30,7 +30,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
             Circle2D circle = Circle2D.FromCircum(new Triangle2D(v0, v1, v2));
 
-            Vector2DAssert.AreEqual(new Vector2D(7, 6), circle.Center, 1e-30);
+            Vector2DAssert.AreEqual((7, 6), circle.Center, 1e-30);
             PrecisionAssert.AreEqual(5, circle.Radius, 1e-30);
         }
 
@@ -40,7 +40,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
             Circle2D circle = Circle2D.FromIncircle(new Triangle2D(v0, v1, v2));
 
-            Vector2DAssert.AreEqual(new Vector2D(5, 2), circle.Center, 1e-30);
+            Vector2DAssert.AreEqual((5, 2), circle.Center, 1e-30);
             PrecisionAssert.AreEqual(1, circle.Radius, 1e-30);
         }
 
@@ -48,7 +48,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         public void FromImplicitTest() {
             Circle2D circle = Circle2D.FromImplicit(-4, 6, -3);
 
-            Vector2DAssert.AreEqual(new Vector2D(2, -3), circle.Center, 1e-30);
+            Vector2DAssert.AreEqual((2, -3), circle.Center, 1e-30);
             PrecisionAssert.AreEqual(4, circle.Radius, 1e-30);
             PrecisionAssert.AreEqual(-4, circle.A, 1e-30);
             PrecisionAssert.AreEqual(6, circle.B, 1e-30);
@@ -97,7 +97,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
         [TestMethod()]
         public void ValidTest() {
-            Assert.IsTrue(Circle2D.IsValid(new Circle2D(new Vector2D(1, 3), 2)));
+            Assert.IsTrue(Circle2D.IsValid(new Circle2D((1, 3), 2)));
             Assert.IsFalse(Circle2D.IsValid(Circle2D.Invalid));
         }
     }

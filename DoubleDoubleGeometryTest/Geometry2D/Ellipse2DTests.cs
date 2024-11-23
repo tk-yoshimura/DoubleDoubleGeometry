@@ -22,7 +22,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
         [TestMethod]
         public void EqualTest() {
-            Ellipse2D ellipse1 = new(new Vector2D(1, 2), (4, 3), 5);
+            Ellipse2D ellipse1 = new((1, 2), (4, 3), 5);
             Ellipse2D ellipse2 = new((1, 2), (4, 3), 5);
             Ellipse2D ellipse3 = new((1, 2), (4, 4), 5);
 
@@ -113,7 +113,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
         [TestMethod()]
         public void ValidTest() {
-            Assert.IsTrue(Ellipse2D.IsValid(new Ellipse2D(new Vector2D(1, 2), (4, 3), 5)));
+            Assert.IsTrue(Ellipse2D.IsValid(new Ellipse2D((1, 2), (4, 3), 5)));
             Assert.IsFalse(Ellipse2D.IsValid(Ellipse2D.Invalid));
         }
     }

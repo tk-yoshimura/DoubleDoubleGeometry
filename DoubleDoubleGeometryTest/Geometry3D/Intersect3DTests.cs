@@ -6,10 +6,10 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
     public class Intersect3DTests {
         [TestMethod()]
         public void LineLineTest() {
-            Matrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
+            Matrix3D matrix = Matrix3D.RotateAxis((1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
 
-            Line3D line1 = Line3D.FromDirection(new Vector3D(1, 3, 1), new Vector3D(3, 2, 0));
-            Line3D line2 = Line3D.FromDirection(new Vector3D(6, 1, 1), new Vector3D(-1, 2, 0));
+            Line3D line1 = Line3D.FromDirection((1, 3, 1), (3, 2, 0));
+            Line3D line2 = Line3D.FromDirection((6, 1, 1), (-1, 2, 0));
 
             Vector3D cross = Intersect3D.LineLine(matrix * line1, matrix * line2, 1e-28);
 
@@ -18,7 +18,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void LinePlaneTest() {
-            Matrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
+            Matrix3D matrix = Matrix3D.RotateAxis((1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
 
             Vector3D v1 = new(1, 0, 0), v2 = new(0, 2, 0), v3 = new(0, 0, 3);
 
@@ -35,7 +35,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void LineTriangleTest() {
-            Matrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
+            Matrix3D matrix = Matrix3D.RotateAxis((1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
 
             Vector3D v1 = new(1, 0, 0), v2 = new(0, 1, 0), v3 = new(0, 0, 1);
 
@@ -63,7 +63,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void LineCircleTest() {
-            Matrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
+            Matrix3D matrix = Matrix3D.RotateAxis((1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
 
             Vector3D v1 = new(1, 0, 0), v2 = new(0, 1, 0), v3 = new(0, 0, 1);
             Vector3D v4 = new Vector3D(1, 2, 3) / 6, v5 = new(1, -0.1, -0.1);
@@ -85,7 +85,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void LineSphereTest() {
-            Matrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4);
+            Matrix3D matrix = Matrix3D.RotateAxis((1, 2, 3), 4);
 
             Vector3D v0 = new(3, 4, 0), v1 = new(0, 3, -4);
 
@@ -101,25 +101,25 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void PlanePlaneTest() {
-            Vector3D v1 = new(-1, 2, 4), v2 = new(1, 2, 4), v3 = new(1, -2, -1), v4 = new(1, 2, 3);
+            Vector3D v1 = (-1, 2, 4), v2 = (1, 2, 4), v3 = (1, -2, -1), v4 = (1, 2, 3);
 
-            Plane3D plane_xy = Plane3D.FromNormal(Vector3D.Zero, new Vector3D(0, 0, 1));
-            Plane3D plane_yz = Plane3D.FromNormal(Vector3D.Zero, new Vector3D(1, 0, 0));
-            Plane3D plane_zx = Plane3D.FromNormal(Vector3D.Zero, new Vector3D(0, 1, 0));
+            Plane3D plane_xy = Plane3D.FromNormal(Vector3D.Zero, (0, 0, 1));
+            Plane3D plane_yz = Plane3D.FromNormal(Vector3D.Zero, (1, 0, 0));
+            Plane3D plane_zx = Plane3D.FromNormal(Vector3D.Zero, (0, 1, 0));
 
             Plane3D plane1 = Plane3D.FromIntersection(v1, v2, v3);
             Plane3D plane2 = Plane3D.FromIntersection(v1, v2, v4);
 
-            Vector3DAssert.AreEqual(new Vector3D(0, 1, 0), Intersect3D.PlanePlane(plane_xy, plane_yz).Direction, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(0, 0, 1), Intersect3D.PlanePlane(plane_yz, plane_zx).Direction, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(1, 0, 0), Intersect3D.PlanePlane(plane_zx, plane_xy).Direction, 1e-30);
+            Vector3DAssert.AreEqual((0, 1, 0), Intersect3D.PlanePlane(plane_xy, plane_yz).Direction, 1e-30);
+            Vector3DAssert.AreEqual((0, 0, 1), Intersect3D.PlanePlane(plane_yz, plane_zx).Direction, 1e-30);
+            Vector3DAssert.AreEqual((1, 0, 0), Intersect3D.PlanePlane(plane_zx, plane_xy).Direction, 1e-30);
 
-            Vector3DAssert.AreEqual(new Vector3D(1, 0, 0), Intersect3D.PlanePlane(plane1, plane2).Direction, 1e-30);
+            Vector3DAssert.AreEqual((1, 0, 0), Intersect3D.PlanePlane(plane1, plane2).Direction, 1e-30);
         }
 
         [TestMethod()]
         public void PlaneSphereTest() {
-            Matrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4);
+            Matrix3D matrix = Matrix3D.RotateAxis((1, 2, 3), 4);
 
             Vector3D v0 = matrix * Vector3D.Zero, v1 = matrix * new Vector3D(1, 0, 0), v2 = matrix * new Vector3D(0, 1, 0), v3 = matrix * new Vector3D(0, 0, 1);
 
@@ -136,7 +136,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void SphereSphereTest() {
-            Matrix3D matrix = Matrix3D.RotateAxis(new Vector3D(1, 2, 3), 4);
+            Matrix3D matrix = Matrix3D.RotateAxis((1, 2, 3), 4);
 
             Vector3D v0 = matrix * new Vector3D(-2, 0, 0), v1 = matrix * new Vector3D(3, 0, 0), v2 = matrix * new Vector3D("-0.2", 0, 0);
 

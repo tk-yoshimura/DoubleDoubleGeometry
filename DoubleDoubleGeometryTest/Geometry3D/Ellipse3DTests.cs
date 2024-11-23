@@ -10,7 +10,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         public void Ellipse3DTest() {
             Ellipse3D ellipse = new((1, 2, 7), (4, 3), Vector3D.Rot((0, 0, 1), (2, 3, 4)));
 
-            Vector3DAssert.AreEqual(new Vector3D(1, 2, 7), ellipse.Center, 1e-30);
+            Vector3DAssert.AreEqual((1, 2, 7), ellipse.Center, 1e-30);
             Vector3DAssert.AreEqual(new Vector3D(2, 3, 4).Normal, ellipse.Normal, 1e-30);
             Assert.AreEqual(4d, ellipse.MajorAxis);
             Assert.AreEqual(3d, ellipse.MinorAxis);
@@ -26,7 +26,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         public void EqualTest() {
             Quaternion rot = Quaternion.FromAxisAngle(new Vector3D(2, 3, 4).Normal, 5);
 
-            Ellipse3D ellipse1 = new(new Vector3D(1, 2, 7), (4, 3), rot);
+            Ellipse3D ellipse1 = new((1, 2, 7), (4, 3), rot);
             Ellipse3D ellipse2 = new((1, 2, 7), (4, 3), rot);
             Ellipse3D ellipse3 = new((1, 2, 7), (4, 4), rot);
             Ellipse3D ellipse4 = new((1, 2, 7), (4, 4), rot);
