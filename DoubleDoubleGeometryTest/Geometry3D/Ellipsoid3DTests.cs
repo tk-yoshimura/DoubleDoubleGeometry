@@ -52,6 +52,43 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void PointTest() {
+            Ellipsoid3D ellipsoid1 = new(Vector3D.Zero, (4, 3, 5), Quaternion.One);
+            Ellipsoid3D ellipsoid2 = new Ellipsoid3D(Vector3D.Zero, (4, 3, 5), Quaternion.One) * 2;
+            Ellipsoid3D ellipsoid3 = new Ellipsoid3D(Vector3D.Zero, (4, 3, 5), Quaternion.One) * -2;
+            Ellipsoid3D ellipsoid4 = new((2, 3, 4), (4, 3, 5), Quaternion.One);
+
+            Quaternion q = (1, 2, 3, 4);
+
+            Ellipsoid3D ellipsoid5 = q * new Ellipsoid3D((2, 3, 4), (20, 15, 25), Quaternion.One);
+
+            Vector3DAssert.AreEqual((4, 0, 0), ellipsoid1.Point(ddouble.Pi / 2, 0), 1e-30);
+            Vector3DAssert.AreEqual((ddouble.Sqrt2 * 2, ddouble.Sqrt2 * 3 / 2, 0), ellipsoid1.Point(ddouble.Pi / 2, ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual((0, 3, 0), ellipsoid1.Point(ddouble.Pi / 2, ddouble.Pi / 2), 1e-30);
+            Vector3DAssert.AreEqual((0, 0, 5), ellipsoid1.Point(0, 0), 1e-30);
+
+            Vector3DAssert.AreEqual(ellipsoid1.Point(0, 0) * 2, ellipsoid2.Point(0, 0), 1e-30);
+            Vector3DAssert.AreEqual(ellipsoid1.Point(ddouble.Pi / 2, 0) * 2, ellipsoid2.Point(ddouble.Pi / 2, 0), 1e-30);
+            Vector3DAssert.AreEqual(ellipsoid1.Point(ddouble.Pi / 2, ddouble.Pi / 4) * 2, ellipsoid2.Point(ddouble.Pi / 2, ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual(ellipsoid1.Point(ddouble.Pi / 2, ddouble.Pi / 2) * 2, ellipsoid2.Point(ddouble.Pi / 2, ddouble.Pi / 2), 1e-30);
+
+            Vector3DAssert.AreEqual(ellipsoid1.Point(0, 0) * -2, ellipsoid3.Point(0, 0), 1e-30);
+            Vector3DAssert.AreEqual(ellipsoid1.Point(ddouble.Pi / 2, 0) * -2, ellipsoid3.Point(ddouble.Pi / 2, 0), 1e-30);
+            Vector3DAssert.AreEqual(ellipsoid1.Point(ddouble.Pi / 2, ddouble.Pi / 4) * -2, ellipsoid3.Point(ddouble.Pi / 2, ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual(ellipsoid1.Point(ddouble.Pi / 2, ddouble.Pi / 2) * -2, ellipsoid3.Point(ddouble.Pi / 2, ddouble.Pi / 2), 1e-30);
+
+            Vector3DAssert.AreEqual(ellipsoid1.Point(0, 0) + (2, 3, 4), ellipsoid4.Point(0, 0), 1e-30);
+            Vector3DAssert.AreEqual(ellipsoid1.Point(ddouble.Pi / 2, 0) + (2, 3, 4), ellipsoid4.Point(ddouble.Pi / 2, 0), 1e-30);
+            Vector3DAssert.AreEqual(ellipsoid1.Point(ddouble.Pi / 2, ddouble.Pi / 4) + (2, 3, 4), ellipsoid4.Point(ddouble.Pi / 2, ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual(ellipsoid1.Point(ddouble.Pi / 2, ddouble.Pi / 2) + (2, 3, 4), ellipsoid4.Point(ddouble.Pi / 2, ddouble.Pi / 2), 1e-30);
+
+            Vector3DAssert.AreEqual(q * (ellipsoid1.Point(0, 0) * 5 + (2, 3, 4)), ellipsoid5.Point(0, 0), 2e-29);
+            Vector3DAssert.AreEqual(q * (ellipsoid1.Point(ddouble.Pi / 2, 0) * 5 + (2, 3, 4)), ellipsoid5.Point(ddouble.Pi / 2, 0), 2e-29);
+            Vector3DAssert.AreEqual(q * (ellipsoid1.Point(ddouble.Pi / 2, ddouble.Pi / 4) * 5 + (2, 3, 4)), ellipsoid5.Point(ddouble.Pi / 2, ddouble.Pi / 4), 2e-29);
+            Vector3DAssert.AreEqual(q * (ellipsoid1.Point(ddouble.Pi / 2, ddouble.Pi / 2) * 5 + (2, 3, 4)), ellipsoid5.Point(ddouble.Pi / 2, ddouble.Pi / 2), 2e-29);
+        }
+
+        [TestMethod()]
         public void ValidTest() {
             Assert.IsTrue(Ellipsoid3D.IsValid(new Ellipsoid3D((1, 2, 7), (2, 3, 4), (4, 3, 5, 6))));
             Assert.IsFalse(Ellipsoid3D.IsValid(Ellipsoid3D.Invalid));

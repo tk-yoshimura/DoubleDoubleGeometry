@@ -100,7 +100,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public static Circle2D operator *(Complex c, Circle2D g) {
             ddouble norm = c.Norm;
 
-            return new(g.Center * norm, g.Radius * norm);
+            return new(c * g.Center, norm * g.Radius);
         }
 
         public static Circle2D operator *(Circle2D g, ddouble r) {

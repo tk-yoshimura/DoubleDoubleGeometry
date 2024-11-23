@@ -58,6 +58,38 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void PointTest() {
+            Ellipse3D ellipse1 = new(Vector3D.Zero, (4, 3), (0, 0, 1));
+            Ellipse3D ellipse2 = new Ellipse3D(Vector3D.Zero, (4, 3), (0, 0, 1)) * 2;
+            Ellipse3D ellipse3 = new Ellipse3D(Vector3D.Zero, (4, 3), (0, 0, 1)) * -2;
+            Ellipse3D ellipse4 = new((2, 3, 4), (4, 3), (0, 0, 1));
+
+            Quaternion q = (1, 2, 3, 4);
+
+            Ellipse3D ellipse5 = q * new Ellipse3D((2, 3, 4), (20, 15), (0, 0, 1));
+
+            Vector3DAssert.AreEqual((4, 0, 0), ellipse1.Point(0), 1e-30);
+            Vector3DAssert.AreEqual((ddouble.Sqrt2 * 2, ddouble.Sqrt2 * 3 / 2, 0), ellipse1.Point(ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual((0, 3, 0), ellipse1.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector3DAssert.AreEqual(ellipse1.Point(0) * 2, ellipse2.Point(0), 1e-30);
+            Vector3DAssert.AreEqual(ellipse1.Point(ddouble.Pi / 4) * 2, ellipse2.Point(ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual(ellipse1.Point(ddouble.Pi / 2) * 2, ellipse2.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector3DAssert.AreEqual(ellipse1.Point(0) * -2, ellipse3.Point(0), 1e-30);
+            Vector3DAssert.AreEqual(ellipse1.Point(ddouble.Pi / 4) * -2, ellipse3.Point(ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual(ellipse1.Point(ddouble.Pi / 2) * -2, ellipse3.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector3DAssert.AreEqual(ellipse1.Point(0) + (2, 3, 4), ellipse4.Point(0), 1e-30);
+            Vector3DAssert.AreEqual(ellipse1.Point(ddouble.Pi / 4) + (2, 3, 4), ellipse4.Point(ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual(ellipse1.Point(ddouble.Pi / 2) + (2, 3, 4), ellipse4.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector3DAssert.AreEqual(q * (ellipse1.Point(0) * 5 + (2, 3, 4)), ellipse5.Point(0), 2e-29);
+            Vector3DAssert.AreEqual(q * (ellipse1.Point(ddouble.Pi / 4) * 5 + (2, 3, 4)), ellipse5.Point(ddouble.Pi / 4), 2e-29);
+            Vector3DAssert.AreEqual(q * (ellipse1.Point(ddouble.Pi / 2) * 5 + (2, 3, 4)), ellipse5.Point(ddouble.Pi / 2), 2e-29);
+        }
+
+        [TestMethod()]
         public void ValidTest() {
             Quaternion rot = Quaternion.FromAxisAngle(new Vector3D(2, 3, 4).Normal, 5);
 

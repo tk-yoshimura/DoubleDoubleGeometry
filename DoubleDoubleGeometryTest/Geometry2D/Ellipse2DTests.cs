@@ -81,10 +81,11 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Ellipse2D ellipse2 = new Ellipse2D(Vector2D.Zero, (3, 2), 0) * 2;
             Ellipse2D ellipse3 = new Ellipse2D(Vector2D.Zero, (3, 2), 0) * -2;
             Ellipse2D ellipse4 = new((2, 3), (3, 2), 0);
-            Ellipse2D ellipse5 = new(Vector2D.Zero, (3, 2), ddouble.Pi / 2);
-            Ellipse2D ellipse6 = new((2, 3), (3, 2), ddouble.Pi / 2);
-
-            Complex c = Complex.ImaginaryOne;
+            Ellipse2D ellipse5 = new((2, 3), (3, 2), ddouble.Pi / 2);
+            
+            Complex c = (3, 4);
+            
+            Ellipse2D ellipse6 = c * ellipse5;
 
             Vector2DAssert.AreEqual((3, 0), ellipse1.Point(0), 1e-30);
             Vector2DAssert.AreEqual((3 * ddouble.Sqrt2 / 2, ddouble.Sqrt2), ellipse1.Point(ddouble.Pi / 4), 1e-30);
@@ -102,13 +103,9 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Vector2DAssert.AreEqual(ellipse1.Point(ddouble.Pi / 4) + (2, 3), ellipse4.Point(ddouble.Pi / 4), 1e-30);
             Vector2DAssert.AreEqual(ellipse1.Point(ddouble.Pi / 2) + (2, 3), ellipse4.Point(ddouble.Pi / 2), 1e-30);
 
-            Vector2DAssert.AreEqual(c * ellipse1.Point(0), ellipse5.Point(0), 1e-30);
-            Vector2DAssert.AreEqual(c * ellipse1.Point(ddouble.Pi / 4), ellipse5.Point(ddouble.Pi / 4), 1e-30);
-            Vector2DAssert.AreEqual(c * ellipse1.Point(ddouble.Pi / 2), ellipse5.Point(ddouble.Pi / 2), 1e-30);
-
-            Vector2DAssert.AreEqual(c * ellipse1.Point(0) + (2, 3), ellipse6.Point(0), 1e-30);
-            Vector2DAssert.AreEqual(c * ellipse1.Point(ddouble.Pi / 4) + (2, 3), ellipse6.Point(ddouble.Pi / 4), 1e-30);
-            Vector2DAssert.AreEqual(c * ellipse1.Point(ddouble.Pi / 2) + (2, 3), ellipse6.Point(ddouble.Pi / 2), 1e-30);
+            Vector2DAssert.AreEqual(c * ellipse5.Point(0), ellipse6.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(c * ellipse5.Point(ddouble.Pi / 4), ellipse6.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual(c * ellipse5.Point(ddouble.Pi / 2), ellipse6.Point(ddouble.Pi / 2), 1e-30);
         }
 
         [TestMethod()]

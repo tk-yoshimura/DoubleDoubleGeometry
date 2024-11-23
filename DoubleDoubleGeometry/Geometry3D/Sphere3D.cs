@@ -46,7 +46,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public ddouble Area => 4d * Radius * Radius * ddouble.Pi;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble Volume => Radius * Radius * Radius * ddouble.Pi / 0.75d;
+        public ddouble Volume => ddouble.Abs(Radius * Radius * Radius) * ddouble.Pi / 0.75d;
 
         public static Sphere3D operator +(Sphere3D g) {
             return g;
@@ -77,11 +77,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Sphere3D operator *(Sphere3D g, ddouble r) {
-            return new(g.Center * r, g.Radius * ddouble.Abs(r));
+            return new(g.Center * r, g.Radius * r);
         }
 
         public static Sphere3D operator *(Sphere3D g, double r) {
-            return new(g.Center * r, g.Radius * double.Abs(r));
+            return new(g.Center * r, g.Radius * r);
         }
 
         public static Sphere3D operator *(ddouble r, Sphere3D g) {
@@ -93,11 +93,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Sphere3D operator /(Sphere3D g, ddouble r) {
-            return new(g.Center / r, g.Radius / ddouble.Abs(r));
+            return new(g.Center / r, g.Radius / r);
         }
 
         public static Sphere3D operator /(Sphere3D g, double r) {
-            return new(g.Center / r, g.Radius / double.Abs(r));
+            return new(g.Center / r, g.Radius / r);
         }
 
         public static bool operator ==(Sphere3D g1, Sphere3D g2) {

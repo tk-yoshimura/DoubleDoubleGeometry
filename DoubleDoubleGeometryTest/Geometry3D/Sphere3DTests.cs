@@ -1,4 +1,5 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 
@@ -41,6 +42,36 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(new Sphere3D((8, 10, 2), 6), (double)2 * new Sphere3D((4, 5, 1), 3));
             Assert.AreEqual(new Sphere3D((2, 2.5, 0.5), 1.5), new Sphere3D((4, 5, 1), 3) / (ddouble)2);
             Assert.AreEqual(new Sphere3D((2, 2.5, 0.5), 1.5), new Sphere3D((4, 5, 1), 3) / (double)2);
+        }
+
+        [TestMethod()]
+        public void PointTest() {
+            Sphere3D sphere1 = new(Vector3D.Zero, 4);
+            Sphere3D sphere2 = new Sphere3D(Vector3D.Zero, 4) * 2;
+            Sphere3D sphere3 = new Sphere3D(Vector3D.Zero, 4) * -2;
+            Sphere3D sphere4 = new((2, 3, 4), 4);
+
+            Quaternion q = (1, 2, 3, 4);
+
+            Vector3DAssert.AreEqual((4, 0, 0), sphere1.Point(ddouble.Pi / 2, 0), 1e-30);
+            Vector3DAssert.AreEqual((ddouble.Sqrt2 * 2, ddouble.Sqrt2 * 2, 0), sphere1.Point(ddouble.Pi / 2, ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual((0, 4, 0), sphere1.Point(ddouble.Pi / 2, ddouble.Pi / 2), 1e-30);
+            Vector3DAssert.AreEqual((0, 0, 4), sphere1.Point(0, 0), 1e-30);
+
+            Vector3DAssert.AreEqual(sphere1.Point(0, 0) * 2, sphere2.Point(0, 0), 1e-30);
+            Vector3DAssert.AreEqual(sphere1.Point(ddouble.Pi / 2, 0) * 2, sphere2.Point(ddouble.Pi / 2, 0), 1e-30);
+            Vector3DAssert.AreEqual(sphere1.Point(ddouble.Pi / 2, ddouble.Pi / 4) * 2, sphere2.Point(ddouble.Pi / 2, ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual(sphere1.Point(ddouble.Pi / 2, ddouble.Pi / 2) * 2, sphere2.Point(ddouble.Pi / 2, ddouble.Pi / 2), 1e-30);
+
+            Vector3DAssert.AreEqual(sphere1.Point(0, 0) * -2, sphere3.Point(0, 0), 1e-30);
+            Vector3DAssert.AreEqual(sphere1.Point(ddouble.Pi / 2, 0) * -2, sphere3.Point(ddouble.Pi / 2, 0), 1e-30);
+            Vector3DAssert.AreEqual(sphere1.Point(ddouble.Pi / 2, ddouble.Pi / 4) * -2, sphere3.Point(ddouble.Pi / 2, ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual(sphere1.Point(ddouble.Pi / 2, ddouble.Pi / 2) * -2, sphere3.Point(ddouble.Pi / 2, ddouble.Pi / 2), 1e-30);
+
+            Vector3DAssert.AreEqual(sphere1.Point(0, 0) + (2, 3, 4), sphere4.Point(0, 0), 1e-30);
+            Vector3DAssert.AreEqual(sphere1.Point(ddouble.Pi / 2, 0) + (2, 3, 4), sphere4.Point(ddouble.Pi / 2, 0), 1e-30);
+            Vector3DAssert.AreEqual(sphere1.Point(ddouble.Pi / 2, ddouble.Pi / 4) + (2, 3, 4), sphere4.Point(ddouble.Pi / 2, ddouble.Pi / 4), 1e-30);
+            Vector3DAssert.AreEqual(sphere1.Point(ddouble.Pi / 2, ddouble.Pi / 2) + (2, 3, 4), sphere4.Point(ddouble.Pi / 2, ddouble.Pi / 2), 1e-30);
         }
 
         [TestMethod()]

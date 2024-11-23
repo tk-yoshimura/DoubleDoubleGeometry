@@ -36,14 +36,14 @@ namespace DoubleDoubleGeometry.Geometry3D {
             get {
                 ddouble a = Axis.X, b = Axis.Y, c = Axis.Z;
 
-                ddouble s = 4d * ddouble.Pi * a * b * c * ddouble.CarlsonRG(1d / (a * a), 1d / (b * b), 1d / (c * c));
+                ddouble s = 4d * ddouble.Pi * ddouble.Abs(a * b * c) * ddouble.CarlsonRG(1d / (a * a), 1d / (b * b), 1d / (c * c));
 
                 return s;
             }
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble Volume => Axis.X * Axis.Y * Axis.Z * ddouble.Pi / 0.75d;
+        public ddouble Volume => ddouble.Abs(Axis.X * Axis.Y * Axis.Z) * ddouble.Pi / 0.75d;
 
         public static Ellipsoid3D operator +(Ellipsoid3D g) {
             return g;
@@ -74,11 +74,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Ellipsoid3D operator *(Ellipsoid3D g, ddouble r) {
-            return new(g.Center * r, g.Axis * ddouble.Abs(r), g.Rotation, 0);
+            return new(g.Center * r, g.Axis * r, g.Rotation, 0);
         }
 
         public static Ellipsoid3D operator *(Ellipsoid3D g, double r) {
-            return new(g.Center * r, g.Axis * double.Abs(r), g.Rotation, 0);
+            return new(g.Center * r, g.Axis * r, g.Rotation, 0);
         }
 
         public static Ellipsoid3D operator *(ddouble r, Ellipsoid3D g) {
@@ -90,11 +90,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Ellipsoid3D operator /(Ellipsoid3D g, ddouble r) {
-            return new(g.Center / r, g.Axis / ddouble.Abs(r), g.Rotation, 0);
+            return new(g.Center / r, g.Axis / r, g.Rotation, 0);
         }
 
         public static Ellipsoid3D operator /(Ellipsoid3D g, double r) {
-            return new(g.Center / r, g.Axis / double.Abs(r), g.Rotation, 0);
+            return new(g.Center / r, g.Axis / r, g.Rotation, 0);
         }
 
         public static bool operator ==(Ellipsoid3D g1, Ellipsoid3D g2) {

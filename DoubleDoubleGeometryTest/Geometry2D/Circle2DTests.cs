@@ -1,4 +1,5 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
 using PrecisionTestTools;
 
@@ -76,7 +77,12 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Circle2D circle1 = new(Vector2D.Zero, 1);
             Circle2D circle2 = new Circle2D(Vector2D.Zero, 1) * 2;
             Circle2D circle3 = new Circle2D(Vector2D.Zero, 1) * -2;
-            Circle2D circle4 = new((2, 3), 1);
+            Circle2D circle4 = new((2, 3), 1.25);
+
+            Complex c = (3, 4);
+
+            Circle2D circle5 = c * circle4;
+            Circle2D circle6 = Circle2D.FromIntersection(c * circle4.Point(0), c * circle4.Point(1), c * circle4.Point(2));
 
             Vector2DAssert.AreEqual((1, 0), circle1.Point(0), 1e-30);
             Vector2DAssert.AreEqual((ddouble.Sqrt2 / 2, ddouble.Sqrt2 / 2), circle1.Point(ddouble.Pi / 4), 1e-30);
@@ -90,9 +96,12 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Vector2DAssert.AreEqual(circle1.Point(ddouble.Pi / 4) * -2, circle3.Point(ddouble.Pi / 4), 1e-30);
             Vector2DAssert.AreEqual(circle1.Point(ddouble.Pi / 2) * -2, circle3.Point(ddouble.Pi / 2), 1e-30);
 
-            Vector2DAssert.AreEqual(circle1.Point(0) + (2, 3), circle4.Point(0), 1e-30);
-            Vector2DAssert.AreEqual(circle1.Point(ddouble.Pi / 4) + (2, 3), circle4.Point(ddouble.Pi / 4), 1e-30);
-            Vector2DAssert.AreEqual(circle1.Point(ddouble.Pi / 2) + (2, 3), circle4.Point(ddouble.Pi / 2), 1e-30);
+            Vector2DAssert.AreEqual(circle1.Point(0) * 1.25 + (2, 3), circle4.Point(0), 1e-30);
+            Vector2DAssert.AreEqual(circle1.Point(ddouble.Pi / 4) * 1.25 + (2, 3), circle4.Point(ddouble.Pi / 4), 1e-30);
+            Vector2DAssert.AreEqual(circle1.Point(ddouble.Pi / 2) * 1.25 + (2, 3), circle4.Point(ddouble.Pi / 2), 1e-30);
+
+            Vector2DAssert.AreEqual(circle6.Center, circle5.Center, 1e-29);
+            PrecisionAssert.AreEqual(circle6.Radius, circle5.Radius, 1e-29);
         }
 
         [TestMethod()]
