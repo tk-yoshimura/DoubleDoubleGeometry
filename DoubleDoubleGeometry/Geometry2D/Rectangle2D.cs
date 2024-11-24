@@ -37,7 +37,6 @@ namespace DoubleDoubleGeometry.Geometry2D {
                 (-Scale.X, -Scale.Y), (Scale.X, -Scale.Y), (Scale.X, Scale.Y), (-Scale.X, Scale.Y)
         );
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ReadOnlyCollection<Vector2D> Vertex => Polygon.Vertex;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

@@ -41,7 +41,6 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 (Scale.X, Scale.Y, Scale.Z), (-Scale.X, Scale.Y, Scale.Z)
         );
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ReadOnlyCollection<Vector3D> Vertex => Polyhedron.Vertex;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
