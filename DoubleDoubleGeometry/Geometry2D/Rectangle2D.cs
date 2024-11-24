@@ -47,6 +47,9 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public ddouble Height => ddouble.Abs(Scale.Y) * 2d;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Vector2D Size => (Width, Height);
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble LongSide => ddouble.Max(Width, Height);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

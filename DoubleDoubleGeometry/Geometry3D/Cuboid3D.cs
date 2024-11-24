@@ -54,7 +54,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public ddouble Depth => ddouble.Abs(Scale.Z) * 2d;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble Area => (Width * Height + Height * Depth + Width * Depth) * 2d;
+        public Vector3D Size => (Width, Height, Depth);
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Area => (Width * (Height + Depth) + Height * Depth) * 2d;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Volume => Width * Height * Depth;
