@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("DoubleDouble.Geometry")]
-[assembly: AssemblyDescription("Double-Double Geometry 2D/3D Implements ")]
+[assembly: AssemblyDescription("Double-Double Geometry 2D/3D Implements")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("DoubleDouble.Geometry")]
