@@ -158,7 +158,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Polyhedron3D Cube => new(
             new Connection(8,
-                (0, 1), (0, 3), (0, 4), (1, 2), (1, 5), (2, 3), 
+                (0, 1), (0, 3), (0, 4), (1, 2), (1, 5), (2, 3),
                 (2, 6), (3, 7), (4, 5), (4, 7), (5, 6), (6, 7)
             ),
             (-1, -1, -1), (1, -1, -1), (1, 1, -1), (-1, 1, -1),
@@ -168,7 +168,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Polyhedron3D Octahedron => new(
             new Connection(6,
-                (0, 1), (0, 2), (0, 3), (0, 4), (1, 2), (1, 4), 
+                (0, 1), (0, 2), (0, 3), (0, 4), (1, 2), (1, 4),
                 (1, 5), (2, 3), (2, 5), (3, 4), (3, 5), (4, 5)
             ),
             (0, 0, -1), (1, 0, 0), (0, 1, 0), (-1, 0, 0),

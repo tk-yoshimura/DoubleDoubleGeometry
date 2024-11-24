@@ -32,12 +32,12 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public Polyhedron3D Polyhedron
             => polyhedron ??= Center + Rotation * new Polyhedron3D(
                 new Connection(8,
-                    (0, 1), (0, 3), (0, 4), (1, 2), (1, 5), (2, 3), 
+                    (0, 1), (0, 3), (0, 4), (1, 2), (1, 5), (2, 3),
                     (2, 6), (3, 7), (4, 5), (4, 7), (5, 6), (6, 7)
                 ),
-                (-Scale.X, -Scale.Y, -Scale.Z), (Scale.X, -Scale.Y, -Scale.Z), 
+                (-Scale.X, -Scale.Y, -Scale.Z), (Scale.X, -Scale.Y, -Scale.Z),
                 (Scale.X, Scale.Y, -Scale.Z), (-Scale.X, Scale.Y, -Scale.Z),
-                (-Scale.X, -Scale.Y, Scale.Z), (Scale.X, -Scale.Y, Scale.Z), 
+                (-Scale.X, -Scale.Y, Scale.Z), (Scale.X, -Scale.Y, Scale.Z),
                 (Scale.X, Scale.Y, Scale.Z), (-Scale.X, Scale.Y, Scale.Z)
         );
 
