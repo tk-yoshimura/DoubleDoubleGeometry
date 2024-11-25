@@ -1,5 +1,6 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
+using DoubleDoubleGeometry;
 using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 
@@ -90,6 +91,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 Assert.AreEqual(3, p.Connection[i].Count);
             }
 
+            Assert.IsTrue(Connection.IsValid(p.Connection));
+
             Assert.AreEqual(Vector3D.Zero, p.Center);
             Assert.AreEqual((2, 2, 2), p.Size);
 
@@ -126,6 +129,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             for (int i = 0; i < p.Vertices; i++) {
                 Assert.AreEqual(4, p.Connection[i].Count);
             }
+
+            Assert.IsTrue(Connection.IsValid(p.Connection));
 
             Assert.AreEqual(Vector3D.Zero, p.Center);
             Assert.AreEqual((2, 2, 2), p.Size);
@@ -164,6 +169,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 Assert.AreEqual(3, p.Connection[i].Count);
             }
 
+            Assert.IsTrue(Connection.IsValid(p.Connection));
+
             Assert.AreEqual(Vector3D.Zero, p.Center);
             Assert.AreEqual((2, 2, 2), p.Size);
 
@@ -200,6 +207,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             for (int i = 0; i < p.Vertices; i++) {
                 Assert.AreEqual(5, p.Connection[i].Count);
             }
+
+            Assert.IsTrue(Connection.IsValid(p.Connection));
 
             Assert.AreEqual(Vector3D.Zero, p.Center);
             Assert.AreEqual((2, 2, 2), p.Size);

@@ -176,6 +176,45 @@ namespace DoubleDoubleGeometry {
             }
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool? valid = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool Valid {
+            get {
+                if (valid is not null) {
+                    return valid.Value;
+                }
+
+                List<int> visited_node = [];
+                Stack<int> stack = new([0]);
+
+                while (stack.Count > 0) {
+                    Debug.Assert(visited_node.Count + stack.Count <= Vertices);
+
+                    if (visited_node.Count + stack.Count >= Vertices) { 
+                        return valid ??= true;
+                    }
+
+                    int current_node = stack.Pop();
+                    visited_node.Add(current_node);
+
+                    foreach (int next_node in map[current_node]) {
+                        if (visited_node.Contains(next_node) || stack.Contains(next_node)) {
+                            continue;
+                        }
+
+                        stack.Push(next_node);
+                    }
+                }
+
+                return valid ??= false;
+            }
+        }
+
+        public static bool IsValid(Connection c) {
+            return c.Valid;
+        }
+
         public override string ToString() {
             return $"connection vertices={Vertices}, edges={Edges}";
         }

@@ -128,7 +128,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static bool IsValid(Polyhedron3D g) {
-            return g.Vertices > 0 || IsFinite(g);
+            return g.Vertices > 0 && IsFinite(g) && Connection.IsValid(g.Connection);
         }
 
         public override string ToString() {
