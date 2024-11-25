@@ -124,33 +124,46 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return g.Vertices > 0 || IsFinite(g);
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool? convex = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool Convex {
+            get {
+                if (convex is not null) {
+                    return convex.Value;
+                }
+
+                if (Vertices <= 3) {
+                    return convex ??= true;
+                }
+
+                static ddouble cross(Vector2D v1, Vector2D v2) {
+                    return v1.X * v2.Y - v2.X * v1.Y;
+                }
+
+                int n = Vertices;
+                Vector2D[] delta = Vertex.Select((Vector2D v, int index) => Vertex[(index + 1) % n] - v).ToArray();
+
+                int sgn = ddouble.Sign(cross(delta[n - 1], delta[0]));
+
+                for (int i = 1; i < n; i++) {
+                    int s = ddouble.Sign(cross(delta[i - 1], delta[i]));
+
+                    if (sgn * s < 0) {
+                        return convex ??= false;
+                    }
+
+                    if (sgn == 0 && s != 0) {
+                        sgn = s;
+                    }
+                }
+
+                return convex ??= true;
+            }
+        }
+
         public static bool IsConvex(Polygon2D g) {
-            if (g.Vertices <= 3) {
-                return true;
-            }
-
-            static ddouble cross(Vector2D v1, Vector2D v2) {
-                return v1.X * v2.Y - v2.X * v1.Y;
-            }
-
-            int n = g.Vertices;
-            Vector2D[] delta = g.Vertex.Select((Vector2D v, int index) => g.Vertex[(index + 1) % n] - v).ToArray();
-
-            int sgn = ddouble.Sign(cross(delta[n - 1], delta[0]));
-
-            for (int i = 1; i < n; i++) {
-                int s = ddouble.Sign(cross(delta[i - 1], delta[i]));
-
-                if (sgn * s < 0) {
-                    return false;
-                }
-
-                if (sgn == 0 && s != 0) {
-                    sgn = s;
-                }
-            }
-
-            return true;
+            return g.Convex;
         }
 
         public override string ToString() {
