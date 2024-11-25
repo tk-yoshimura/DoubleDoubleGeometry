@@ -121,7 +121,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static bool IsValid(Polygon2D g) {
-            return g.Vertices > 0 || IsFinite(g);
+            return g.Vertices > 0 && IsFinite(g);
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
