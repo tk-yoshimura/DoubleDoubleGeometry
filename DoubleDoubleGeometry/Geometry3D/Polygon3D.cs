@@ -132,6 +132,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return IsFinite(g);
         }
 
+        public static bool IsConvex(Polygon3D g) {
+            return Polygon2D.IsConvex(g.Polygon);
+        }
+
         public override string ToString() {
             return $"polygon vertices={Vertices}";
         }
