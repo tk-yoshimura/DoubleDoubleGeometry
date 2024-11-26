@@ -217,14 +217,14 @@ namespace DoubleDoubleGeometry {
                             continue;
                         }
 
-                        queue.Enqueue(edge);
-                        paths[edge] = [.. path, next_node];
-
                         if (next_node == start_node && !cycles.Any(cycle => cycle.SequenceEqual(path))) {
                             cycles.Add(path.AsReadOnly());
                             searched = true;
                             break;
                         }
+
+                        queue.Enqueue(edge);
+                        paths[edge] = [.. path, next_node];
                     }
                 }
 
