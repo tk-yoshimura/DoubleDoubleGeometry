@@ -82,6 +82,12 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(4, p.Connection.EnumerateFace().Count());
 
             Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 3));
+
+            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) { 
+                for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
+                    Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
+                }
+            }
         }
 
         [TestMethod()]
@@ -125,6 +131,12 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(6, p.Connection.EnumerateFace().Count());
 
             Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 4));
+
+            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) { 
+                for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
+                    Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
+                }
+            }
         }
 
         [TestMethod()]
@@ -168,6 +180,12 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(8, p.Connection.EnumerateFace().Count());
 
             Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 3));
+
+            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) { 
+                for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
+                    Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
+                }
+            }
         }
 
         [TestMethod()]
@@ -211,6 +229,12 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(12, p.Connection.EnumerateFace().Count());
 
             Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 5));
+
+            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) { 
+                for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
+                    Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
+                }
+            }
         }
 
         [TestMethod()]
@@ -258,6 +282,12 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(20, p.Connection.EnumerateFace().Count());
 
             Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 3));
+
+            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) { 
+                for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
+                    Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
+                }
+            }
         }
     }
 }

@@ -174,11 +174,14 @@ namespace DoubleDoubleGeometry {
                 yield break;
             }
 
+            static (int, int) edge_index(int from, int to) {
+                return (int.Min(from, to), int.Max(from, to));
+            }
+
             List<ReadOnlyCollection<int>> cycles = [];
             Dictionary<(int from, int to), int> edge_count = [];
             foreach ((int from, int to) in EnumerateEdge()) {
                 edge_count[(from, to)] = 0;
-                edge_count[(to, from)] = 0;
             }
 
             for (int start_node = 0; start_node < Vertices;) {
@@ -187,7 +190,7 @@ namespace DoubleDoubleGeometry {
                 Dictionary<(int from, int to), List<int>> paths = [];
 
                 foreach (int next_node in map[start_node]) {
-                    if (edge_count[(start_node, next_node)] >= 2 || edge_count[(next_node, start_node)] >= 2) {
+                    if (edge_count[edge_index(start_node, next_node)] >= 2) {
                         continue;
                     }
 
@@ -208,9 +211,9 @@ namespace DoubleDoubleGeometry {
                     visited_edge.Add((from_node, to_node));
 
                     foreach (int next_node in map[to_node]) {
-                        (int, int) edge = (to_node, next_node), edge_reverse = (next_node, to_node);
+                        (int, int) edge = (to_node, next_node);
 
-                        if (next_node == from_node || edge_count[edge] >= 2 || edge_count[edge_reverse] >= 2) {
+                        if (next_node == from_node || edge_count[edge_index(to_node, next_node)] >= 2) {
                             continue;
                         }
 
@@ -233,12 +236,9 @@ namespace DoubleDoubleGeometry {
                 ReadOnlyCollection<int> cycle = cycles[^1];
 
                 for (int i = 1; i < cycle.Count; i++) {
-                    edge_count[(cycle[i - 1], cycle[i])]++;
-                    edge_count[(cycle[i], cycle[i - 1])]++;
+                    edge_count[edge_index(cycle[i - 1], cycle[i])]++;
                 }
-
-                edge_count[(cycle[0], cycle[^1])]++;
-                edge_count[(cycle[^1], cycle[0])]++;
+                edge_count[edge_index(cycle[0], cycle[^1])]++;
             }
 
             facet = cycles.AsReadOnly();
