@@ -120,8 +120,73 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return !IsFinite(g);
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool? valid = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool Valid {
+            get {
+                if (valid is not null) {
+                    return valid.Value;
+                }
+
+                if (Vertices <= 0 || !IsFinite(this)) {
+                    return valid ??= false;
+                }
+
+                if (Vertices <= 3) {
+                    return valid ??= true;
+                }
+
+                static bool is_cross(Vector2D a, Vector2D b, Vector2D c, Vector2D d) {
+                    Vector2D ab = b - a, ac = c - a, ad = d - a;
+                    
+                    ddouble s = ab.X * ac.Y - ab.Y * ac.X;
+                    ddouble t = ab.X * ad.Y - ab.Y * ad.X;
+
+                    if (s * t > 0d) {
+                        return false;
+                    }
+
+                    Vector2D cd = d - c, ca = a - c, cb = b - c;
+
+                    ddouble u = cd.X * ca.Y - cd.Y * ca.X; 
+                    ddouble w = cd.X * cb.Y - cd.Y * cb.X;
+                    
+                    if (u * w > 0d) {
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                int n = Vertices;
+
+                for (int i = 1; i < n; i++) {
+                    Vector2D a = Vertex[i - 1], b = Vertex[i];
+
+                    for (int j = i + 1; j < n - 1; j++) {
+                        Vector2D c = Vertex[j], d = Vertex[j + 1];
+
+                        if (is_cross(a, b, c, d)) {
+                            return valid ??= false;
+                        }
+                    }
+
+                    if (i + 1 < n && i > 1) { 
+                        Vector2D c = Vertex[n - 1], d = Vertex[0];
+
+                        if (is_cross(a, b, c, d)) {
+                            return valid ??= false;
+                        }
+                    }
+                }
+
+                return valid ??= true;
+            }
+        }
+
         public static bool IsValid(Polygon2D g) {
-            return g.Vertices > 0 && IsFinite(g);
+            return g.Valid;
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

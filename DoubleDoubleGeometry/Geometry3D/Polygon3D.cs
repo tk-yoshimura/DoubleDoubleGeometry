@@ -129,7 +129,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static bool IsValid(Polygon3D g) {
-            return g.Vertices > 0 && IsFinite(g);
+            return Vector3D.IsFinite(g.Center) && Quaternion.IsFinite(g.Rotation) && Polygon2D.IsValid(g.Polygon);
         }
 
         public static bool IsConvex(Polygon3D g) {

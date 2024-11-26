@@ -132,5 +132,73 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
                 }
             }
         }
+
+        [TestMethod()]
+        public void IsValidTest() {
+            for (int n = 3; n <= 16; n++) {
+                Assert.IsTrue(Polygon2D.IsValid(Polygon2D.Regular(n)), $"{n}");
+                Assert.IsTrue(Polygon2D.IsValid(-Polygon2D.Regular(n)), $"{n}");
+            }
+
+            {
+                Vector2D[] vertex = [.. Polygon2D.Regular(4).Vertex];
+
+                (vertex[2], vertex[3]) = (vertex[3], vertex[2]);
+
+                Assert.IsFalse(Polygon2D.IsValid(new Polygon2D(vertex)));
+            }
+
+            {
+                Vector2D[] vertex = [.. Polygon2D.Regular(4).Vertex];
+
+                (vertex[0], vertex[3]) = (vertex[3], vertex[0]);
+
+                Assert.IsFalse(Polygon2D.IsValid(new Polygon2D(vertex)));
+            }
+
+            for (int n = 5; n <= 16; n++) {
+                for (int i = 0; i < n; i++) {
+                    for (int j = i + 1; j < n; j++) {
+                        Vector2D[] vertex = [.. Polygon2D.Regular(n).Vertex];
+
+                        (vertex[i], vertex[j]) = (vertex[j], vertex[i]);
+
+                        Assert.IsFalse(Polygon2D.IsValid(new Polygon2D(vertex)));
+                    }
+                }
+            }
+
+            for (int n = 4; n <= 16; n++) {
+                for (int i = 0; i < n; i++) {
+                    Vector2D[] vertex = [.. Polygon2D.Regular(n).Vertex];
+
+                    vertex[i] *= -0.5;
+
+                    Assert.IsTrue(Polygon2D.IsValid(new Polygon2D(vertex)));
+                }
+            }
+
+            for (int n = 5; n <= 16; n++) {
+                for (int i = 0; i < n; i++) {
+                    for (int j = i + 1; j < n; j++) {
+                        Vector2D[] vertex = [.. Polygon2D.Regular(n).Vertex];
+
+                        (vertex[i], vertex[j]) = (vertex[j], vertex[i]);
+
+                        Assert.IsFalse(Polygon2D.IsValid(-new Polygon2D(vertex)));
+                    }
+                }
+            }
+
+            for (int n = 4; n <= 16; n++) {
+                for (int i = 0; i < n; i++) {
+                    Vector2D[] vertex = [.. Polygon2D.Regular(n).Vertex];
+
+                    vertex[i] *= -0.5;
+
+                    Assert.IsTrue(Polygon2D.IsValid(-new Polygon2D(vertex)));
+                }
+            }
+        }
     }
 }
