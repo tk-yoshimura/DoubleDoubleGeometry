@@ -164,6 +164,93 @@ namespace DoubleDoubleGeometry {
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ReadOnlyCollection<ReadOnlyCollection<int>> facet = null;
+        public IEnumerable<ReadOnlyCollection<int>> EnumerateFace() {
+            if (facet is not null) {
+                foreach (var face in facet) {
+                    yield return face;
+                }
+
+                yield break;
+            }
+
+            List<ReadOnlyCollection<int>> cycles = [];
+            Dictionary<(int from, int to), int> edge_count = [];
+            foreach ((int from, int to) in EnumerateEdge()) {
+                edge_count[(from, to)] = 0;
+                edge_count[(to, from)] = 0;
+            }
+
+            for (int start_node = 0; start_node < Vertices;) {
+                List<(int from, int to)> visited_edge = [];
+                Queue<(int from, int to)> queue = new();
+                Dictionary<(int from, int to), List<int>> paths = [];
+
+                foreach (int next_node in map[start_node]) {
+                    if (edge_count[(start_node, next_node)] >= 2 || edge_count[(next_node, start_node)] >= 2) {
+                        continue;
+                    }
+
+                    queue.Enqueue((start_node, next_node));
+                    paths[(start_node, next_node)] = [start_node, next_node];
+                }
+
+                bool searched = false;
+
+                while (queue.Count > 0 && !searched) {
+                    (int from_node, int to_node) = queue.Dequeue();
+                    List<int> path = paths[(from_node, to_node)];
+
+                    if (path.Count > Edges) {
+                        continue;
+                    }
+
+                    visited_edge.Add((from_node, to_node));
+
+                    foreach (int next_node in map[to_node]) {
+                        (int, int) edge = (to_node, next_node), edge_reverse = (next_node, to_node);
+
+                        if (next_node == from_node || edge_count[edge] >= 2 || edge_count[edge_reverse] >= 2) {
+                            continue;
+                        }
+
+                        queue.Enqueue(edge);
+                        paths[edge] = [.. path, next_node];
+
+                        if (next_node == start_node && !cycles.Any(cycle => cycle.SequenceEqual(path))) {
+                            cycles.Add(path.AsReadOnly());
+                            searched = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!searched) {
+                    start_node++;
+                    continue;
+                }
+
+                ReadOnlyCollection<int> cycle = cycles[^1];
+
+                for (int i = 1; i < cycle.Count; i++) {
+                    edge_count[(cycle[i - 1], cycle[i])]++;
+                    edge_count[(cycle[i], cycle[i - 1])]++;
+                }
+
+                edge_count[(cycle[0], cycle[^1])]++;
+                edge_count[(cycle[^1], cycle[0])]++;
+            }
+
+            facet = cycles.AsReadOnly();
+
+            foreach (var face in facet) {
+                yield return face;
+            }
+
+            yield break;
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool[,] AdjacencyMatrix {
             get {
                 bool[,] matrix = new bool[Vertices, Vertices];
@@ -191,7 +278,7 @@ namespace DoubleDoubleGeometry {
                 while (stack.Count > 0) {
                     Debug.Assert(visited_node.Count + stack.Count <= Vertices);
 
-                    if (visited_node.Count + stack.Count >= Vertices) { 
+                    if (visited_node.Count + stack.Count >= Vertices) {
                         return valid ??= true;
                     }
 

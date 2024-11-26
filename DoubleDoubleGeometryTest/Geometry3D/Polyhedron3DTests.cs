@@ -78,6 +78,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             }
 
             Assert.AreEqual(4, p.Connection.EnumerateTriangle().Count());
+
+            Assert.AreEqual(4, p.Connection.EnumerateFace().Count());
         }
 
         [TestMethod()]
@@ -117,6 +119,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             }
 
             Assert.AreEqual(0, p.Connection.EnumerateTriangle().Count());
+
+            Assert.AreEqual(6, p.Connection.EnumerateFace().Count());
         }
 
         [TestMethod()]
@@ -156,6 +160,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             }
 
             Assert.AreEqual(8, p.Connection.EnumerateTriangle().Count());
+
+            Assert.AreEqual(8, p.Connection.EnumerateFace().Count());
         }
 
         [TestMethod()]
@@ -195,6 +201,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             }
 
             Assert.AreEqual(0, p.Connection.EnumerateTriangle().Count());
+
+            Assert.AreEqual(12, p.Connection.EnumerateFace().Count());
         }
 
         [TestMethod()]
@@ -238,6 +246,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             foreach ((int i, int j, int k) in p.Connection.EnumerateTriangle()) {
                 Console.WriteLine($"{i}, {j}, {k}");
             }
+
+            Assert.AreEqual(20, p.Connection.EnumerateFace().Count());
         }
     }
 }
