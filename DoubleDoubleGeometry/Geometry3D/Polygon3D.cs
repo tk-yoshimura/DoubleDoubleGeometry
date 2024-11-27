@@ -21,7 +21,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public Polygon3D(Polygon2D polygon, Vector3D center, Vector3D normal)
-            : this(polygon, center, Vector3D.Rot((0, 0, 1), normal.Normal), 0) { }
+            : this(polygon, center, Vector3D.Rot((0d, 0d, 1d), normal.Normal), 0) { }
 
         public Polygon3D(Polygon2D polygon, Vector3D center, Quaternion rotation) {
             this.Center = center;
@@ -44,7 +44,13 @@ namespace DoubleDoubleGeometry.Geometry3D {
             => vertex ??= Polygon.Vertex.Select(v => Center + Rotation * (Vector3D)v).ToArray().AsReadOnly();
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Vector3D Normal => Rotation * new Vector3D(0, 0, 1);
+        public Vector3D Normal => Rotation * new Vector3D(0d, 0d, 1d);
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Area => Polygon.Area;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Perimeter => Polygon.Perimeter;
 
         public static Polygon3D operator +(Polygon3D g) {
             return g;
