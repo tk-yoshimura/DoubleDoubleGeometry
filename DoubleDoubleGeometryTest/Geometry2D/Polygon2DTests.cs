@@ -1,6 +1,7 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
+using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
     [TestClass()]
@@ -198,6 +199,79 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
                     Assert.IsTrue(Polygon2D.IsValid(-new Polygon2D(vertex)));
                 }
+            }
+        }
+
+        [TestMethod()]
+        public void AreaTest() {
+            for (int n = 3; n <= 16; n++) {
+                ddouble s = n * ddouble.SinPi(2 * ddouble.Rcp(n)) / 2;
+
+                PrecisionAssert.AreEqual(s, Polygon2D.Regular(n).Area, 1e-30, $"{n}");
+                PrecisionAssert.AreEqual(s, (-Polygon2D.Regular(n)).Area, 1e-30, $"{n}");
+
+                PrecisionAssert.AreEqual(s, (Polygon2D.Regular(n) + (1, 2)).Area, 1e-30, $"{n}");
+                PrecisionAssert.AreEqual(s, (-Polygon2D.Regular(n) + (1, 2)).Area, 1e-30, $"{n}");
+            }
+
+            {
+                Vector2D[] vertex = [.. Polygon2D.Regular(4).Vertex];
+
+                (vertex[2], vertex[3]) = (vertex[3], vertex[2]);
+
+                PrecisionAssert.IsNaN(new Polygon2D(vertex).Area);
+            }
+
+            {
+                Vector2D[] vertex = [.. Polygon2D.Regular(4).Vertex];
+
+                (vertex[0], vertex[3]) = (vertex[3], vertex[0]);
+
+                PrecisionAssert.IsNaN(new Polygon2D(vertex).Area);
+            }
+
+            for (int n = 5; n <= 16; n++) {
+                for (int i = 0; i < n; i++) {
+                    for (int j = i + 1; j < n; j++) {
+                        Vector2D[] vertex = [.. Polygon2D.Regular(n).Vertex];
+
+                        (vertex[i], vertex[j]) = (vertex[j], vertex[i]);
+
+                        PrecisionAssert.IsNaN(new Polygon2D(vertex).Area);
+                    }
+                }
+            }
+
+            for (int n = 4; n <= 16; n++) {
+                for (int i = 0; i < n; i++) {
+                    Polygon2D p = Polygon2D.Regular(n);
+
+                    Vector2D[] vertex = [.. p.Vertex];
+
+                    ddouble s = p.Area - new Polygon2D(vertex[i], vertex[(i + 1) % n], vertex[i] * -0.5, vertex[(i + n - 1) % n]).Area;
+
+                    vertex[i] *= -0.5;
+
+                    PrecisionAssert.AreEqual(s, new Polygon2D(vertex).Area, 1e-30, $"{n}");
+                    PrecisionAssert.AreEqual(s, (-new Polygon2D(vertex)).Area, 1e-30, $"{n}");
+
+                    PrecisionAssert.AreEqual(s, (new Polygon2D(vertex) + (1, 2)).Area, 1e-30, $"{n}");
+                    PrecisionAssert.AreEqual(s, (-new Polygon2D(vertex) + (1, 2)).Area, 1e-30, $"{n}");
+                }
+            }
+        }
+
+
+        [TestMethod()]
+        public void PerimeterTest() {
+            for (int n = 3; n <= 16; n++) {
+                ddouble s = 2 * n * ddouble.SinPi(ddouble.Rcp(n));
+
+                PrecisionAssert.AreEqual(s, Polygon2D.Regular(n).Perimeter, 1e-30, $"{n}");
+                PrecisionAssert.AreEqual(s, (-Polygon2D.Regular(n)).Perimeter, 1e-30, $"{n}");
+
+                PrecisionAssert.AreEqual(s, (Polygon2D.Regular(n) + (1, 2)).Perimeter, 1e-30, $"{n}");
+                PrecisionAssert.AreEqual(s, (-Polygon2D.Regular(n) + (1, 2)).Perimeter, 1e-30, $"{n}");
             }
         }
     }
