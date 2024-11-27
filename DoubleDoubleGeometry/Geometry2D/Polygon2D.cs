@@ -34,6 +34,64 @@ namespace DoubleDoubleGeometry.Geometry2D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public Vector2D Size => size ??= Vertex.Max() - Vertex.Min();
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ddouble? area = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Area {
+            get {
+                if (area is not null) {
+                    return area.Value;
+                }
+
+                if (Vertices <= 2) {
+                    return area ??= 0d;
+                }
+
+                if (!IsValid(this)) {
+                    return area ??= ddouble.NaN;
+                }
+
+                int n = Vertices;
+
+                ddouble s = Vector2D.Cross(Vertex[n - 1], Vertex[0]);
+
+                for (int i = 1; i < n; i++) {
+                    s += Vector2D.Cross(Vertex[i - 1], Vertex[i]);
+                }
+
+                area ??= ddouble.Ldexp(ddouble.Abs(s), -1);
+
+                return area.Value;
+            }
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ddouble? perimeter = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Perimeter {
+            get {
+                if (perimeter is not null) {
+                    return perimeter.Value;
+                }
+
+                if (Vertices <= 1) {
+                    return perimeter ??= 0d;
+                }
+
+                int n = Vertices;
+
+                ddouble s = Vector2D.Distance(Vertex[n - 1], Vertex[0]);
+
+                for (int i = 1; i < n; i++) {
+                    s += Vector2D.Distance(Vertex[i - 1], Vertex[i]);
+                }
+
+                perimeter ??= s;
+
+                return perimeter.Value;
+            }
+        }
+
         public static Polygon2D operator +(Polygon2D g) {
             return g;
         }
@@ -139,9 +197,8 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
                 static bool is_cross(Vector2D a, Vector2D b, Vector2D c, Vector2D d) {
                     Vector2D ab = b - a, ac = c - a, ad = d - a;
-                    
-                    ddouble s = ab.X * ac.Y - ab.Y * ac.X;
-                    ddouble t = ab.X * ad.Y - ab.Y * ad.X;
+
+                    ddouble s = Vector2D.Cross(ab, ac), t = Vector2D.Cross(ab, ad);
 
                     if (s * t > 0d) {
                         return false;
@@ -149,10 +206,9 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
                     Vector2D cd = d - c, ca = a - c, cb = b - c;
 
-                    ddouble u = cd.X * ca.Y - cd.Y * ca.X; 
-                    ddouble w = cd.X * cb.Y - cd.Y * cb.X;
-                    
-                    if (u * w > 0d) {
+                    ddouble u = Vector2D.Cross(cd, ca), v = Vector2D.Cross(cd, cb);
+
+                    if (u * v > 0d) {
                         return false;
                     }
 
@@ -172,7 +228,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
                         }
                     }
 
-                    if (i + 1 < n && i > 1) { 
+                    if (i + 1 < n && i > 1) {
                         Vector2D c = Vertex[n - 1], d = Vertex[0];
 
                         if (is_cross(a, b, c, d)) {
@@ -202,17 +258,13 @@ namespace DoubleDoubleGeometry.Geometry2D {
                     return convex ??= true;
                 }
 
-                static ddouble cross(Vector2D v1, Vector2D v2) {
-                    return v1.X * v2.Y - v2.X * v1.Y;
-                }
-
                 int n = Vertices;
                 Vector2D[] delta = Vertex.Select((Vector2D v, int index) => Vertex[(index + 1) % n] - v).ToArray();
 
-                int sgn = ddouble.Sign(cross(delta[n - 1], delta[0]));
+                int sgn = ddouble.Sign(Vector2D.Cross(delta[n - 1], delta[0]));
 
                 for (int i = 1; i < n; i++) {
-                    int s = ddouble.Sign(cross(delta[i - 1], delta[i]));
+                    int s = ddouble.Sign(Vector2D.Cross(delta[i - 1], delta[i]));
 
                     if (sgn * s < 0) {
                         return convex ??= false;
