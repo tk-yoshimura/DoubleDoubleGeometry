@@ -131,6 +131,102 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return g.Vertices > 0 && IsFinite(g) && Connection.IsValid(g.Connection);
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ReadOnlyCollection<(Plane3D plane, bool is_convex)> Planes {
+            get {
+                if (planes is not null) {
+                    return planes;
+                }
+
+                List<(Plane3D, bool)> plane_list = [];
+
+                foreach (ReadOnlyCollection<int> face in Connection.Face) {
+                    int n = face.Count;
+                    Vector3D[] vertex_polygon = face.Select(idx => Vertex[idx]).ToArray();
+
+                    Vector3D[] delta = vertex_polygon.Select((Vector3D v, int index) => vertex_polygon[(index + 1) % n] - v).ToArray();
+
+                    Vector3D cross = Vector3D.Cross(delta[n - 1], delta[0]);
+                    Vector3D normal = cross;
+
+                    bool is_convex = true;
+
+                    for (int i = 1; i < n; i++) {
+                        Vector3D c = Vector3D.Cross(delta[i - 1], delta[i]);
+
+                        if (Vector3D.Dot(cross, c) < 0d) {
+                            c = -c;
+                            is_convex = false;
+                        }
+
+                        normal += c;
+                    }
+
+                    normal = normal.Normal;
+
+                    ddouble d = -vertex_polygon.Select(v => Vector3D.Dot(v, normal)).Average();
+
+                    Plane3D plane = Plane3D.FromIntercept(normal, d);
+
+                    plane_list.Add((plane, is_convex));
+                }
+
+                planes = plane_list.AsReadOnly();
+
+                return planes;
+            }
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool? convex = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool Convex {
+            get {
+                if (convex is not null) {
+                    return convex.Value;
+                }
+
+                if (Vertices <= 4) {
+                    return convex ??= true;
+                }
+
+                ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = Planes;
+                ReadOnlyCollection<ReadOnlyCollection<int>> faces = Connection.Face;
+
+                foreach (((Plane3D plane, bool is_convex), ReadOnlyCollection<int> face) in planes.Zip(faces)) {
+                    if (!is_convex) {
+                        return convex ??= false;
+                    }
+
+                    List<ddouble> ss = [];
+
+                    for (int vertex_index = 0; vertex_index < Vertices; vertex_index++) {
+                        if (face.Contains(vertex_index)) {
+                            continue;
+                        }
+
+                        Vector3D p = Vertex[vertex_index];
+
+                        ddouble s = Vector3D.Dot(plane.Normal, p) + plane.D;
+
+                        ss.Add(s);
+                    }
+
+                    if (ss.Any(s => s < 0d) && ss.Any(s => s > 0d)) {
+                        return convex ??= false;
+                    }
+                }
+
+                return convex ??= true;
+            }
+        }
+
+        public static bool IsConvex(Polyhedron3D g) {
+            return g.Convex;
+        }
+
         public override string ToString() {
             return $"polyhedron vertices={Vertices}, edges={Edges}";
         }

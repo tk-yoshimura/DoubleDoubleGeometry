@@ -134,120 +134,173 @@ namespace DoubleDoubleGeometry {
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public IEnumerable<(int i, int j)> EnumerateEdge() {
-            for (int i = 0; i < Vertices; i++) {
-                foreach (int j in map[i]) {
-                    if (i >= j) {
-                        continue;
-                    }
+            ReadOnlyCollection<(int i, int j)> edge = Edge;
 
-                    yield return (i, j);
-                }
-            }
-        }
-
-        public IEnumerable<(int i, int j, int k)> EnumerateTriangle() {
-            for (int i = 0; i < Vertices; i++) {
-                foreach (int j in map[i]) {
-                    if (i >= j) {
-                        continue;
-                    }
-
-                    foreach (int k in map[j]) {
-                        if (j >= k || !map[k].Contains(i)) {
-                            continue;
-                        }
-
-                        yield return (i, j, k);
-                    }
-                }
+            foreach (var e in edge) {
+                yield return e;
             }
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ReadOnlyCollection<ReadOnlyCollection<int>> facet = null;
-        public IEnumerable<ReadOnlyCollection<int>> EnumerateFace() {
-            if (facet is not null) {
-                foreach (var face in facet) {
-                    yield return face;
+        ReadOnlyCollection<(int i, int j)> edge;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ReadOnlyCollection<(int i, int j)> Edge {
+            get {
+                if (edge is not null) {
+                    return edge;
                 }
 
-                yield break;
-            }
+                List<(int i, int j)> e = [];
 
-            static (int, int) edge_index(int from, int to) {
-                return (int.Min(from, to), int.Max(from, to));
-            }
-
-            List<ReadOnlyCollection<int>> cycles = [];
-            Dictionary<(int from, int to), int> edge_count = [];
-            foreach ((int from, int to) in EnumerateEdge()) {
-                edge_count[(from, to)] = 0;
-            }
-
-            for (int start_node = 0; start_node < Vertices;) {
-                List<(int from, int to)> visited_edge = [];
-                Queue<(int from, int to)> queue = new();
-                Dictionary<(int from, int to), List<int>> paths = [];
-
-                foreach (int next_node in map[start_node]) {
-                    if (edge_count[edge_index(start_node, next_node)] >= 2) {
-                        continue;
-                    }
-
-                    queue.Enqueue((start_node, next_node));
-                    paths[(start_node, next_node)] = [start_node, next_node];
-                }
-
-                bool searched = false;
-
-                while (queue.Count > 0 && !searched) {
-                    (int from_node, int to_node) = queue.Dequeue();
-                    List<int> path = paths[(from_node, to_node)];
-
-                    if (path.Count > Edges) {
-                        continue;
-                    }
-
-                    visited_edge.Add((from_node, to_node));
-
-                    foreach (int next_node in map[to_node]) {
-                        (int, int) edge = (to_node, next_node);
-
-                        if (next_node == from_node || edge_count[edge_index(to_node, next_node)] >= 2) {
+                for (int i = 0; i < Vertices; i++) {
+                    foreach (int j in map[i]) {
+                        if (i >= j) {
                             continue;
                         }
 
-                        if (next_node == start_node && !cycles.Any(cycle => cycle.SequenceEqual(path))) {
-                            cycles.Add(path.AsReadOnly());
-                            searched = true;
-                            break;
-                        }
-
-                        queue.Enqueue(edge);
-                        paths[edge] = [.. path, next_node];
+                        e.Add((i, j));
                     }
                 }
 
-                if (!searched) {
-                    start_node++;
-                    continue;
+                edge = e.AsReadOnly();
+
+                return edge;
+            }
+        }
+
+        public IEnumerable<(int i, int j, int k)> EnumerateTriangle() {
+            ReadOnlyCollection<(int i, int j, int k)> triangle = Triangle;
+
+            foreach (var t in triangle) {
+                yield return t;
+            }
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ReadOnlyCollection<(int i, int j, int k)> triangle;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ReadOnlyCollection<(int i, int j, int k)> Triangle {
+            get {
+                if (triangle is not null) {
+                    return triangle;
                 }
 
-                ReadOnlyCollection<int> cycle = cycles[^1];
+                List<(int i, int j, int k)> t = [];
 
-                for (int i = 1; i < cycle.Count; i++) {
-                    edge_count[edge_index(cycle[i - 1], cycle[i])]++;
+                for (int i = 0; i < Vertices; i++) {
+                    foreach (int j in map[i]) {
+                        if (i >= j) {
+                            continue;
+                        }
+
+                        foreach (int k in map[j]) {
+                            if (j >= k || !map[k].Contains(i)) {
+                                continue;
+                            }
+
+                            t.Add((i, j, k));
+                        }
+                    }
                 }
-                edge_count[edge_index(cycle[0], cycle[^1])]++;
+
+                triangle = t.AsReadOnly();
+
+                return triangle;
             }
+        }
 
-            facet = cycles.AsReadOnly();
+        public IEnumerable<ReadOnlyCollection<int>> EnumerateFace() {
+            ReadOnlyCollection<ReadOnlyCollection<int>> face = Face;
 
-            foreach (var face in facet) {
-                yield return face;
+            foreach (var f in face) {
+                yield return f;
             }
+        }
 
-            yield break;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ReadOnlyCollection<ReadOnlyCollection<int>> face = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ReadOnlyCollection<ReadOnlyCollection<int>> Face {
+            get {
+                if (face is not null) {
+                    return face;
+                }
+
+                static (int, int) edge_index(int from, int to) {
+                    return (int.Min(from, to), int.Max(from, to));
+                }
+
+                List<ReadOnlyCollection<int>> cycles = [];
+                Dictionary<(int from, int to), int> edge_count = [];
+                foreach ((int from, int to) in EnumerateEdge()) {
+                    edge_count[(from, to)] = 0;
+                }
+
+                for (int start_node = 0; start_node < Vertices;) {
+                    List<(int from, int to)> visited_edge = [];
+                    Queue<(int from, int to)> queue = new();
+                    Dictionary<(int from, int to), List<int>> paths = [];
+
+                    foreach (int next_node in map[start_node]) {
+                        if (edge_count[edge_index(start_node, next_node)] >= 2) {
+                            continue;
+                        }
+
+                        queue.Enqueue((start_node, next_node));
+                        paths[(start_node, next_node)] = [start_node, next_node];
+                    }
+
+                    if (queue.Count <= 1) {
+                        start_node++;
+                        continue;
+                    }
+
+                    bool searched = false;
+
+                    while (queue.Count > 0 && !searched) {
+                        (int from_node, int to_node) = queue.Dequeue();
+                        List<int> path = paths[(from_node, to_node)];
+
+                        visited_edge.Add((from_node, to_node));
+
+                        foreach (int next_node in map[to_node]) {
+                            if (next_node == from_node || edge_count[edge_index(to_node, next_node)] >= 2) {
+                                continue;
+                            }
+
+                            if (next_node == start_node && !cycles.Any(cycle => cycle.SequenceEqual(path))) {
+                                cycles.Add(path.AsReadOnly());
+                                searched = true;
+                                break;
+                            }
+
+                            if (path.Contains(next_node)) {
+                                continue;
+                            }
+
+                            (int, int) edge = (to_node, next_node);
+                            queue.Enqueue(edge);
+                            paths[edge] = [.. path, next_node];
+                        }
+                    }
+
+                    if (!searched) {
+                        start_node++;
+                        continue;
+                    }
+
+                    ReadOnlyCollection<int> cycle = cycles.Last();
+
+                    for (int i = 1; i < cycle.Count; i++) {
+                        edge_count[edge_index(cycle[i - 1], cycle[i])]++;
+                    }
+                    edge_count[edge_index(cycle[0], cycle[^1])]++;
+                }
+
+                face = cycles.AsReadOnly();
+
+                return face;
+            }
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

@@ -83,7 +83,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 3));
 
-            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) { 
+            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) {
                 for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
                     Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
                 }
@@ -132,7 +132,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 4));
 
-            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) { 
+            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) {
                 for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
                     Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
                 }
@@ -181,7 +181,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 3));
 
-            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) { 
+            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) {
                 for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
                     Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
                 }
@@ -230,7 +230,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 5));
 
-            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) { 
+            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) {
                 for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
                     Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
                 }
@@ -283,9 +283,87 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 3));
 
-            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) { 
+            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) {
                 for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
                     Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
+                }
+            }
+        }
+
+        [TestMethod()]
+        public void IsConvexTest() {
+            Assert.IsTrue(Polyhedron3D.IsConvex(Polyhedron3D.Tetrahedron));
+            Assert.IsTrue(Polyhedron3D.IsConvex(-Polyhedron3D.Tetrahedron));
+
+            Assert.IsTrue(Polyhedron3D.IsConvex(Polyhedron3D.Cube));
+            Assert.IsTrue(Polyhedron3D.IsConvex(-Polyhedron3D.Cube));
+
+            Assert.IsTrue(Polyhedron3D.IsConvex(Polyhedron3D.Octahedron));
+            Assert.IsTrue(Polyhedron3D.IsConvex(-Polyhedron3D.Octahedron));
+
+            Assert.IsTrue(Polyhedron3D.IsConvex(Polyhedron3D.Dodecahedron));
+            Assert.IsTrue(Polyhedron3D.IsConvex(-Polyhedron3D.Dodecahedron));
+
+            Assert.IsTrue(Polyhedron3D.IsConvex(Polyhedron3D.Icosahedron));
+            Assert.IsTrue(Polyhedron3D.IsConvex(-Polyhedron3D.Icosahedron));
+
+            {
+                Vector3D[] vertex = [.. Polyhedron3D.Cube.Vertex];
+
+                for (int i = 0; i < vertex.Length; i++) {
+                    Vector3D[] vertex_copy = (Vector3D[])vertex.Clone();
+
+                    vertex_copy[i] *= -0.5;
+
+                    Polyhedron3D g = new(Polyhedron3D.Cube.Connection, vertex_copy);
+
+                    Assert.IsFalse(Polyhedron3D.IsConvex(g));
+                    Assert.IsFalse(Polyhedron3D.IsConvex(-g));
+                }
+            }
+
+            {
+                Vector3D[] vertex = [.. Polyhedron3D.Octahedron.Vertex];
+
+                for (int i = 0; i < vertex.Length; i++) {
+                    Vector3D[] vertex_copy = (Vector3D[])vertex.Clone();
+
+                    vertex_copy[i] *= -0.5;
+
+                    Polyhedron3D g = new(Polyhedron3D.Octahedron.Connection, vertex_copy);
+
+                    Assert.IsFalse(Polyhedron3D.IsConvex(g));
+                    Assert.IsFalse(Polyhedron3D.IsConvex(-g));
+                }
+            }
+
+            {
+                Vector3D[] vertex = [.. Polyhedron3D.Dodecahedron.Vertex];
+
+                for (int i = 0; i < vertex.Length; i++) {
+                    Vector3D[] vertex_copy = (Vector3D[])vertex.Clone();
+
+                    vertex_copy[i] *= -0.5;
+
+                    Polyhedron3D g = new(Polyhedron3D.Dodecahedron.Connection, vertex_copy);
+
+                    Assert.IsFalse(Polyhedron3D.IsConvex(g));
+                    Assert.IsFalse(Polyhedron3D.IsConvex(-g));
+                }
+            }
+
+            {
+                Vector3D[] vertex = [.. Polyhedron3D.Icosahedron.Vertex];
+
+                for (int i = 0; i < vertex.Length; i++) {
+                    Vector3D[] vertex_copy = (Vector3D[])vertex.Clone();
+
+                    vertex_copy[i] *= -0.5;
+
+                    Polyhedron3D g = new(Polyhedron3D.Icosahedron.Connection, vertex_copy);
+
+                    Assert.IsFalse(Polyhedron3D.IsConvex(g));
+                    Assert.IsFalse(Polyhedron3D.IsConvex(-g));
                 }
             }
         }
