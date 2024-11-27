@@ -163,6 +163,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return v1.X * v2.X + v1.Y * v2.Y;
         }
 
+        public static ddouble Cross(Vector2D v1, Vector2D v2) {
+            return v1.X * v2.Y - v1.Y * v2.X;
+        }
+
         public static Complex Rot(Vector2D v1, Vector2D v2) {
             ddouble v1_norm = v1.Norm, v2_norm = v2.Norm;
 
