@@ -188,17 +188,17 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static Matrix3D RotateX(ddouble theta) {
             ddouble cs = ddouble.Cos(theta), sn = ddouble.Sin(theta);
-            return new Matrix3D(1, 0, 0, 0, +cs, -sn, 0, +sn, +cs);
+            return new Matrix3D(1d, 0d, 0d, 0d, +cs, -sn, 0d, +sn, +cs);
         }
 
         public static Matrix3D RotateY(ddouble theta) {
             ddouble cs = ddouble.Cos(theta), sn = ddouble.Sin(theta);
-            return new Matrix3D(+cs, 0, +sn, 0, 1, 0, -sn, 0, +cs);
+            return new Matrix3D(+cs, 0d, +sn, 0d, 1d, 0d, -sn, 0d, +cs);
         }
 
         public static Matrix3D RotateZ(ddouble theta) {
             ddouble cs = ddouble.Cos(theta), sn = ddouble.Sin(theta);
-            return new Matrix3D(+cs, -sn, 0, +sn, +cs, 0, 0, 0, 1);
+            return new Matrix3D(+cs, -sn, 0d, +sn, +cs, 0d, 0d, 0d, 1d);
         }
 
         public static Matrix3D Rotate(ddouble roll, ddouble pitch, ddouble yaw) {

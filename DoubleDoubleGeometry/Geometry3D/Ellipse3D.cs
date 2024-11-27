@@ -20,7 +20,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public Ellipse3D(Vector3D center, Vector2D axis, Vector3D normal)
-            : this(center, axis, Vector3D.Rot((0, 0, 1), normal.Normal), 0) { }
+            : this(center, axis, Vector3D.Rot((0d, 0d, 1d), normal.Normal), 0) { }
 
         public Ellipse3D(Vector3D center, Vector2D axis, Quaternion rotation) {
             this.Center = center;
@@ -45,7 +45,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public ddouble MinorAxis => ddouble.Min(ddouble.Abs(Axis.X), ddouble.Abs(Axis.Y));
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Vector3D Normal => Rotation * new Vector3D(0, 0, 1);
+        public Vector3D Normal => Rotation * new Vector3D(0d, 0d, 1d);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Area => ddouble.Abs(Axis.X * Axis.Y) * ddouble.Pi;

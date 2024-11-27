@@ -20,7 +20,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public Circle3D(Vector3D center, ddouble radius, Vector3D normal)
-            : this(center, radius, Vector3D.Rot((0, 0, 1), normal.Normal), 0) { }
+            : this(center, radius, Vector3D.Rot((0d, 0d, 1d), normal.Normal), 0) { }
 
         public Circle3D(Vector3D center, ddouble radius, Quaternion rotation) {
             this.Center = center;
@@ -78,7 +78,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public ddouble Perimeter => 2d * ddouble.Abs(Radius) * ddouble.Pi;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Vector3D Normal => Rotation * new Vector3D(0, 0, 1);
+        public Vector3D Normal => Rotation * new Vector3D(0d, 0d, 1d);
 
         public static Circle3D operator +(Circle3D g) {
             return g;
