@@ -1,6 +1,7 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -121,6 +122,22 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Ellipsoid3D Zero { get; } = new(Vector3D.Zero, Vector3D.Zero, Quaternion.Zero, 0);
+
+        public bool Inside(Vector3D v) {
+            bool inside = ((Rotation.Conj * (v - Center)) / (ddouble.Abs(Axis.X), ddouble.Abs(Axis.Y), ddouble.Abs(Axis.Z))).SquareNorm <= 1d;
+
+            return inside;
+        }
+
+        public IEnumerable<bool> Inside(IEnumerable<Vector3D> vs) {
+            Matrix3D m = Matrix3D.Scale(1d / ddouble.Abs(Axis.X), 1d / ddouble.Abs(Axis.Y), 1d / ddouble.Abs(Axis.Z)) * new Matrix3D(Rotation.Conj);
+
+            foreach (Vector3D v in vs) {
+                bool inside = (m * (v - Center)).SquareNorm <= 1d;
+
+                yield return inside;
+            }
+        }
 
         public static bool IsNaN(Ellipsoid3D g) {
             return Vector3D.IsNaN(g.Center) || Vector3D.IsNaN(g.Axis) || Quaternion.IsNaN(g.Rotation);

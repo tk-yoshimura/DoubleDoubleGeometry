@@ -98,5 +98,40 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Assert.IsTrue(Triangle2D.IsValid(new Triangle2D(new Vector2D(8, 1), new Vector2D(2, 3), new Vector2D(4, 9))));
             Assert.IsFalse(Triangle2D.IsValid(Triangle2D.Invalid));
         }
+
+        [TestMethod()]
+        public void InsideTest() {
+            Triangle2D t = new((0, 0), (0, 1), (1, 0));
+
+            Vector2D[] insides = [
+                (0.25, 0.25), (0.25, 0.5), (0.5, 0.25)
+            ];
+
+            Vector2D[] outsides = [
+                (-0.25, -0.25), (-0.25, 0.5), (0.5, -0.25), (-0.25, -0.5), (-0.5, -0.25),
+                (0, 1.5), (1.5, 0), (0.5, 0.75), (0.75, 0.5)
+            ];
+
+            foreach (Vector2D v in insides) {
+                Assert.IsTrue(t.Inside(v));
+            }
+
+            foreach (Vector2D v in outsides) {
+                Assert.IsFalse(t.Inside(v));
+            }
+
+            Matrix2D m = new double[,] { { 1, 2 }, { 3, 5 } };
+            Vector2D s = (4, 6);
+
+            Triangle2D t2 = m * t + s;
+
+            foreach (Vector2D v in insides) {
+                Assert.IsTrue(t2.Inside(m * v + s));
+            }
+
+            foreach (Vector2D v in outsides) {
+                Assert.IsFalse(t2.Inside(m * v + s));
+            }
+        }
     }
 }

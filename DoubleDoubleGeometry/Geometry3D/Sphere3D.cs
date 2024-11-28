@@ -1,6 +1,7 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -124,6 +125,24 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Sphere3D Zero { get; } = new(Vector3D.Zero, ddouble.Zero);
+               
+        public bool Inside(Vector3D v) {
+            ddouble radius = ddouble.Abs(Radius);
+
+            bool inside = ((v - Center) / radius).SquareNorm <= 1d;
+
+            return inside;
+        }
+
+        public IEnumerable<bool> Inside(IEnumerable<Vector3D> vs) {
+            ddouble radius_inv = 1d / ddouble.Abs(Radius);
+
+            foreach (Vector3D v in vs) {
+                bool inside = ((v - Center) * radius_inv).SquareNorm <= 1d;
+
+                yield return inside;
+            }
+        }
 
         public static bool IsNaN(Sphere3D g) {
             return Vector3D.IsNaN(g.Center) || ddouble.IsNaN(g.Radius);

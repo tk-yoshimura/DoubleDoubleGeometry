@@ -149,6 +149,14 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return [v.X, v.Y, v.Z];
         }
 
+        public static implicit operator Vector3D(double[] v) {
+            if (v.Length != 3) {
+                throw new ArgumentException("invalid dim", nameof(v));
+            }
+
+            return new Vector3D(v[0], v[1], v[2]);
+        }
+
         public static implicit operator Vector3D(ddouble[] v) {
             if (v.Length != 3) {
                 throw new ArgumentException("invalid dim", nameof(v));

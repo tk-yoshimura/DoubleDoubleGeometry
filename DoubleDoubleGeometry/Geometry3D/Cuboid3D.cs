@@ -1,6 +1,7 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -137,6 +138,26 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Cuboid3D Zero { get; } = new(Vector3D.Zero, Vector3D.Zero, Quaternion.Zero, 0);
+
+        public bool Inside(Vector3D v) {
+            Vector3D u = Rotation.Conj * (v - Center);
+
+            bool inside = ddouble.Abs(u.X) <= Scale.X && ddouble.Abs(u.Y) <= Scale.Y && ddouble.Abs(u.Z) <= Scale.Z;
+
+            return inside;
+        }
+
+        public IEnumerable<bool> Inside(IEnumerable<Vector3D> vs) {
+            Quaternion q = Rotation.Conj;
+
+            foreach (Vector3D v in vs) {
+                Vector3D u = q * (v - Center);
+
+                bool inside = ddouble.Abs(u.X) <= Scale.X && ddouble.Abs(u.Y) <= Scale.Y && ddouble.Abs(u.Z) <= Scale.Z;
+
+                yield return inside;
+            }
+        }
 
         public static bool IsNaN(Cuboid3D g) {
             return Vector3D.IsNaN(g.Center) || Vector3D.IsNaN(g.Scale) || Quaternion.IsNaN(g.Rotation);

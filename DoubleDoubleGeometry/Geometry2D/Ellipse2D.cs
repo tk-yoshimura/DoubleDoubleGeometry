@@ -1,6 +1,8 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -161,6 +163,22 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Ellipse2D Zero { get; } = new(Vector2D.Zero, (ddouble.Zero, ddouble.Zero), ddouble.Zero);
+
+        public bool Inside(Vector2D v) {
+            bool inside = ((Rotation.Conj * (v - Center)) / (ddouble.Abs(Axis.X), ddouble.Abs(Axis.Y))).SquareNorm <= 1d;
+
+            return inside;
+        }
+
+        public IEnumerable<bool> Inside(IEnumerable<Vector2D> vs) {
+            Matrix2D m = Matrix2D.Scale(1d / ddouble.Abs(Axis.X), 1d / ddouble.Abs(Axis.Y)) * new Matrix2D(Rotation.Conj);
+
+            foreach (Vector2D v in vs) {
+                bool inside = (m * (v - Center)).SquareNorm <= 1d;
+
+                yield return inside;
+            }
+        }
 
         public static bool IsNaN(Ellipse2D g) {
             return Vector2D.IsNaN(g.Center) || Vector2D.IsNaN(g.Axis) || Complex.IsNaN(g.Rotation);

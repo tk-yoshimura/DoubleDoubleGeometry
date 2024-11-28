@@ -140,6 +140,14 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return [v.X, v.Y];
         }
 
+        public static implicit operator Vector2D(double[] v) {
+            if (v.Length != 2) {
+                throw new ArgumentException("invalid dim", nameof(v));
+            }
+
+            return new Vector2D(v[0], v[1]);
+        }
+
         public static implicit operator Vector2D(ddouble[] v) {
             if (v.Length != 2) {
                 throw new ArgumentException("invalid dim", nameof(v));

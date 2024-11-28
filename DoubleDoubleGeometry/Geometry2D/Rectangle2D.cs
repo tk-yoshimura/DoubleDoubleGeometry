@@ -1,6 +1,7 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -144,6 +145,26 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Rectangle2D Zero { get; } = new(Vector2D.Zero, (ddouble.Zero, ddouble.Zero), ddouble.Zero);
+
+        public bool Inside(Vector2D v) {
+            Vector2D u = Rotation.Conj * (v - Center);
+
+            bool inside = ddouble.Abs(u.X) <= Scale.X && ddouble.Abs(u.Y) <= Scale.Y;
+
+            return inside;
+        }
+
+        public IEnumerable<bool> Inside(IEnumerable<Vector2D> vs) {
+            Complex c = Rotation.Conj;
+
+            foreach (Vector2D v in vs) {
+                Vector2D u = c * (v - Center);
+
+                bool inside = ddouble.Abs(u.X) <= Scale.X && ddouble.Abs(u.Y) <= Scale.Y;
+
+                yield return inside;
+            }
+        }
 
         public static bool IsNaN(Rectangle2D g) {
             return Vector2D.IsNaN(g.Center) || Vector2D.IsNaN(g.Scale) || Complex.IsNaN(g.Rotation);

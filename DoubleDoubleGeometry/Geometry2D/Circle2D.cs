@@ -1,8 +1,11 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace DoubleDoubleGeometry.Geometry2D {
 
@@ -151,6 +154,24 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Circle2D Zero { get; } = new(Vector2D.Zero, ddouble.Zero);
+
+        public bool Inside(Vector2D v) {
+            ddouble radius = ddouble.Abs(Radius);
+
+            bool inside = ((v - Center) / radius).SquareNorm <= 1d;
+
+            return inside;
+        }
+
+        public IEnumerable<bool> Inside(IEnumerable<Vector2D> vs) {
+            ddouble radius_inv = 1d / ddouble.Abs(Radius);
+
+            foreach (Vector2D v in vs) {
+                bool inside = ((v - Center) * radius_inv).SquareNorm <= 1d;
+
+                yield return inside;
+            }
+        }
 
         public static bool IsNaN(Circle2D g) {
             return Vector2D.IsNaN(g.Center) || ddouble.IsNaN(g.Radius);

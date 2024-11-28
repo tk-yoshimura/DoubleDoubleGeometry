@@ -1,6 +1,7 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -110,6 +111,35 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Triangle2D Zero { get; } = new(Vector2D.Zero, Vector2D.Zero, Vector2D.Zero);
+
+        public bool Inside(Vector2D v) {
+            Vector2D ab = V1 - V0, bc = V2 - V1, ca = V0 - V2;
+            Vector2D av = v - V0, bv = v - V1, cv = v - V2;
+
+            int s = ddouble.Sign(Vector2D.Cross(ab, bv));
+            int t = ddouble.Sign(Vector2D.Cross(bc, cv));
+            int u = ddouble.Sign(Vector2D.Cross(ca, av));
+
+            bool inside = (s * t >= 0) && (t * u >= 0) && (s * u >= 0);
+
+            return inside;
+        }
+
+        public IEnumerable<bool> Inside(IEnumerable<Vector2D> vs) {
+            Vector2D ab = V1 - V0, bc = V2 - V1, ca = V0 - V2;
+
+            foreach (Vector2D v in vs) {
+                Vector2D av = v - V0, bv = v - V1, cv = v - V2;
+
+                int s = ddouble.Sign(Vector2D.Cross(ab, bv));
+                int t = ddouble.Sign(Vector2D.Cross(bc, cv));
+                int u = ddouble.Sign(Vector2D.Cross(ca, av));
+
+                bool inside = (s * t >= 0) && (t * u >= 0) && (s * u >= 0);
+
+                yield return inside;
+            }
+        }
 
         public static bool IsNaN(Triangle2D g) {
             return Vector2D.IsNaN(g.V0) || Vector2D.IsNaN(g.V1) || Vector2D.IsNaN(g.V2);
