@@ -116,9 +116,13 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
                 Assert.IsTrue(t.Inside(v));
             }
 
+            Assert.IsTrue(t.Inside(insides).All(b => b));
+
             foreach (Vector2D v in outsides) {
                 Assert.IsFalse(t.Inside(v));
             }
+
+            Assert.IsTrue(t.Inside(outsides).All(b => !b));
 
             Matrix2D m = new double[,] { { 1, 2 }, { 3, 5 } };
             Vector2D s = (4, 6);
@@ -129,9 +133,13 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
                 Assert.IsTrue(t2.Inside(m * v + s));
             }
 
+            Assert.IsTrue(t2.Inside(insides.Select(v => m * v + s)).All(b => b));
+
             foreach (Vector2D v in outsides) {
                 Assert.IsFalse(t2.Inside(m * v + s));
             }
+
+            Assert.IsTrue(t2.Inside(outsides.Select(v => m * v + s)).All(b => !b));
         }
     }
 }
