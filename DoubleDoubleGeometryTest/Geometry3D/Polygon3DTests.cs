@@ -71,5 +71,18 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Vector3DAssert.AreEqual(q * polygon1.Vertex[3], polygon5.Vertex[3], 1e-30);
             Vector3DAssert.AreEqual(q * polygon1.Vertex[5], polygon5.Vertex[5], 1e-30);
         }
+
+        [TestMethod()]
+        public void ProjectionTest() {
+            Polygon3D polygon = new Polygon3D(Polygon2D.Regular(7), (1, 3, 5), (2, 4, 6)) + (1, 2, 4);
+
+            Plane3D plane = polygon.Plane;
+
+            Vector3D[] vertex = plane.Projection(polygon.Vertex).ToArray();
+
+            Assert.IsTrue(vertex.All(v => ddouble.Abs(v.Z) < 1e-30));
+
+            Assert.IsTrue(ddouble.Abs(plane.Projection(polygon.Vertex[0]).Z) < 1e-30);
+        }
     }
 }

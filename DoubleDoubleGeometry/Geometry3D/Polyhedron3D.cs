@@ -1,5 +1,6 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
+using DoubleDoubleGeometry.Geometry2D;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -220,6 +221,65 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 }
 
                 return convex ??= true;
+            }
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ReadOnlyCollection<Polygon3D> polygons = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ReadOnlyCollection<Polygon3D> Polygons {
+            get {
+                if (polygons is not null) {
+                    return polygons;
+                }
+
+                List<Polygon3D> polygon_list = [];
+
+                ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = Planes;
+                ReadOnlyCollection<ReadOnlyCollection<int>> faces = Connection.Face;
+
+                foreach (((Plane3D plane, bool is_convex), ReadOnlyCollection<int> face) in planes.Zip(faces)) {
+                    IEnumerable<Vector3D> vs = face.Select(i => Vertex[i]);
+                    IEnumerable<Vector3D> us = plane.Projection(vs);
+
+                    Vector3D center = (us.Max() + us.Min()) / 2d;
+                    Polygon2D polygon = new(us.Select(u => (Vector2D)(u - center)));
+
+                    Quaternion rot = Vector3D.Rot((0d, 0d, 1d), plane.Normal);
+
+                    Polygon3D p = new(polygon, rot * new Vector3D(center.X, center.Y, -plane.D), rot);
+
+                    polygon_list.Add(p);
+                }
+
+                polygons = polygon_list.AsReadOnly();
+
+                return polygons;
+            }
+        }
+
+        public IEnumerable<int> ValidateFaceFlatness(double abserr = 1e-28, double relerr = 1e-28, bool enable_throw_expection = true) {
+            ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = Planes;
+            ReadOnlyCollection<ReadOnlyCollection<int>> faces = Connection.Face;
+
+            int face_index = 0;
+
+            foreach (((Plane3D plane, bool is_convex), ReadOnlyCollection<int> face) in planes.Zip(faces)) {
+                IEnumerable<Vector3D> vs = face.Select(i => Vertex[i]);
+                IEnumerable<Vector3D> us = plane.Projection(vs);
+
+                ddouble delta = ddouble.Abs(plane.D) * relerr + abserr;
+
+                if (us.Any(u => ddouble.Abs(u.Z) >= delta)) {
+                    if (enable_throw_expection) {
+                        throw new ArithmeticException($"invalid face: index={face_index}");
+                    }
+                    else {
+                        yield return face_index;
+                    }
+                }
+
+                face_index++;
             }
         }
 

@@ -3,6 +3,7 @@ using DoubleDoubleComplex;
 using DoubleDoubleGeometry;
 using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
+using System.Collections.ObjectModel;
 
 namespace DoubleDoubleGeometryTest.Geometry3D {
     [TestClass()]
@@ -88,6 +89,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                     Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
                 }
             }
+
+            p.ValidateFaceFlatness();
         }
 
         [TestMethod()]
@@ -137,6 +140,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                     Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
                 }
             }
+
+            p.ValidateFaceFlatness();
         }
 
         [TestMethod()]
@@ -186,6 +191,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                     Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
                 }
             }
+
+            p.ValidateFaceFlatness();
         }
 
         [TestMethod()]
@@ -235,6 +242,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                     Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
                 }
             }
+
+            p.ValidateFaceFlatness();
         }
 
         [TestMethod()]
@@ -288,6 +297,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                     Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
                 }
             }
+
+            p.ValidateFaceFlatness();
         }
 
         [TestMethod()]
@@ -364,6 +375,22 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
                     Assert.IsFalse(Polyhedron3D.IsConvex(g));
                     Assert.IsFalse(Polyhedron3D.IsConvex(-g));
+                }
+            }
+        }
+
+        [TestMethod()]
+        public void PolygonsTest() {
+            Polyhedron3D p = Polyhedron3D.Dodecahedron;
+
+            Polygon3D[] polygons = [.. p.Polygons];
+
+            foreach ((Polygon3D polygon, ReadOnlyCollection<int> face) in polygons.Zip(p.Connection.Face)) {
+                for (int i = 0; i < face.Count; i++) {
+                    Vector3D actual = polygon.Vertex[i];
+                    Vector3D expected = p.Vertex[face[i]];
+
+                    Vector3DAssert.AreEqual(expected, actual, 1e-30);
                 }
             }
         }

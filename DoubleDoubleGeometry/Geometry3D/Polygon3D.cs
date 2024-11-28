@@ -47,6 +47,9 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public Vector3D Normal => Rotation * new Vector3D(0d, 0d, 1d);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Plane3D Plane => Plane3D.FromNormal(Center, Normal);
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Area => Polygon.Area;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
