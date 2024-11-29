@@ -130,6 +130,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return (g.Center, g.Scale, g.Rotation);
         }
 
+        public static implicit operator Polyhedron3D(Cuboid3D g) {
+            return g.Polyhedron;
+        }
+
         public void Deconstruct(out Vector3D center, out Vector3D scale, out Quaternion rotation)
             => (center, scale, rotation) = (Center, Scale, Rotation);
 

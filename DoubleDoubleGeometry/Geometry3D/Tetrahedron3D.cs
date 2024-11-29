@@ -126,6 +126,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return (g.V0, g.V1, g.V2, g.V3);
         }
 
+        public static implicit operator Polyhedron3D(Tetrahedron3D g) {
+            return g.Polyhedron;
+        }
+
         public void Deconstruct(out Vector3D v0, out Vector3D v1, out Vector3D v2, out Vector3D v3)
             => (v0, v1, v2, v3) = (V0, V1, V2, V3);
 
