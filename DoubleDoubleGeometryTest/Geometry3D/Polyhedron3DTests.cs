@@ -90,7 +90,10 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
-            p.ValidateFaceFlatness();
+            Assert.IsTrue(p.FaceFlatness.All(v => v < 1e-30));
+
+            PrecisionAssert.AlmostEqual(p.Area, ddouble.Sqrt(3) * 8, 1e-30);
+            PrecisionAssert.AlmostEqual(p.Volume, 8 * ddouble.Rcp(3), 1e-30);
         }
 
         [TestMethod()]
@@ -141,7 +144,10 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
-            p.ValidateFaceFlatness();
+            Assert.IsTrue(p.FaceFlatness.All(v => v < 1e-30));
+
+            PrecisionAssert.AlmostEqual(p.Area, 2 * 2 * 6, 1e-30);
+            PrecisionAssert.AlmostEqual(p.Volume, 8, 1e-30);
         }
 
         [TestMethod()]
@@ -192,7 +198,10 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
-            p.ValidateFaceFlatness();
+            Assert.IsTrue(p.FaceFlatness.All(v => v < 1e-30));
+
+            PrecisionAssert.AlmostEqual(p.Area, 4 * ddouble.Sqrt(3), 1e-30);
+            PrecisionAssert.AlmostEqual(p.Volume, 4 * ddouble.Rcp(3), 1e-30);
         }
 
         [TestMethod()]
@@ -243,7 +252,11 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
-            p.ValidateFaceFlatness();
+            Assert.IsTrue(p.FaceFlatness.All(v => v < 1e-30));
+
+            PrecisionAssert.AlmostEqual(p.Area, 3 * ddouble.Sqrt(5 * (4 * ddouble.GoldenRatio + 3)) * ddouble.Square(4 / (3 + ddouble.Sqrt(5))), 1e-30);
+            PrecisionAssert.AlmostEqual(p.Volume, (15 + 7 * ddouble.Sqrt(5)) / 4 * ddouble.Cube(4 / (3 + ddouble.Sqrt(5))), 1e-30);
+
         }
 
         [TestMethod()]
@@ -298,7 +311,10 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
-            p.ValidateFaceFlatness();
+            Assert.IsTrue(p.FaceFlatness.All(v => v < 1e-30));
+
+            PrecisionAssert.AlmostEqual(p.Area, 5 * ddouble.Sqrt(3) * ddouble.Square(4 / (1 + ddouble.Sqrt(5))), 1e-30);
+            PrecisionAssert.AlmostEqual(p.Volume, 5 * (3 + ddouble.Sqrt(5)) / 12 * ddouble.Cube(4 / (1 + ddouble.Sqrt(5))), 1e-30);
         }
 
         [TestMethod()]
@@ -393,6 +409,150 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                     Vector3DAssert.AreEqual(expected, actual, 1e-30);
                 }
             }
+        }
+
+        [TestMethod()]
+        public void InsideTest() {
+            Polyhedron3D p = Polyhedron3D.Dodecahedron;
+
+            List<Vector3D> insides = [], outsides = [];
+
+            foreach (Polygon3D polygon in p.Polygons) {
+                insides.Add(polygon.Center * 0.95);
+                insides.Add(polygon.Center * 0.75);
+
+                outsides.Add(polygon.Center * 1.05);
+                outsides.Add(polygon.Center * 1.25);
+
+                foreach (Vector3D v in polygon.Vertex) {
+                    insides.Add((polygon.Center + v) / 2 * 0.95);
+                    insides.Add((polygon.Center + v) / 2 * 0.75);
+
+                    outsides.Add((polygon.Center + v) / 2 * 1.05);
+                    outsides.Add((polygon.Center + v) / 2 * 1.25);
+
+                    insides.Add((polygon.Center * 3 + v) / 4 * 0.95);
+                    insides.Add((polygon.Center * 3 + v) / 4 * 0.75);
+
+                    outsides.Add((polygon.Center * 3 + v) / 4 * 1.05);
+                    outsides.Add((polygon.Center * 3 + v) / 4 * 1.25);
+
+                    insides.Add((polygon.Center + v * 3) / 4 * 0.95);
+                    insides.Add((polygon.Center + v * 3) / 4 * 0.75);
+
+                    outsides.Add((polygon.Center + v * 3) / 4 * 1.05);
+                    outsides.Add((polygon.Center + v * 3) / 4 * 1.25);
+                }
+            }
+
+            foreach (Vector3D v in p.Vertex) {
+                insides.Add(v * 0.95);
+                insides.Add(v * 0.75);
+
+                outsides.Add(v * 1.05);
+                outsides.Add(v * 1.25);
+            }
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(p.Inside(v));
+            }
+
+            Assert.IsTrue(p.Inside(insides).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(p.Inside(v));
+            }
+
+            Assert.IsTrue(p.Inside(outsides).All(b => !b));
+
+            Matrix3D m = new double[,] { { 1, 2, 7 }, { 3, 5, 8 }, { -2, 4, 6 } };
+            Vector3D s = (4, 6, 5);
+
+            Polyhedron3D p2 = m * p + s;
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(p2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(p2.Inside(insides.Select(v => m * v + s)).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(p2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(p2.Inside(outsides.Select(v => m * v + s)).All(b => !b));
+        }
+
+        [TestMethod()]
+        public void InsideTest2() {
+            Polyhedron3D p = Polyhedron3D.Icosahedron;
+
+            List<Vector3D> insides = [], outsides = [];
+
+            foreach (Polygon3D polygon in p.Polygons) {
+                insides.Add(polygon.Center * 0.95);
+                insides.Add(polygon.Center * 0.75);
+
+                outsides.Add(polygon.Center * 1.05);
+                outsides.Add(polygon.Center * 1.25);
+
+                foreach (Vector3D v in polygon.Vertex) {
+                    insides.Add((polygon.Center + v) / 2 * 0.95);
+                    insides.Add((polygon.Center + v) / 2 * 0.75);
+
+                    outsides.Add((polygon.Center + v) / 2 * 1.05);
+                    outsides.Add((polygon.Center + v) / 2 * 1.25);
+
+                    insides.Add((polygon.Center * 3 + v) / 4 * 0.95);
+                    insides.Add((polygon.Center * 3 + v) / 4 * 0.75);
+
+                    outsides.Add((polygon.Center * 3 + v) / 4 * 1.05);
+                    outsides.Add((polygon.Center * 3 + v) / 4 * 1.25);
+
+                    insides.Add((polygon.Center + v * 3) / 4 * 0.95);
+                    insides.Add((polygon.Center + v * 3) / 4 * 0.75);
+
+                    outsides.Add((polygon.Center + v * 3) / 4 * 1.05);
+                    outsides.Add((polygon.Center + v * 3) / 4 * 1.25);
+                }
+            }
+
+            foreach (Vector3D v in p.Vertex) {
+                insides.Add(v * 0.95);
+                insides.Add(v * 0.75);
+
+                outsides.Add(v * 1.05);
+                outsides.Add(v * 1.25);
+            }
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(p.Inside(v));
+            }
+
+            Assert.IsTrue(p.Inside(insides).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(p.Inside(v));
+            }
+
+            Assert.IsTrue(p.Inside(outsides).All(b => !b));
+
+            Matrix3D m = new double[,] { { 1, 2, 7 }, { 3, 5, 8 }, { -2, 4, 6 } };
+            Vector3D s = (4, 6, 5);
+
+            Polyhedron3D p2 = m * p + s;
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(p2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(p2.Inside(insides.Select(v => m * v + s)).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(p2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(p2.Inside(outsides.Select(v => m * v + s)).All(b => !b));
         }
     }
 }

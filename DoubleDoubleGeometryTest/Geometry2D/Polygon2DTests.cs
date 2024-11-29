@@ -274,5 +274,118 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
                 PrecisionAssert.AreEqual(s, (-Polygon2D.Regular(n) + (1, 2)).Perimeter, 1e-30, $"{n}");
             }
         }
+
+        [TestMethod()]
+        public void InsideTest() {
+            Polygon2D t = new((0, 0), (0, 1), (1, 0));
+
+            Vector2D[] insides = [
+                (0.25, 0.25), (0.25, 0.5), (0.5, 0.25)
+            ];
+
+            Vector2D[] outsides = [
+                (-0.25, -0.25), (-0.25, 0.5), (0.5, -0.25), (-0.25, -0.5), (-0.5, -0.25),
+                (0, 1.5), (1.5, 0), (0.5, 0.75), (0.75, 0.5)
+            ];
+
+            foreach (Vector2D v in insides) {
+                Assert.IsTrue(t.Inside(v));
+            }
+
+            Assert.IsTrue(t.Inside(insides).All(b => b));
+
+            foreach (Vector2D v in outsides) {
+                Assert.IsFalse(t.Inside(v));
+            }
+
+            Assert.IsTrue(t.Inside(outsides).All(b => !b));
+
+            Matrix2D m = new double[,] { { 1, 2 }, { 3, 5 } };
+            Vector2D s = (4, 6);
+
+            Polygon2D t2 = m * t + s;
+
+            foreach (Vector2D v in insides) {
+                Assert.IsTrue(t2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(t2.Inside(insides.Select(v => m * v + s)).All(b => b));
+
+            foreach (Vector2D v in outsides) {
+                Assert.IsFalse(t2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(t2.Inside(outsides.Select(v => m * v + s)).All(b => !b));
+        }
+
+        [TestMethod()]
+        public void InsideTest2() {
+            Polygon2D t = Polygon2D.Regular(6);
+
+            List<Vector2D> insides = [], outsides = [];
+
+            for (int i = 0; i < 12; i++) {
+                Complex c = Complex.FromPolarPi(ddouble.Sqrt(3) / 2 - 0.05, 2 * i * ddouble.Rcp(12));
+
+                insides.Add((c.R, c.I));
+            }
+
+            for (int i = 0; i < 12; i++) {
+                Complex c = Complex.FromPolarPi(ddouble.Sqrt(3) / 2 + 0.05, 2 * i * ddouble.Rcp(12));
+
+                if ((i % 2) == 0) {
+                    insides.Add((c.R, c.I));
+                }
+                else {
+                    outsides.Add((c.R, c.I));
+                }
+            }
+
+            for (int i = 0; i < 12; i++) {
+                Complex c = Complex.FromPolarPi(0.995, 2 * i * ddouble.Rcp(12));
+
+                if ((i % 2) == 0) {
+                    insides.Add((c.R, c.I));
+                }
+                else {
+                    outsides.Add((c.R, c.I));
+                }
+            }
+
+            for (int i = 0; i < 12; i++) {
+                Complex c = Complex.FromPolarPi(1.05, 2 * i * ddouble.Rcp(12));
+
+                outsides.Add((c.R, c.I));
+            }
+
+            foreach (Vector2D v in insides) {
+                Assert.IsTrue(t.Inside(v));
+            }
+
+            Assert.IsTrue(t.Inside(insides).All(b => b));
+
+            foreach (Vector2D v in outsides) {
+                Assert.IsFalse(t.Inside(v));
+            }
+
+            Assert.IsTrue(t.Inside(outsides).All(b => !b));
+
+            Matrix2D m = new double[,] { { 1, 2 }, { 3, 5 } };
+            Vector2D s = (4, 6);
+
+            Polygon2D t2 = m * t + s;
+
+            foreach (Vector2D v in insides) {
+                Assert.IsTrue(t2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(t2.Inside(insides.Select(v => m * v + s)).All(b => b));
+
+            foreach (Vector2D v in outsides) {
+                Assert.IsFalse(t2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(t2.Inside(outsides.Select(v => m * v + s)).All(b => !b));
+        }
     }
 }

@@ -18,6 +18,9 @@ namespace DoubleDoubleGeometry.Geometry3D {
             if (connection.Vertices != vertex.Length) {
                 throw new ArgumentException("mismatch vertices", nameof(connection));
             }
+            if (!Connection.IsValid(connection)) {
+                throw new ArgumentException("invalid connection: disconnected graph", nameof(connection));
+            }
 
             this.Connection = connection;
             this.Vertex = vertex.AsReadOnly();
@@ -41,6 +44,45 @@ namespace DoubleDoubleGeometry.Geometry3D {
 #pragma warning restore CS8632
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public Vector3D Size => size ??= Vertex.Max() - Vertex.Min();
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ddouble? area = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Area => area ??= Polygons.Select(p => p.Area).Sum();
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ddouble? volume = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble Volume {
+            get {
+                if (volume is not null) {
+                    return volume.Value;
+                }
+
+                if (!IsConvex(this)) {
+                    throw new NotImplementedException("not implemented: not convex");
+                }
+
+                static ddouble vol(Vector3D v1, Vector3D v2, Vector3D v3) {
+                    return ddouble.Abs(Vector3D.Dot(Vector3D.Cross(v1, v2), v3));
+                }
+
+                Vector3D c = Center;
+                Vector3D[] vertex = Vertex.Select(v => v - c).ToArray();
+
+                ddouble v = 0d;
+
+                foreach (ReadOnlyCollection<int> face in Connection.Face) {
+                    for (int i = 1; i < face.Count - 1; i++) {
+                        v += vol(vertex[face[0]], vertex[face[i]], vertex[face[i + 1]]);
+                    }
+                }
+
+                v /= 6d;
+
+                return volume ??= v;
+            }
+        }
 
         public static Polyhedron3D operator +(Polyhedron3D g) {
             return g;
@@ -111,6 +153,60 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Polyhedron3D Zero { get; } = new(new Connection(1), Vector3D.Zero);
+
+        public bool Inside(Vector3D v) {
+            if (IsConvex(this)) {
+                Vector3D c = Center;
+
+                Vector3D u = v - c;
+
+                if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y
+                    || ddouble.Ldexp(u.Z, 1) > Size.Z) {
+                    return false;
+                }
+
+                foreach (Polygon3D p in Polygons) {
+                    if (Vector3D.Dot(v - p.Center, p.Normal) * Vector3D.Dot(c - p.Center, p.Normal) < 0d) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+            else {
+                throw new NotImplementedException("not implemented: not convex");
+            }
+        }
+
+        public IEnumerable<bool> Inside(IEnumerable<Vector3D> vs) {
+            if (IsConvex(this)) {
+                Vector3D c = Center;
+
+                foreach (Vector3D v in vs) {
+                    Vector3D u = v - c;
+
+                    if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y
+                        || ddouble.Ldexp(u.Z, 1) > Size.Z) {
+                        yield return false;
+                        continue;
+                    }
+
+                    bool inside = true;
+
+                    foreach (Polygon3D p in Polygons) {
+                        if (Vector3D.Dot(v - p.Center, p.Normal) * Vector3D.Dot(c - p.Center, p.Normal) < 0d) {
+                            inside = false;
+                            break;
+                        }
+                    }
+
+                    yield return inside;
+                }
+            }
+            else {
+                throw new NotImplementedException("not implemented: not convex");
+            }
+        }
 
         public static bool IsNaN(Polyhedron3D g) {
             return g.Vertices < 1 || g.Vertex.Any(Vector3D.IsNaN);
@@ -258,28 +354,18 @@ namespace DoubleDoubleGeometry.Geometry3D {
             }
         }
 
-        public IEnumerable<int> ValidateFaceFlatness(double abserr = 1e-28, double relerr = 1e-28, bool enable_throw_expection = true) {
-            ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = Planes;
-            ReadOnlyCollection<ReadOnlyCollection<int>> faces = Connection.Face;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public IEnumerable<ddouble> FaceFlatness {
+            get {
+                ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = Planes;
+                ReadOnlyCollection<ReadOnlyCollection<int>> faces = Connection.Face;
 
-            int face_index = 0;
+                foreach (((Plane3D plane, bool is_convex), ReadOnlyCollection<int> face) in planes.Zip(faces)) {
+                    IEnumerable<Vector3D> vs = face.Select(i => Vertex[i]);
+                    IEnumerable<Vector3D> us = plane.Projection(vs);
 
-            foreach (((Plane3D plane, bool is_convex), ReadOnlyCollection<int> face) in planes.Zip(faces)) {
-                IEnumerable<Vector3D> vs = face.Select(i => Vertex[i]);
-                IEnumerable<Vector3D> us = plane.Projection(vs);
-
-                ddouble delta = ddouble.Abs(plane.D) * relerr + abserr;
-
-                if (us.Any(u => ddouble.Abs(u.Z) >= delta)) {
-                    if (enable_throw_expection) {
-                        throw new ArithmeticException($"invalid face: index={face_index}");
-                    }
-                    else {
-                        yield return face_index;
-                    }
+                    yield return us.Max(u => ddouble.Abs(u.Z));
                 }
-
-                face_index++;
             }
         }
 
