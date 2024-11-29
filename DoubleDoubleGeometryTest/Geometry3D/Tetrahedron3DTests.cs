@@ -106,5 +106,48 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.IsTrue(Tetrahedron3D.IsValid(new Tetrahedron3D((0, 0, 0), (1, 0, 0), (0, 2, 0), (0, 0, 3))));
             Assert.IsFalse(Tetrahedron3D.IsValid(Tetrahedron3D.Invalid));
         }
+
+        [TestMethod()]
+        public void InsideTest() {
+            Tetrahedron3D t = new((0, 0, 0), (0, 0, 1), (0, 1, 0), (1, 0, 0));
+
+            Vector3D[] insides = [
+                (0.25, 0.25, 0.25), (0.25, 0.5, 0.125), (0.5, 0.25, 0.125), (0.125, 0.25, 0.5)
+            ];
+
+            Vector3D[] outsides = [
+                (-0.25, -0.25, -0.25), (-0.25, 0.5, 0.125), (0.5, -0.25, 0.125), (-0.25, -0.5, 0.125), (0.125, -0.5, -0.25),
+                (1.5, 0, 0), (0, 1.5, 0), (0, 0, 1.5), (0.5, 0.75, 0), (0, 0.75, 0.5), (0.5, 0.5, 0.5)
+            ];
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(t.Inside(v));
+            }
+
+            Assert.IsTrue(t.Inside(insides).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(t.Inside(v));
+            }
+
+            Assert.IsTrue(t.Inside(outsides).All(b => !b));
+
+            Matrix3D m = new double[,] { { 1, 2, 7 }, { 3, 5, 8 }, { -2, 4, 6 } };
+            Vector3D s = (4, 6, 5);
+
+            Tetrahedron3D t2 = m * t + s;
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(t2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(t2.Inside(insides.Select(v => m * v + s)).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(t2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(t2.Inside(outsides.Select(v => m * v + s)).All(b => !b));
+        }
     }
 }

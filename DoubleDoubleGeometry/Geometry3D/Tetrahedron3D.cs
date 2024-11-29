@@ -1,6 +1,7 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -10,11 +11,18 @@ namespace DoubleDoubleGeometry.Geometry3D {
     public class Tetrahedron3D : IGeometry<Tetrahedron3D, Vector3D>, IFormattable {
         public readonly Vector3D V0, V1, V2, V3;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private readonly Matrix3D ortho_matrix;
+
         public Tetrahedron3D(Vector3D v0, Vector3D v1, Vector3D v2, Vector3D v3) {
             this.V0 = v0;
             this.V1 = v1;
             this.V2 = v2;
             this.V3 = v3;
+
+            Vector3D a = V1 - V0, b = V2 - V0, c = V3 - V0;
+
+            this.ortho_matrix = new Matrix3D(a.X, b.X, c.X, a.Y, b.Y, c.Y, a.Z, b.Z, c.Z).Inverse;
         }
 
         public Vector3D Point(ddouble u, ddouble v, ddouble w) {
@@ -118,6 +126,24 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Tetrahedron3D Zero { get; } = new(Vector3D.Zero, Vector3D.Zero, Vector3D.Zero, Vector3D.Zero);
+
+        public bool Inside(Vector3D v) {
+            Vector3D u = ortho_matrix * (v - V0);
+
+            bool inside = u.X >= 0d && u.Y >= 0d && u.Z >= 0d && u.X + u.Y + u.Z <= 1d;
+
+            return inside;
+        }
+
+        public IEnumerable<bool> Inside(IEnumerable<Vector3D> vs) {
+            foreach (Vector3D v in vs) {
+                Vector3D u = ortho_matrix * (v - V0);
+
+                bool inside = u.X >= 0d && u.Y >= 0d && u.Z >= 0d && u.X + u.Y + u.Z <= 1d;
+
+                yield return inside;
+            }
+        }
 
         public static bool IsNaN(Tetrahedron3D g) {
             return Vector3D.IsNaN(g.V0) || Vector3D.IsNaN(g.V1) || Vector3D.IsNaN(g.V2) || Vector3D.IsNaN(g.V3);

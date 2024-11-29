@@ -11,10 +11,17 @@ namespace DoubleDoubleGeometry.Geometry2D {
     public class Triangle2D : IGeometry<Triangle2D, Vector2D>, IFormattable {
         public readonly Vector2D V0, V1, V2;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private readonly Matrix2D ortho_matrix;
+
         public Triangle2D(Vector2D v0, Vector2D v1, Vector2D v2) {
             this.V0 = v0;
             this.V1 = v1;
             this.V2 = v2;
+
+            Vector2D a = V1 - V0, b = V2 - V0;
+
+            this.ortho_matrix = new Matrix2D(a.X, b.X, a.Y, b.Y).Inverse;
         }
 
         public Vector2D Point(ddouble u, ddouble v) {
@@ -113,29 +120,18 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public static Triangle2D Zero { get; } = new(Vector2D.Zero, Vector2D.Zero, Vector2D.Zero);
 
         public bool Inside(Vector2D v) {
-            Vector2D ab = V1 - V0, bc = V2 - V1, ca = V0 - V2;
-            Vector2D av = v - V0, bv = v - V1, cv = v - V2;
+            Vector2D u = ortho_matrix * (v - V0);
 
-            int s = ddouble.Sign(Vector2D.Cross(ab, bv));
-            int t = ddouble.Sign(Vector2D.Cross(bc, cv));
-            int u = ddouble.Sign(Vector2D.Cross(ca, av));
-
-            bool inside = (s * t >= 0) && (t * u >= 0) && (s * u >= 0);
+            bool inside = u.X >= 0d && u.Y >= 0d && u.X + u.Y <= 1d;
 
             return inside;
         }
 
         public IEnumerable<bool> Inside(IEnumerable<Vector2D> vs) {
-            Vector2D ab = V1 - V0, bc = V2 - V1, ca = V0 - V2;
-
             foreach (Vector2D v in vs) {
-                Vector2D av = v - V0, bv = v - V1, cv = v - V2;
+                Vector2D u = ortho_matrix * (v - V0);
 
-                int s = ddouble.Sign(Vector2D.Cross(ab, bv));
-                int t = ddouble.Sign(Vector2D.Cross(bc, cv));
-                int u = ddouble.Sign(Vector2D.Cross(ca, av));
-
-                bool inside = (s * t >= 0) && (t * u >= 0) && (s * u >= 0);
+                bool inside = u.X >= 0d && u.Y >= 0d && u.X + u.Y <= 1d;
 
                 yield return inside;
             }

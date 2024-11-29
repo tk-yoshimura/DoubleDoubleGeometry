@@ -162,6 +162,75 @@ namespace DoubleDoubleGeometry.Geometry2D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Polygon2D Zero { get; } = new(Vector2D.Zero);
 
+        public bool Inside(Vector2D v) {
+            if (IsConvex(this)) {
+                Vector2D u = v - Center;
+
+                if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y) {
+                    return false;
+                }
+
+                int n = Vertices;
+
+                int sgn = ddouble.Sign(Vector2D.Cross(v - Vertex[0], Vertex[n - 1] - Vertex[0]));
+
+                for (int i = 1; i < n; i++) {
+                    int s = ddouble.Sign(Vector2D.Cross(v - Vertex[i], Vertex[i - 1] - Vertex[i]));
+
+                    if (sgn * s < 0) {
+                        return false;
+                    }
+
+                    if (sgn == 0 && s != 0) {
+                        sgn = s;
+                    }
+                }
+
+                return true;
+            }
+            else {
+                throw new NotImplementedException("not implemented: not convex");
+            }
+        }
+
+        public IEnumerable<bool> Inside(IEnumerable<Vector2D> vs) {
+            if (IsConvex(this)) {
+                int n = Vertices;
+                Vector2D[] delta = Vertex.Select((Vector2D v, int index) => Vertex[(index + n - 1) % n] - v).ToArray();
+
+                foreach (Vector2D v in vs) {
+                    Vector2D u = v - Center;
+
+                    if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y) {
+                        yield return false;
+                        continue;
+                    }
+
+                    int sgn = ddouble.Sign(Vector2D.Cross(v - Vertex[0], delta[0]));
+
+                    bool inside = true;
+
+                    for (int i = 1; i < n; i++) {
+                        int s = ddouble.Sign(Vector2D.Cross(v - Vertex[i], delta[i]));
+
+                        if (sgn * s < 0) {
+                            inside = false;
+                            break;
+                        }
+
+                        if (sgn == 0 && s != 0) {
+                            sgn = s;
+                        }
+                    }
+
+                    yield return inside;
+                }
+            }
+            else {
+                throw new NotImplementedException("not implemented: not convex");
+            }
+        }
+
         public static bool IsNaN(Polygon2D g) {
             return g.Vertices < 1 || g.Vertex.Any(Vector2D.IsNaN);
         }
