@@ -125,7 +125,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Sphere3D Zero { get; } = new(Vector3D.Zero, ddouble.Zero);
-               
+
         public bool Inside(Vector3D v) {
             ddouble radius = ddouble.Abs(Radius);
 
