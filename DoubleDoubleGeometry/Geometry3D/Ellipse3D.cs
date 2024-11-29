@@ -45,7 +45,14 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public ddouble MinorAxis => ddouble.Min(ddouble.Abs(Axis.X), ddouble.Abs(Axis.Y));
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Vector3D Normal => Rotation * new Vector3D(0d, 0d, 1d);
+        private Vector3D normal = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Vector3D Normal => normal ??= Rotation * new Vector3D(0d, 0d, 1d);
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Plane3D plane = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Plane3D Plane => plane ??= Plane3D.FromNormal(Center, Normal);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Area => ddouble.Abs(Axis.X * Axis.Y) * ddouble.Pi;

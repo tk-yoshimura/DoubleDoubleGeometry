@@ -1,8 +1,10 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
+using DoubleDoubleGeometry.Geometry2D;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace DoubleDoubleGeometry.Geometry3D {
 
@@ -14,6 +16,26 @@ namespace DoubleDoubleGeometry.Geometry3D {
             this.V0 = v0;
             this.V1 = v1;
             this.V2 = v2;
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Polygon3D polygon = null;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Polygon3D Polygon {
+            get {
+                if (polygon is not null) {
+                    return polygon;
+                }
+
+                Vector3D center = Center;
+
+                Vector3D v0 = V0 - center, v1 = V1 - center, v2 = V2 - center;
+
+                Vector2D[] us = Plane.Projection([v0, v1, v2]).Select(v => (Vector2D)v).ToArray();
+                
+                return polygon ??= new Polygon3D(new Polygon2D(us), Center, Normal);
+            }
         }
 
         public Vector3D Point(ddouble u, ddouble v) {
@@ -36,6 +58,18 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 return Vector3D.Cross(V1 - V0, V2 - V0).Normal;
             }
         }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Vector3D Center {
+            get {
+                return (V0 + V1 + V2) / 3d;
+            }
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Plane3D plane = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Plane3D Plane => plane ??= Plane3D.FromNormal(V0, Normal);
 
         public static Triangle3D operator +(Triangle3D g) {
             return g;
@@ -107,6 +141,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static implicit operator (Vector3D v0, Vector3D v1, Vector3D v2)(Triangle3D g) {
             return (g.V0, g.V1, g.V2);
+        }
+
+        public static implicit operator Polygon3D(Triangle3D g) {
+            return g.Polygon;
         }
 
         public void Deconstruct(out Vector3D v0, out Vector3D v1, out Vector3D v2)

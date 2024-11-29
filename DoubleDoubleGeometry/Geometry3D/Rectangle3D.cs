@@ -48,7 +48,14 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public ReadOnlyCollection<Vector3D> Vertex => Polygon.Vertex;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Vector3D Normal => Rotation * new Vector3D(0d, 0d, 1d);
+        private Vector3D normal = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Vector3D Normal => normal ??= Rotation * new Vector3D(0d, 0d, 1d);
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Plane3D plane = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Plane3D Plane => plane ??= Plane3D.FromNormal(Center, Normal);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Width => ddouble.Abs(Scale.X) * 2d;

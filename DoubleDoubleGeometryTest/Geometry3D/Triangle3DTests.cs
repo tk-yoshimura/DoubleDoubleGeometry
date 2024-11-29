@@ -17,6 +17,17 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Vector3DAssert.AreEqual((8 * 1 + 2, 1 * 2 + 4, 1 * 3 + 6), triangle2.V0, 1e-30);
             Vector3DAssert.AreEqual((2 * 1 + 2, 3 * 2 + 4, 1 * 3 + 6), triangle2.V1, 1e-30);
             Vector3DAssert.AreEqual((4 * 1 + 2, 9 * 2 + 4, 1 * 3 + 6), triangle2.V2, 1e-30);
+
+            Polygon3D p1 = triangle1;
+            Polygon3D p2 = triangle2;
+
+            Vector3DAssert.AreEqual(triangle1.V0, p1.Vertex[0], 1e-30);
+            Vector3DAssert.AreEqual(triangle1.V1, p1.Vertex[1], 1e-30);
+            Vector3DAssert.AreEqual(triangle1.V2, p1.Vertex[2], 1e-30);
+
+            Vector3DAssert.AreEqual(triangle2.V0, p2.Vertex[0], 1e-30);
+            Vector3DAssert.AreEqual(triangle2.V1, p2.Vertex[1], 1e-30);
+            Vector3DAssert.AreEqual(triangle2.V2, p2.Vertex[2], 1e-30);
         }
 
         [TestMethod()]

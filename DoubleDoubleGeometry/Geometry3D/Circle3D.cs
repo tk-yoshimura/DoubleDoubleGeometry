@@ -78,7 +78,14 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public ddouble Perimeter => 2d * ddouble.Abs(Radius) * ddouble.Pi;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Vector3D Normal => Rotation * new Vector3D(0d, 0d, 1d);
+        private Vector3D normal = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Vector3D Normal => normal ??= Rotation * new Vector3D(0d, 0d, 1d);
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Plane3D plane = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Plane3D Plane => plane ??= Plane3D.FromNormal(Center, Normal);
 
         public static Circle3D operator +(Circle3D g) {
             return g;
