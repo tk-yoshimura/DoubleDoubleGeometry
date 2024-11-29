@@ -163,14 +163,14 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public static Polygon2D Zero { get; } = new(Vector2D.Zero);
 
         public bool Inside(Vector2D v) {
+            int n = Vertices;
+
             if (IsConvex(this)) {
                 Vector2D u = v - Center;
 
                 if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y) {
                     return false;
                 }
-
-                int n = Vertices;
 
                 int sgn = ddouble.Sign(Vector2D.Cross(v - Vertex[0], Vertex[n - 1] - Vertex[0]));
 
@@ -189,13 +189,51 @@ namespace DoubleDoubleGeometry.Geometry2D {
                 return true;
             }
             else {
-                throw new NotImplementedException("not implemented: concave");
+                Vector2D u = v - Center;
+
+                if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y) {
+                    return false;
+                }
+
+                int crosses = 0;
+
+                static bool is_cross_h(Vector2D v0, Vector2D v1) {
+                    if ((v0.Y <= 0d) != (v1.Y > 0d)) {
+                        return false;
+                    }
+                    if (v0.X < 0d && v1.X < 0d) {
+                        return false;
+                    }
+
+                    ddouble x = (v0.Y <= 0d)
+                        ? (v0.X * v1.Y - v1.X * v0.Y)
+                        : (v1.X * v0.Y - v0.X * v1.Y);
+
+                    return x >= 0d;
+                }
+
+                Vector2D[] dv = Vertex.Select(vertex => vertex - v).ToArray();
+
+                if (is_cross_h(dv[n - 1], dv[0])) {
+                    crosses++;
+                }
+
+                for (int i = 1; i < n; i++) {
+                    if (is_cross_h(dv[i - 1], dv[i])) {
+                        crosses++;
+                    }
+                }
+
+                bool inside = (crosses & 1) == 1;
+
+                return inside;
             }
         }
 
         public IEnumerable<bool> Inside(IEnumerable<Vector2D> vs) {
+            int n = Vertices;
+
             if (IsConvex(this)) {
-                int n = Vertices;
                 Vector2D[] delta = Vertex.Select((Vector2D v, int index) => Vertex[(index + n - 1) % n] - v).ToArray();
 
                 foreach (Vector2D v in vs) {
@@ -227,7 +265,47 @@ namespace DoubleDoubleGeometry.Geometry2D {
                 }
             }
             else {
-                throw new NotImplementedException("not implemented: concave");
+                foreach (Vector2D v in vs) {
+                    Vector2D u = v - Center;
+
+                    if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y) {
+                        yield return false;
+                        continue;
+                    }
+
+                    int crosses = 0;
+
+                    static bool is_cross_h(Vector2D v0, Vector2D v1) {
+                        if ((v0.Y <= 0d) != (v1.Y > 0d)) {
+                            return false;
+                        }
+                        if (v0.X < 0d && v1.X < 0d) {
+                            return false;
+                        }
+
+                        ddouble x = (v0.Y <= 0d)
+                            ? (v0.X * v1.Y - v1.X * v0.Y)
+                            : (v1.X * v0.Y - v0.X * v1.Y);
+
+                        return x >= 0d;
+                    }
+
+                    Vector2D[] dv = Vertex.Select(vertex => vertex - v).ToArray();
+
+                    if (is_cross_h(dv[n - 1], dv[0])) {
+                        crosses++;
+                    }
+
+                    for (int i = 1; i < n; i++) {
+                        if (is_cross_h(dv[i - 1], dv[i])) {
+                            crosses++;
+                        }
+                    }
+
+                    bool inside = (crosses & 1) == 1;
+
+                    yield return inside;
+                }
             }
         }
 

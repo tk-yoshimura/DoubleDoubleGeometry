@@ -33,7 +33,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 Vector3D v0 = V0 - center, v1 = V1 - center, v2 = V2 - center;
 
                 Vector2D[] us = Plane.Projection([v0, v1, v2]).Select(v => (Vector2D)v).ToArray();
-                
+
                 return polygon ??= new Polygon3D(new Polygon2D(us), Center, Normal);
             }
         }

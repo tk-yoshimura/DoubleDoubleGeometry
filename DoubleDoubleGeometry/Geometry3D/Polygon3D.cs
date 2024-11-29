@@ -148,6 +148,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return Polygon2D.IsConvex(g.Polygon);
         }
 
+        public static bool IsConcave(Polygon3D g) {
+            return Polygon2D.IsConcave(g.Polygon);
+        }
+
         public override string ToString() {
             return $"polygon vertices={Vertices}";
         }

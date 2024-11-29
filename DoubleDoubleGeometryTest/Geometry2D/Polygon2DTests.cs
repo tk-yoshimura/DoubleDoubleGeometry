@@ -395,5 +395,58 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
             Assert.IsTrue(t2.Inside(outsides.Select(v => m * v + s)).All(b => !b));
         }
+
+        [TestMethod()]
+        public void InsideTest3() {
+            for (int n = 5; n <= 10; n++) {
+                for (int j = 0; j < n; j++) {
+                    Vector2D[] vertex = [.. Polygon2D.Regular(n).Vertex];
+
+                    vertex[j] *= 0.125;
+
+                    Polygon2D t = new(vertex);
+
+                    Assert.IsTrue(Polygon2D.IsConcave(t));
+
+                    List<Vector2D> insides = [], outsides = [];
+
+                    for (int i = 0; i < n; i++) {
+                        insides.Add(vertex[i] * 0.95);
+                        insides.Add(vertex[i] * 0.75);
+                        outsides.Add(vertex[i] * 1.05);
+                        outsides.Add(vertex[i] * 1.25);
+                    }
+
+                    foreach (Vector2D v in insides) {
+                        Assert.IsTrue(t.Inside(v));
+                    }
+
+                    Assert.IsTrue(t.Inside(insides).All(b => b));
+
+                    foreach (Vector2D v in outsides) {
+                        Assert.IsFalse(t.Inside(v));
+                    }
+
+                    Assert.IsTrue(t.Inside(outsides).All(b => !b));
+
+                    Matrix2D m = new double[,] { { 1, 2 }, { 3, 5 } };
+                    Vector2D s = (4, 6);
+
+                    Polygon2D t2 = m * t + s;
+
+                    foreach (Vector2D v in insides) {
+                        Assert.IsTrue(t2.Inside(m * v + s));
+                    }
+
+                    Assert.IsTrue(t2.Inside(insides.Select(v => m * v + s)).All(b => b));
+
+                    foreach (Vector2D v in outsides) {
+                        Assert.IsFalse(t2.Inside(m * v + s));
+                    }
+
+                    Assert.IsTrue(t2.Inside(outsides.Select(v => m * v + s)).All(b => !b));
+                }
+            }
+        }
     }
 }
