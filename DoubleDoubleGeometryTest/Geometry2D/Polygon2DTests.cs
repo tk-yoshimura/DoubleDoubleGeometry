@@ -79,6 +79,9 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             for (int n = 3; n <= 16; n++) {
                 Assert.IsTrue(Polygon2D.IsConvex(Polygon2D.Regular(n)));
                 Assert.IsTrue(Polygon2D.IsConvex(-Polygon2D.Regular(n)));
+
+                Assert.IsFalse(Polygon2D.IsConcave(Polygon2D.Regular(n)));
+                Assert.IsFalse(Polygon2D.IsConcave(-Polygon2D.Regular(n)));
             }
 
             {
@@ -87,6 +90,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
                 (vertex[2], vertex[3]) = (vertex[3], vertex[2]);
 
                 Assert.IsFalse(Polygon2D.IsConvex(new Polygon2D(vertex)));
+                Assert.IsFalse(Polygon2D.IsConcave(new Polygon2D(vertex)));
             }
 
             for (int n = 5; n <= 16; n++) {
@@ -97,6 +101,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
                         (vertex[i], vertex[j]) = (vertex[j], vertex[i]);
 
                         Assert.IsFalse(Polygon2D.IsConvex(new Polygon2D(vertex)));
+                        Assert.IsFalse(Polygon2D.IsConcave(new Polygon2D(vertex)));
                     }
                 }
             }
@@ -108,6 +113,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
                     vertex[i] *= -0.5;
 
                     Assert.IsFalse(Polygon2D.IsConvex(new Polygon2D(vertex)));
+                    Assert.IsTrue(Polygon2D.IsConcave(new Polygon2D(vertex)));
                 }
             }
 
@@ -119,6 +125,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
                         (vertex[i], vertex[j]) = (vertex[j], vertex[i]);
 
                         Assert.IsFalse(Polygon2D.IsConvex(-new Polygon2D(vertex)));
+                        Assert.IsFalse(Polygon2D.IsConcave(-new Polygon2D(vertex)));
                     }
                 }
             }
@@ -130,6 +137,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
                     vertex[i] *= -0.5;
 
                     Assert.IsFalse(Polygon2D.IsConvex(-new Polygon2D(vertex)));
+                    Assert.IsTrue(Polygon2D.IsConcave(-new Polygon2D(vertex)));
                 }
             }
         }

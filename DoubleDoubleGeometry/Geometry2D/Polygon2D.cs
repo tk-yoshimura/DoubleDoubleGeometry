@@ -189,7 +189,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
                 return true;
             }
             else {
-                throw new NotImplementedException("not implemented: not convex");
+                throw new NotImplementedException("not implemented: concave");
             }
         }
 
@@ -227,7 +227,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
                 }
             }
             else {
-                throw new NotImplementedException("not implemented: not convex");
+                throw new NotImplementedException("not implemented: concave");
             }
         }
 
@@ -350,6 +350,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static bool IsConvex(Polygon2D g) {
             return g.Convex;
+        }
+
+        public static bool IsConcave(Polygon2D g) {
+            return !IsConvex(g) && IsValid(g);
         }
 
         public override string ToString() {

@@ -60,7 +60,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 }
 
                 if (!IsConvex(this)) {
-                    throw new NotImplementedException("not implemented: not convex");
+                    throw new NotImplementedException("not implemented: concave");
                 }
 
                 static ddouble vol(Vector3D v1, Vector3D v2, Vector3D v3) {
@@ -174,7 +174,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 return true;
             }
             else {
-                throw new NotImplementedException("not implemented: not convex");
+                throw new NotImplementedException("not implemented: concave");
             }
         }
 
@@ -204,7 +204,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 }
             }
             else {
-                throw new NotImplementedException("not implemented: not convex");
+                throw new NotImplementedException("not implemented: concave");
             }
         }
 
