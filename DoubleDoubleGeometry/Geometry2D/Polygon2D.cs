@@ -165,13 +165,13 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public bool Inside(Vector2D v) {
             int n = Vertices;
 
+            Vector2D u = v - Center;
+
+            if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y) {
+                return false;
+            }
+
             if (IsConvex(this)) {
-                Vector2D u = v - Center;
-
-                if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y) {
-                    return false;
-                }
-
                 int sgn = ddouble.Sign(Vector2D.Cross(v - Vertex[0], Vertex[n - 1] - Vertex[0]));
 
                 for (int i = 1; i < n; i++) {
@@ -189,12 +189,6 @@ namespace DoubleDoubleGeometry.Geometry2D {
                 return true;
             }
             else {
-                Vector2D u = v - Center;
-
-                if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y) {
-                    return false;
-                }
-
                 int crosses = 0;
 
                 static bool is_cross_h(Vector2D v0, Vector2D v1) {
