@@ -29,6 +29,9 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Polygon2D Polygon => new(V0, V1, V2);
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Area {
             get {
                 Vector2D a = V1 - V0, b = V2 - V0;
@@ -108,6 +111,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static implicit operator (Vector2D v0, Vector2D v1, Vector2D v2)(Triangle2D g) {
             return (g.V0, g.V1, g.V2);
+        }
+
+        public static implicit operator Polygon2D(Triangle2D g) {
+            return new Polygon2D(g.V0, g.V1, g.V2);
         }
 
         public void Deconstruct(out Vector2D v0, out Vector2D v1, out Vector2D v2)

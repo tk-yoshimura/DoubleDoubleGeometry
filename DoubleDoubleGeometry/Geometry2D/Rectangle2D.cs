@@ -140,6 +140,17 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public void Deconstruct(out Vector2D center, out Vector2D scale, out Complex rotation)
             => (center, scale, rotation) = (Center, Scale, Rotation);
 
+        public static implicit operator (Vector2D v0, Vector2D v1, Vector2D v2, Vector2D v3)(Rectangle2D g) {
+            return (g.Vertex[0], g.Vertex[1], g.Vertex[2], g.Vertex[3]);
+        }
+
+        public static implicit operator Polygon2D(Rectangle2D g) {
+            return new Polygon2D(g.Vertex);
+        }
+
+        public void Deconstruct(out Vector2D v0, out Vector2D v1, out Vector2D v2, out Vector2D v3)
+            => (v0, v1, v2, v3) = (Vertex[0], Vertex[1], Vertex[2], Vertex[3]);
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Rectangle2D Invalid { get; } = new(Vector2D.Invalid, (ddouble.NaN, ddouble.NaN), ddouble.NaN);
 

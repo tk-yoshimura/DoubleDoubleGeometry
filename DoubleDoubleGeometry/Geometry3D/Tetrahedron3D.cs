@@ -25,6 +25,14 @@ namespace DoubleDoubleGeometry.Geometry3D {
             this.ortho_matrix = new Matrix3D(a.X, b.X, c.X, a.Y, b.Y, c.Y, a.Z, b.Z, c.Z).Inverse;
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Polyhedron3D Polyhedron => new(
+            new Connection(4,
+                (0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)
+            ),
+            V0, V1, V2, V3
+        );
+
         public Vector3D Point(ddouble u, ddouble v, ddouble w) {
             return V0 + u * (V1 - V0) + (1d - u) * (v * (V2 - V0) + (1d - v) * w * (V3 - V0));
         }
