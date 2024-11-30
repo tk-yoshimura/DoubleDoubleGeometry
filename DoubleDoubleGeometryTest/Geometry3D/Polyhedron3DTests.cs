@@ -574,5 +574,39 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Assert.IsTrue(p2.Inside(outsides.Select(v => m * v + s)).All(b => !b));
         }
+
+        [TestMethod()]
+        public void ConcaveVolumeTest() {
+            Polyhedron3D p = Polyhedron3D.Icosahedron;
+
+            Console.WriteLine(p.Volume);
+
+            Vector3D[] vs = p.Connection[0].Select(index => p.Vertex[index]).ToArray();
+
+            Vector3D[] vertex = [..p.Vertex];
+            int[] nodes = [.. p.Connection[0]];
+
+            for (int i = 0; i < 5; i++) { 
+                for (int j = i + 1; j < 5; j++) {
+                    Console.WriteLine($"{i + 1}, {j + 1}, {Vector3D.Distance(p.Vertex[nodes[i]], p.Vertex[nodes[j]])}");
+                }
+            }
+
+            for (int theta = 0; theta < 32; theta++) {
+                Vector3D v = (0, 0.5 * ddouble.CosPi(theta / 16d), 0.5 * ddouble.SinPi(theta / 16d));
+
+                vertex[0] = v;
+
+                Polyhedron3D p2 = new(new Connection(7,
+                    (0, 1), (0, 2), (0, 3), (0, 4), (0, 5),
+                    (1, 2), (1, 3), (2, 5), (3, 4), (4, 5),
+                    (6, 1), (6, 2), (6, 3), (6, 4), (6, 5)), [p.Vertex[0], .. vs, v]
+                );
+
+                Polyhedron3D p3 = new(p.Connection, vertex);
+
+                PrecisionAssert.AreEqual(p.Volume, p2.Volume + p3.Volume, 1e-30);
+            }
+        }
     }
 }
