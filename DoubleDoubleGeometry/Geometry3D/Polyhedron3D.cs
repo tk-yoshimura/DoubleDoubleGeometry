@@ -128,9 +128,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public bool Inside(Vector3D v) {
             if (IsConvex(this)) {
-                Vector3D c = Center;
-
-                Vector3D u = v - c;
+                Vector3D u = v - Center;
 
                 if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y
                     || ddouble.Ldexp(u.Z, 1) > Size.Z) {
@@ -138,7 +136,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 }
 
                 foreach (Polygon3D p in Polygons) {
-                    if (Vector3D.Dot(v - p.Center, p.Normal) * Vector3D.Dot(c - p.Center, p.Normal) < 0d) {
+                    if (Vector3D.Dot(v - p.Center, p.Normal) > 0d) {
                         return false;
                     }
                 }
@@ -166,7 +164,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                     bool inside = true;
 
                     foreach (Polygon3D p in Polygons) {
-                        if (Vector3D.Dot(v - p.Center, p.Normal) * Vector3D.Dot(c - p.Center, p.Normal) < 0d) {
+                        if (Vector3D.Dot(v - p.Center, p.Normal) > 0d) {
                             inside = false;
                             break;
                         }
