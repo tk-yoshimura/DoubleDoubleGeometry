@@ -80,13 +80,13 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Assert.AreEqual(4, p.Connection.EnumerateTriangle().Count());
 
-            Assert.AreEqual(4, p.Connection.EnumerateFace().Count());
+            Assert.AreEqual(4, p.Connection.EnumerateCycle().Count());
 
-            Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 3));
+            Assert.IsTrue(p.Connection.EnumerateCycle().All(f => f.Count == 3));
 
-            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) {
-                for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
-                    Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
+            for (int i = 0; i < p.Connection.EnumerateCycle().Count(); i++) {
+                for (int j = i + 1; j < p.Connection.EnumerateCycle().Count(); j++) {
+                    Assert.IsFalse(p.Connection.EnumerateCycle().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateCycle().ToArray()[j].Order()));
                 }
             }
 
@@ -94,6 +94,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             PrecisionAssert.AlmostEqual(p.Area, ddouble.Sqrt(3) * 8, 1e-30);
             PrecisionAssert.AlmostEqual(p.Volume, 8 * ddouble.Rcp(3), 1e-30);
+            PrecisionAssert.AlmostEqual((p + (1, 2, 3)).Volume, 8 * ddouble.Rcp(3), 1e-30);
+            PrecisionAssert.AlmostEqual((-p).Volume, 8 * ddouble.Rcp(3), 1e-30);
         }
 
         [TestMethod()]
@@ -134,13 +136,13 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Assert.AreEqual(0, p.Connection.EnumerateTriangle().Count());
 
-            Assert.AreEqual(6, p.Connection.EnumerateFace().Count());
+            Assert.AreEqual(6, p.Connection.EnumerateCycle().Count());
 
-            Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 4));
+            Assert.IsTrue(p.Connection.EnumerateCycle().All(f => f.Count == 4));
 
-            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) {
-                for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
-                    Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
+            for (int i = 0; i < p.Connection.EnumerateCycle().Count(); i++) {
+                for (int j = i + 1; j < p.Connection.EnumerateCycle().Count(); j++) {
+                    Assert.IsFalse(p.Connection.EnumerateCycle().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateCycle().ToArray()[j].Order()));
                 }
             }
 
@@ -148,6 +150,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             PrecisionAssert.AlmostEqual(p.Area, 2 * 2 * 6, 1e-30);
             PrecisionAssert.AlmostEqual(p.Volume, 8, 1e-30);
+            PrecisionAssert.AlmostEqual((p + (1, 2, 3)).Volume, 8, 1e-30);
+            PrecisionAssert.AlmostEqual((-p).Volume, 8, 1e-30);
         }
 
         [TestMethod()]
@@ -188,13 +192,13 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Assert.AreEqual(8, p.Connection.EnumerateTriangle().Count());
 
-            Assert.AreEqual(8, p.Connection.EnumerateFace().Count());
+            Assert.AreEqual(8, p.Connection.EnumerateCycle().Count());
 
-            Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 3));
+            Assert.IsTrue(p.Connection.EnumerateCycle().All(f => f.Count == 3));
 
-            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) {
-                for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
-                    Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
+            for (int i = 0; i < p.Connection.EnumerateCycle().Count(); i++) {
+                for (int j = i + 1; j < p.Connection.EnumerateCycle().Count(); j++) {
+                    Assert.IsFalse(p.Connection.EnumerateCycle().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateCycle().ToArray()[j].Order()));
                 }
             }
 
@@ -202,6 +206,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             PrecisionAssert.AlmostEqual(p.Area, 4 * ddouble.Sqrt(3), 1e-30);
             PrecisionAssert.AlmostEqual(p.Volume, 4 * ddouble.Rcp(3), 1e-30);
+            PrecisionAssert.AlmostEqual((p + (1, 2, 3)).Volume, 4 * ddouble.Rcp(3), 1e-30);
+            PrecisionAssert.AlmostEqual((-p).Volume, 4 * ddouble.Rcp(3), 1e-30);
         }
 
         [TestMethod()]
@@ -242,13 +248,13 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Assert.AreEqual(0, p.Connection.EnumerateTriangle().Count());
 
-            Assert.AreEqual(12, p.Connection.EnumerateFace().Count());
+            Assert.AreEqual(12, p.Connection.EnumerateCycle().Count());
 
-            Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 5));
+            Assert.IsTrue(p.Connection.EnumerateCycle().All(f => f.Count == 5));
 
-            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) {
-                for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
-                    Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
+            for (int i = 0; i < p.Connection.EnumerateCycle().Count(); i++) {
+                for (int j = i + 1; j < p.Connection.EnumerateCycle().Count(); j++) {
+                    Assert.IsFalse(p.Connection.EnumerateCycle().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateCycle().ToArray()[j].Order()));
                 }
             }
 
@@ -256,6 +262,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             PrecisionAssert.AlmostEqual(p.Area, 3 * ddouble.Sqrt(5 * (4 * ddouble.GoldenRatio + 3)) * ddouble.Square(4 / (3 + ddouble.Sqrt(5))), 1e-30);
             PrecisionAssert.AlmostEqual(p.Volume, (15 + 7 * ddouble.Sqrt(5)) / 4 * ddouble.Cube(4 / (3 + ddouble.Sqrt(5))), 1e-30);
+            PrecisionAssert.AlmostEqual((p + (1, 2, 3)).Volume, (15 + 7 * ddouble.Sqrt(5)) / 4 * ddouble.Cube(4 / (3 + ddouble.Sqrt(5))), 1e-30);
+            PrecisionAssert.AlmostEqual((-p).Volume, (15 + 7 * ddouble.Sqrt(5)) / 4 * ddouble.Cube(4 / (3 + ddouble.Sqrt(5))), 1e-30);
 
         }
 
@@ -301,13 +309,13 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 Console.WriteLine($"{i}, {j}, {k}");
             }
 
-            Assert.AreEqual(20, p.Connection.EnumerateFace().Count());
+            Assert.AreEqual(20, p.Connection.EnumerateCycle().Count());
 
-            Assert.IsTrue(p.Connection.EnumerateFace().All(f => f.Count == 3));
+            Assert.IsTrue(p.Connection.EnumerateCycle().All(f => f.Count == 3));
 
-            for (int i = 0; i < p.Connection.EnumerateFace().Count(); i++) {
-                for (int j = i + 1; j < p.Connection.EnumerateFace().Count(); j++) {
-                    Assert.IsFalse(p.Connection.EnumerateFace().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateFace().ToArray()[j].Order()));
+            for (int i = 0; i < p.Connection.EnumerateCycle().Count(); i++) {
+                for (int j = i + 1; j < p.Connection.EnumerateCycle().Count(); j++) {
+                    Assert.IsFalse(p.Connection.EnumerateCycle().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateCycle().ToArray()[j].Order()));
                 }
             }
 
@@ -315,6 +323,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             PrecisionAssert.AlmostEqual(p.Area, 5 * ddouble.Sqrt(3) * ddouble.Square(4 / (1 + ddouble.Sqrt(5))), 1e-30);
             PrecisionAssert.AlmostEqual(p.Volume, 5 * (3 + ddouble.Sqrt(5)) / 12 * ddouble.Cube(4 / (1 + ddouble.Sqrt(5))), 1e-30);
+            PrecisionAssert.AlmostEqual((p + (1, 2, 3)).Volume, 5 * (3 + ddouble.Sqrt(5)) / 12 * ddouble.Cube(4 / (1 + ddouble.Sqrt(5))), 1e-30);
+            PrecisionAssert.AlmostEqual((-p).Volume, 5 * (3 + ddouble.Sqrt(5)) / 12 * ddouble.Cube(4 / (1 + ddouble.Sqrt(5))), 1e-30);
         }
 
         [TestMethod()]
@@ -401,7 +411,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Polygon3D[] polygons = [.. p.Polygons];
 
-            foreach ((Polygon3D polygon, ReadOnlyCollection<int> face) in polygons.Zip(p.Connection.Face)) {
+            foreach ((Polygon3D polygon, ReadOnlyCollection<int> face) in polygons.Zip(p.Faces)) {
                 for (int i = 0; i < face.Count; i++) {
                     Vector3D actual = polygon.Vertex[i];
                     Vector3D expected = p.Vertex[face[i]];

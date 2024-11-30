@@ -209,21 +209,21 @@ namespace DoubleDoubleGeometry {
             }
         }
 
-        public IEnumerable<ReadOnlyCollection<int>> EnumerateFace() {
-            ReadOnlyCollection<ReadOnlyCollection<int>> face = Face;
+        public IEnumerable<ReadOnlyCollection<int>> EnumerateCycle() {
+            ReadOnlyCollection<ReadOnlyCollection<int>> cycles = Cycles;
 
-            foreach (var f in face) {
-                yield return f;
+            foreach (var c in cycles) {
+                yield return c;
             }
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ReadOnlyCollection<ReadOnlyCollection<int>> face = null;
+        private ReadOnlyCollection<ReadOnlyCollection<int>> cycles = null;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ReadOnlyCollection<ReadOnlyCollection<int>> Face {
+        public ReadOnlyCollection<ReadOnlyCollection<int>> Cycles {
             get {
-                if (face is not null) {
-                    return face;
+                if (this.cycles is not null) {
+                    return this.cycles;
                 }
 
                 static (int, int) edge_index(int from, int to) {
@@ -271,7 +271,7 @@ namespace DoubleDoubleGeometry {
 
                             if (next_node == start_node && !cycles.Any(cycle => cycle.SequenceEqual(path))) {
                                 if (used_edge.Contains((path[0], path[1]))) {
-                                    cycles.Add(ReverseFaceIndexes(path.AsReadOnly()));
+                                    cycles.Add(ReverseCycleIndexes(path.AsReadOnly()));
                                 }
                                 else {
                                     cycles.Add(path.AsReadOnly());
@@ -309,9 +309,9 @@ namespace DoubleDoubleGeometry {
                 Debug.Assert(used_edge.Count == Edges * 2);
                 Debug.Assert(used_edge.Distinct().Count() == used_edge.Count);
 
-                face = cycles.AsReadOnly();
+                this.cycles = cycles.AsReadOnly();
 
-                return face;
+                return this.cycles;
             }
         }
 
@@ -367,7 +367,7 @@ namespace DoubleDoubleGeometry {
             return c.Valid;
         }
 
-        public static ReadOnlyCollection<int> ReverseFaceIndexes(ReadOnlyCollection<int> indexes) {
+        public static ReadOnlyCollection<int> ReverseCycleIndexes(ReadOnlyCollection<int> indexes) {
             if (indexes.Count < 2) {
                 return indexes;
             }

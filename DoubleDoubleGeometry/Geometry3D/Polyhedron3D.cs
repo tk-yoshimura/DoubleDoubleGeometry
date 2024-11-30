@@ -51,38 +51,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public ddouble Area => area ??= Polygons.Select(p => p.Area).Sum();
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ddouble? volume = null;
+        private PolyhedronProperty property = null;
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble Volume {
-            get {
-                if (volume is not null) {
-                    return volume.Value;
-                }
-
-                if (!IsConvex(this)) {
-                    throw new NotImplementedException("not implemented: concave");
-                }
-
-                static ddouble vol(Vector3D v1, Vector3D v2, Vector3D v3) {
-                    return ddouble.Abs(Vector3D.Dot(Vector3D.Cross(v1, v2), v3));
-                }
-
-                Vector3D c = Center;
-                Vector3D[] vertex = Vertex.Select(v => v - c).ToArray();
-
-                ddouble v = 0d;
-
-                foreach (ReadOnlyCollection<int> face in Connection.Face) {
-                    for (int i = 1; i < face.Count - 1; i++) {
-                        v += vol(vertex[face[0]], vertex[face[i]], vertex[face[i + 1]]);
-                    }
-                }
-
-                v /= 6d;
-
-                return volume ??= v;
-            }
-        }
+        public ddouble Volume => (property ??= new PolyhedronProperty(this)).Volume;
 
         public static Polyhedron3D operator +(Polyhedron3D g) {
             return g;
@@ -229,52 +201,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = null;
+        public ReadOnlyCollection<(Plane3D plane, bool is_convex)> Planes => (property ??= new PolyhedronProperty(this)).Planes;
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ReadOnlyCollection<(Plane3D plane, bool is_convex)> Planes {
-            get {
-                if (planes is not null) {
-                    return planes;
-                }
-
-                List<(Plane3D, bool)> plane_list = [];
-
-                foreach (ReadOnlyCollection<int> face in Connection.Face) {
-                    int n = face.Count;
-                    Vector3D[] vertex_polygon = face.Select(idx => Vertex[idx]).ToArray();
-
-                    Vector3D[] delta = vertex_polygon.Select((Vector3D v, int index) => vertex_polygon[(index + 1) % n] - v).ToArray();
-
-                    Vector3D cross = Vector3D.Cross(delta[n - 1], delta[0]);
-                    Vector3D normal = cross;
-
-                    bool is_convex = true;
-
-                    for (int i = 1; i < n; i++) {
-                        Vector3D c = Vector3D.Cross(delta[i - 1], delta[i]);
-
-                        if (Vector3D.Dot(cross, c) < 0d) {
-                            c = -c;
-                            is_convex = false;
-                        }
-
-                        normal += c;
-                    }
-
-                    normal = normal.Normal;
-
-                    ddouble d = -vertex_polygon.Select(v => Vector3D.Dot(v, normal)).Average();
-
-                    Plane3D plane = Plane3D.FromIntercept(normal, d);
-
-                    plane_list.Add((plane, is_convex));
-                }
-
-                planes = plane_list.AsReadOnly();
-
-                return planes;
-            }
-        }
+        public ReadOnlyCollection<ReadOnlyCollection<int>> Faces => (property ??= new PolyhedronProperty(this)).Faces;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private bool? convex = null;
@@ -290,7 +220,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 }
 
                 ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = Planes;
-                ReadOnlyCollection<ReadOnlyCollection<int>> faces = Connection.Face;
+                ReadOnlyCollection<ReadOnlyCollection<int>> faces = Faces;
 
                 foreach (((Plane3D plane, bool is_convex), ReadOnlyCollection<int> face) in planes.Zip(faces)) {
                     if (!is_convex) {
@@ -321,44 +251,13 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ReadOnlyCollection<Polygon3D> polygons = null;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ReadOnlyCollection<Polygon3D> Polygons {
-            get {
-                if (polygons is not null) {
-                    return polygons;
-                }
-
-                List<Polygon3D> polygon_list = [];
-
-                ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = Planes;
-                ReadOnlyCollection<ReadOnlyCollection<int>> faces = Connection.Face;
-
-                foreach (((Plane3D plane, bool is_convex), ReadOnlyCollection<int> face) in planes.Zip(faces)) {
-                    IEnumerable<Vector3D> vs = face.Select(i => Vertex[i]);
-                    IEnumerable<Vector3D> us = plane.Projection(vs);
-
-                    Vector3D center = (us.Max() + us.Min()) / 2d;
-                    Polygon2D polygon = new(us.Select(u => (Vector2D)(u - center)));
-
-                    Quaternion rot = Vector3D.Rot((0d, 0d, 1d), plane.Normal);
-
-                    Polygon3D p = new(polygon, rot * new Vector3D(center.X, center.Y, -plane.D), rot);
-
-                    polygon_list.Add(p);
-                }
-
-                polygons = polygon_list.AsReadOnly();
-
-                return polygons;
-            }
-        }
+        public ReadOnlyCollection<Polygon3D> Polygons => (property ??= new PolyhedronProperty(this)).Polygons;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IEnumerable<ddouble> FaceFlatness {
             get {
                 ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = Planes;
-                ReadOnlyCollection<ReadOnlyCollection<int>> faces = Connection.Face;
+                ReadOnlyCollection<ReadOnlyCollection<int>> faces = Faces;
 
                 foreach (((Plane3D plane, bool is_convex), ReadOnlyCollection<int> face) in planes.Zip(faces)) {
                     IEnumerable<Vector3D> vs = face.Select(i => Vertex[i]);
@@ -455,6 +354,97 @@ namespace DoubleDoubleGeometry.Geometry3D {
                     (p1, -1, 0), (-p1, -1, 0), (p1, 1, 0), (-p1, 1, 0),
                     (-1, 0, p1), (1, 0, p1), (0, -p1, 1), (0, p1, 1)
                 );
+            }
+        }
+
+        private class PolyhedronProperty {
+            public readonly ddouble Volume;
+            public readonly ReadOnlyCollection<Polygon3D> Polygons;
+            public readonly ReadOnlyCollection<(Plane3D plane, bool is_convex)> Planes;
+            public readonly ReadOnlyCollection<ReadOnlyCollection<int>> Faces;
+
+            public PolyhedronProperty(Polyhedron3D g) {
+                ReadOnlyCollection<ReadOnlyCollection<int>> faces = g.Connection.Cycles;
+                ddouble volume = EvalVolume(g, faces);
+
+                if (ddouble.IsNegative(volume)) {
+                    volume = -volume;
+                    faces = faces.Select(Connection.ReverseCycleIndexes).ToList().AsReadOnly();
+                }
+
+                (List<(Plane3D, bool)> plane_list, List<Polygon3D> polygon_list) = EnumPolygons(g, faces);
+
+                Volume = volume;
+                Planes = plane_list.AsReadOnly();
+                Polygons = polygon_list.AsReadOnly();
+                Faces = faces;
+            }
+
+            private static ddouble EvalVolume(Polyhedron3D g, ReadOnlyCollection<ReadOnlyCollection<int>> faces) {
+                static ddouble vol(Vector3D v1, Vector3D v2, Vector3D v3) {
+                    return Vector3D.Dot(Vector3D.Cross(v1, v2), v3);
+                }
+
+                ddouble volume = 0d;
+
+                foreach (ReadOnlyCollection<int> face in faces) {
+                    for (int i = 1; i < face.Count - 1; i++) {
+                        volume += vol(g.Vertex[face[0]], g.Vertex[face[i]], g.Vertex[face[i + 1]]);
+                    }
+                }
+
+                volume /= 6d;
+                return volume;
+            }
+
+            private static (List<(Plane3D, bool)> plane_list, List<Polygon3D> polygon_list) EnumPolygons(Polyhedron3D g, ReadOnlyCollection<ReadOnlyCollection<int>> faces) {
+                List<(Plane3D, bool)> plane_list = [];
+                List<Polygon3D> polygon_list = [];
+
+                foreach (ReadOnlyCollection<int> face in faces) {
+                    int n = face.Count;
+                    Vector3D[] vertex_polygon = face.Select(idx => g.Vertex[idx]).ToArray();
+
+                    Vector3D[] delta = vertex_polygon.Select((Vector3D v, int index) => vertex_polygon[(index + 1) % n] - v).ToArray();
+
+                    Vector3D cross = Vector3D.Cross(delta[n - 1], delta[0]);
+                    Vector3D normal = cross;
+
+                    bool is_convex = true;
+
+                    for (int i = 1; i < n; i++) {
+                        Vector3D c = Vector3D.Cross(delta[i - 1], delta[i]);
+
+                        if (Vector3D.Dot(cross, c) < 0d) {
+                            c = -c;
+                            is_convex = false;
+                        }
+
+                        normal += c;
+                    }
+
+                    normal = normal.Normal;
+
+                    ddouble d = -vertex_polygon.Select(v => Vector3D.Dot(v, normal)).Average();
+
+                    Plane3D plane = Plane3D.FromIntercept(normal, d);
+
+                    plane_list.Add((plane, is_convex));
+
+                    IEnumerable<Vector3D> vs = face.Select(i => g.Vertex[i]);
+                    IEnumerable<Vector3D> us = plane.Projection(vs);
+
+                    Vector3D center = (us.Max() + us.Min()) / 2d;
+                    Polygon2D polygon = new(us.Select(u => (Vector2D)(u - center)));
+
+                    Quaternion rot = Vector3D.Rot((0d, 0d, 1d), plane.Normal);
+
+                    Polygon3D p = new(polygon, rot * new Vector3D(center.X, center.Y, -plane.D), rot);
+
+                    polygon_list.Add(p);
+                }
+
+                return (plane_list, polygon_list);
             }
         }
     }
