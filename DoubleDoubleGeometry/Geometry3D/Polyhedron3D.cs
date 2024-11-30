@@ -372,10 +372,16 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
                 (List<(Plane3D, bool)> plane_list, List<Polygon3D> polygon_list) = EnumPolygons(g, faces);
 
+                int[] indexes = faces
+                    .Select((face, idx) => (face, idx))
+                    .OrderBy(item => item.face[0])
+                    .ThenBy(item => item.face[1])
+                    .Select(item => item.idx).ToArray();
+
                 Volume = volume;
-                Planes = plane_list.AsReadOnly();
-                Polygons = polygon_list.AsReadOnly();
-                Faces = faces;
+                Faces = indexes.Select(index => faces[index]).ToList().AsReadOnly();
+                Planes = indexes.Select(index => plane_list[index]).ToList().AsReadOnly();
+                Polygons = indexes.Select(index => polygon_list[index]).ToList().AsReadOnly();
             }
 
             private static ddouble EvalVolume(Polyhedron3D g, ReadOnlyCollection<ReadOnlyCollection<int>> faces) {
