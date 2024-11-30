@@ -606,6 +606,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 Polyhedron3D p3 = new(p.Connection, vertex);
 
                 PrecisionAssert.AreEqual(p.Volume, p2.Volume + p3.Volume, 1e-30);
+                PrecisionAssert.AreEqual(p.Volume, (p2 + (1, 2, 3)).Volume + p3.Volume, 1e-30);
+                PrecisionAssert.AreEqual(p.Volume, (-p2).Volume + p3.Volume, 1e-30);
             }
         }
     }
