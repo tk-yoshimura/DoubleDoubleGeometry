@@ -90,6 +90,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
+            Assert.IsTrue(p.Planes.All(plane => plane.plane.D < 0d));
+
             Assert.IsTrue(p.FaceFlatness.All(v => v < 1e-30));
 
             PrecisionAssert.AlmostEqual(p.Area, ddouble.Sqrt(3) * 8, 1e-30);
@@ -145,6 +147,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                     Assert.IsFalse(p.Connection.EnumerateCycle().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateCycle().ToArray()[j].Order()));
                 }
             }
+
+            Assert.IsTrue(p.Planes.All(plane => plane.plane.D < 0d));
 
             Assert.IsTrue(p.FaceFlatness.All(v => v < 1e-30));
 
@@ -202,6 +206,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 }
             }
 
+            Assert.IsTrue(p.Planes.All(plane => plane.plane.D < 0d));
+
             Assert.IsTrue(p.FaceFlatness.All(v => v < 1e-30));
 
             PrecisionAssert.AlmostEqual(p.Area, 4 * ddouble.Sqrt(3), 1e-30);
@@ -257,6 +263,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                     Assert.IsFalse(p.Connection.EnumerateCycle().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateCycle().ToArray()[j].Order()));
                 }
             }
+
+            Assert.IsTrue(p.Planes.All(plane => plane.plane.D < 0d));
 
             Assert.IsTrue(p.FaceFlatness.All(v => v < 1e-30));
 
@@ -318,6 +326,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                     Assert.IsFalse(p.Connection.EnumerateCycle().ToArray()[i].Order().SequenceEqual(p.Connection.EnumerateCycle().ToArray()[j].Order()));
                 }
             }
+
+            Assert.IsTrue(p.Planes.All(plane => plane.plane.D < 0d));
 
             Assert.IsTrue(p.FaceFlatness.All(v => v < 1e-30));
 
