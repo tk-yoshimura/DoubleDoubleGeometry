@@ -231,6 +231,7 @@ namespace DoubleDoubleGeometry {
                 }
 
                 List<ReadOnlyCollection<int>> cycles = [];
+                List<(int from, int to)> used_edge = [];
                 Dictionary<(int from, int to), int> edge_count = [];
                 foreach ((int from, int to) in EnumerateEdge()) {
                     edge_count[(from, to)] = 0;
@@ -269,7 +270,13 @@ namespace DoubleDoubleGeometry {
                             }
 
                             if (next_node == start_node && !cycles.Any(cycle => cycle.SequenceEqual(path))) {
-                                cycles.Add(path.AsReadOnly());
+                                if (used_edge.Contains((path[0], path[1]))) {
+                                    cycles.Add(ReverseFaceIndexes(path.AsReadOnly()));
+                                }
+                                else {
+                                    cycles.Add(path.AsReadOnly());
+                                }
+
                                 searched = true;
                                 break;
                             }
@@ -293,9 +300,14 @@ namespace DoubleDoubleGeometry {
 
                     for (int i = 1; i < cycle.Count; i++) {
                         edge_count[edge_index(cycle[i - 1], cycle[i])]++;
+                        used_edge.Add((cycle[i - 1], cycle[i]));
                     }
-                    edge_count[edge_index(cycle[0], cycle[^1])]++;
+                    edge_count[edge_index(cycle[^1], cycle[0])]++;
+                    used_edge.Add((cycle[^1], cycle[0]));
                 }
+
+                Debug.Assert(used_edge.Count == Edges * 2);
+                Debug.Assert(used_edge.Distinct().Count() == used_edge.Count);
 
                 face = cycles.AsReadOnly();
 
@@ -353,6 +365,20 @@ namespace DoubleDoubleGeometry {
 
         public static bool IsValid(Connection c) {
             return c.Valid;
+        }
+
+        public static ReadOnlyCollection<int> ReverseFaceIndexes(ReadOnlyCollection<int> indexes) {
+            if (indexes.Count < 2) {
+                return indexes;
+            }
+
+            List<int> indexes_reversed = [indexes[0]];
+
+            for (int i = 1; i < indexes.Count; i++) {
+                indexes_reversed.Add(indexes[^i]);
+            }
+
+            return indexes_reversed.AsReadOnly();
         }
 
         public override string ToString() {
