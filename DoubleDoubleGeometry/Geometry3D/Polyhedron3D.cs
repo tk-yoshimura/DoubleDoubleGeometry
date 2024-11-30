@@ -287,7 +287,9 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public static Polyhedron3D Tetrahedron => new(
+        private static Polyhedron3D preset_tetrahedron = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public static Polyhedron3D Tetrahedron => preset_tetrahedron ??= new(
             new Connection(4,
                 (0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)
             ),
@@ -295,7 +297,9 @@ namespace DoubleDoubleGeometry.Geometry3D {
         );
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public static Polyhedron3D Cube => new(
+        private static Polyhedron3D preset_cube = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public static Polyhedron3D Cube => preset_cube ??= new(
             new Connection(8,
                 (0, 1), (0, 3), (0, 4), (1, 2), (1, 5), (2, 3),
                 (2, 6), (3, 7), (4, 5), (4, 7), (5, 6), (6, 7)
@@ -305,7 +309,9 @@ namespace DoubleDoubleGeometry.Geometry3D {
         );
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public static Polyhedron3D Octahedron => new(
+        private static Polyhedron3D preset_octahedron = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public static Polyhedron3D Octahedron => preset_octahedron ??= new(
             new Connection(6,
                 (0, 1), (0, 2), (0, 3), (0, 4), (1, 2), (1, 4),
                 (1, 5), (2, 3), (2, 5), (3, 4), (3, 5), (4, 5)
@@ -315,12 +321,18 @@ namespace DoubleDoubleGeometry.Geometry3D {
         );
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private static Polyhedron3D preset_dodecahedron = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Polyhedron3D Dodecahedron {
             get {
+                if (preset_dodecahedron is not null) {
+                    return preset_dodecahedron;
+                }
+
                 ddouble p1 = (ddouble.Sqrt(5) - 1d) * 0.5d;
                 ddouble p2 = (3d - ddouble.Sqrt(5)) * 0.5d;
 
-                return new(
+                return preset_dodecahedron = new(
                     new Connection(20,
                         (0, 1), (0, 2), (0, 3), (1, 4), (1, 6), (2, 8), (2, 9), (3, 5),
                         (3, 7), (4, 8), (4, 10), (5, 9), (5, 11), (6, 7), (6, 12), (7, 13),
@@ -337,11 +349,17 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private static Polyhedron3D preset_icosahedron = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Polyhedron3D Icosahedron {
             get {
+                if (preset_icosahedron is not null) {
+                    return preset_icosahedron;
+                }
+
                 ddouble p1 = (ddouble.Sqrt(5) - 1d) * 0.5d;
 
-                return new(
+                return preset_icosahedron ??= new(
                     new Connection(12,
                         (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (1, 2), (1, 3), (1, 6),
                         (1, 7), (2, 5), (2, 7), (2, 8), (3, 4), (3, 6), (3, 9), (4, 5),
