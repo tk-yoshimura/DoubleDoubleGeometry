@@ -175,6 +175,14 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return v1.X * v2.Y - v1.Y * v2.X;
         }
 
+        public static ddouble Angle(Vector2D v1, Vector2D v2) {
+            return ddouble.Acos(ddouble.Clamp(Dot(v1, v2) / (v1.Norm * v2.Norm), -1d, 1d));
+        }
+
+        public static ddouble AnglePi(Vector2D v1, Vector2D v2) {
+            return ddouble.AcosPi(ddouble.Clamp(Dot(v1, v2) / (v1.Norm * v2.Norm), -1d, 1d));
+        }
+
         public static Complex Rot(Vector2D v1, Vector2D v2) {
             ddouble v1_norm = v1.Norm, v2_norm = v2.Norm;
 

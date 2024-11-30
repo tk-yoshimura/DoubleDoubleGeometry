@@ -184,6 +184,14 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return new Vector3D(v1.Y * v2.Z - v1.Z * v2.Y, v1.Z * v2.X - v1.X * v2.Z, v1.X * v2.Y - v1.Y * v2.X);
         }
 
+        public static ddouble Angle(Vector3D v1, Vector3D v2) {
+            return ddouble.Acos(ddouble.Clamp(Dot(v1, v2) / (v1.Norm * v2.Norm), -1d, 1d));
+        }
+
+        public static ddouble AnglePi(Vector3D v1, Vector3D v2) {
+            return ddouble.AcosPi(ddouble.Clamp(Dot(v1, v2) / (v1.Norm * v2.Norm), -1d, 1d));
+        }
+
         public static Quaternion Rot(Vector3D v1, Vector3D v2) {
             Vector3D axis = Cross(v1, v2).Normal;
             ddouble dot = Dot(v1, v2);

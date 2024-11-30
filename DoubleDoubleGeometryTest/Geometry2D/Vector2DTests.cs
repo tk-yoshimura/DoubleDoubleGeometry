@@ -110,6 +110,27 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         }
 
         [TestMethod()]
+        public void AngleTest() {
+            Vector2D vector1 = (1, 2);
+            Vector2D vector2 = (2, 4);
+            Vector2D vector3 = (-4, 2);
+            Vector2D vector4 = (1, 0);
+            Vector2D vector5 = (1, 1);
+
+            PrecisionAssert.AreEqual(0d, Vector2D.AnglePi(vector1, vector2), 1e-30);
+            PrecisionAssert.AreEqual(1d, Vector2D.AnglePi(vector1, -vector2), 1e-30);
+            PrecisionAssert.AreEqual(0.5d, Vector2D.AnglePi(vector1, vector3), 1e-30);
+            PrecisionAssert.AreEqual(0.25d, Vector2D.AnglePi(vector4, vector5), 1e-30);
+            PrecisionAssert.AreEqual(0.75d, Vector2D.AnglePi(vector4, -vector5), 1e-30);
+
+            PrecisionAssert.AreEqual(0d * ddouble.Pi, Vector2D.Angle(vector1, vector2), 1e-30);
+            PrecisionAssert.AreEqual(1d * ddouble.Pi, Vector2D.Angle(vector1, -vector2), 1e-30);
+            PrecisionAssert.AreEqual(0.5d * ddouble.Pi, Vector2D.Angle(vector1, vector3), 1e-30);
+            PrecisionAssert.AreEqual(0.25d * ddouble.Pi, Vector2D.Angle(vector4, vector5), 1e-30);
+            PrecisionAssert.AreEqual(0.75d * ddouble.Pi, Vector2D.Angle(vector4, -vector5), 1e-30);
+        }
+
+        [TestMethod()]
         public void ScaleBTest() {
             Vector2D vector1 = new(4, -6);
 

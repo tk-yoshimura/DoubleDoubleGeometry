@@ -160,6 +160,27 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void AngleTest() {
+            Vector3D vector1 = (1, 2, 0);
+            Vector3D vector2 = (2, 4, 0);
+            Vector3D vector3 = (-4, 2, 0);
+            Vector3D vector4 = (1, 0, 0);
+            Vector3D vector5 = (1, 1, 0);
+
+            PrecisionAssert.AreEqual(0d, Vector3D.AnglePi(vector1, vector2), 1e-30);
+            PrecisionAssert.AreEqual(1d, Vector3D.AnglePi(vector1, -vector2), 1e-30);
+            PrecisionAssert.AreEqual(0.5d, Vector3D.AnglePi(vector1, vector3), 1e-30);
+            PrecisionAssert.AreEqual(0.25d, Vector3D.AnglePi(vector4, vector5), 1e-30);
+            PrecisionAssert.AreEqual(0.75d, Vector3D.AnglePi(vector4, -vector5), 1e-30);
+
+            PrecisionAssert.AreEqual(0d * ddouble.Pi, Vector3D.Angle(vector1, vector2), 1e-30);
+            PrecisionAssert.AreEqual(1d * ddouble.Pi, Vector3D.Angle(vector1, -vector2), 1e-30);
+            PrecisionAssert.AreEqual(0.5d * ddouble.Pi, Vector3D.Angle(vector1, vector3), 1e-30);
+            PrecisionAssert.AreEqual(0.25d * ddouble.Pi, Vector3D.Angle(vector4, vector5), 1e-30);
+            PrecisionAssert.AreEqual(0.75d * ddouble.Pi, Vector3D.Angle(vector4, -vector5), 1e-30);
+        }
+
+        [TestMethod()]
         public void ScaleBTest() {
             Vector3D vector1 = new(4, -6, 9);
 
