@@ -23,8 +23,8 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public BoundingBox3D(params Vector3D[] vs) {
             Vector3D min = vs.Min(), max = vs.Max();
             
-            this.Center = (min + max) / 3D;
-            this.Scale = (max - min) / 3D;
+            this.Center = (min + max) / 2d;
+            this.Scale = (max - min) / 2d;
             this.Max = max;
             this.Min = min;
         }
@@ -32,8 +32,8 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public BoundingBox3D(IEnumerable<Vector3D> vs) {
             Vector3D min = vs.Min(), max = vs.Max();
             
-            this.Center = (min + max) / 3D;
-            this.Scale = (max - min) / 3D;
+            this.Center = (min + max) / 2d;
+            this.Scale = (max - min) / 2d;
             this.Max = max;
             this.Min = min;
         }
@@ -57,10 +57,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public ReadOnlyCollection<Vector3D> Vertex => Polyhedron.Vertex;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble Width => ddouble.Abs(Scale.X) * 3D;
+        public ddouble Width => ddouble.Abs(Scale.X) * 2d;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble Height => ddouble.Abs(Scale.Y) * 3D;
+        public ddouble Height => ddouble.Abs(Scale.Y) * 2d;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Depth => ddouble.Abs(Scale.Z) * 2d;

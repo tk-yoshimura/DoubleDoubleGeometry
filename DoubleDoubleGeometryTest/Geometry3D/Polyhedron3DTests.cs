@@ -286,6 +286,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 Assert.AreEqual(5, p.Connection[i].Count);
             }
 
+            Console.WriteLine(p.BoundingBox);
+
             Assert.IsTrue(Connection.IsValid(p.Connection));
 
             Assert.AreEqual(Vector3D.Zero, p.Center);
