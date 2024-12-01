@@ -156,6 +156,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Triangle3D Zero { get; } = new(Vector3D.Zero, Vector3D.Zero, Vector3D.Zero);
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private BoundingBox3D bbox = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public BoundingBox3D BoundingBox => bbox ??= new BoundingBox3D(V0, V1, V2);
+
         public static bool IsNaN(Triangle3D g) {
             return Vector3D.IsNaN(g.V0) || Vector3D.IsNaN(g.V1) || Vector3D.IsNaN(g.V2);
         }

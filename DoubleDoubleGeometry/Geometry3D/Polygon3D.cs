@@ -124,6 +124,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Polygon3D Zero { get; } = new(Polygon2D.Zero, Vector3D.Zero, Quaternion.Zero, 0);
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private BoundingBox3D bbox = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public BoundingBox3D BoundingBox => bbox ??= new BoundingBox3D(Vertex);
+
         public static bool IsNaN(Polygon3D g) {
             return Polygon2D.IsNaN(g.Polygon) || Vector3D.IsNaN(g.Center) || Quaternion.IsNaN(g.Rotation);
         }

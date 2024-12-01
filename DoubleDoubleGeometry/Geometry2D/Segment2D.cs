@@ -107,6 +107,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Segment2D Zero { get; } = new(Vector2D.Zero, Vector2D.Zero);
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private BoundingBox2D bbox = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public BoundingBox2D BoundingBox => bbox ??= new BoundingBox2D(V0, V1);
+
         public static bool IsNaN(Segment2D g) {
             return Vector2D.IsNaN(g.V0) || Vector2D.IsNaN(g.V1);
         }

@@ -198,7 +198,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 return ToString();
             }
 
-            return $"center={Center.ToString(format)}, scale=({Scale.ToString(format)}, rotation={Rotation.ToString(format)}";
+            return $"center={Center.ToString(format)}, scale={Scale.ToString(format)}, rotation={Rotation.ToString(format)}";
         }
 
         public string ToString(string format) {

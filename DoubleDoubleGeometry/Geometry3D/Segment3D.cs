@@ -107,6 +107,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Segment3D Zero { get; } = new(Vector3D.Zero, Vector3D.Zero);
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private BoundingBox3D bbox = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public BoundingBox3D BoundingBox => bbox ??= new BoundingBox3D(V0, V1);
+
         public static bool IsNaN(Segment3D g) {
             return Vector3D.IsNaN(g.V0) || Vector3D.IsNaN(g.V1);
         }

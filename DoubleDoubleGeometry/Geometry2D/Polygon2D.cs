@@ -162,6 +162,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Polygon2D Zero { get; } = new(Vector2D.Zero);
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private BoundingBox2D bbox = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public BoundingBox2D BoundingBox => bbox ??= new BoundingBox2D(Vertex);
+
         public bool Inside(Vector2D v) {
             int n = Vertices;
 

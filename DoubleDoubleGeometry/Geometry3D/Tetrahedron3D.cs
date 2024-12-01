@@ -139,6 +139,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Tetrahedron3D Zero { get; } = new(Vector3D.Zero, Vector3D.Zero, Vector3D.Zero, Vector3D.Zero);
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private BoundingBox3D bbox = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public BoundingBox3D BoundingBox => bbox ??= new BoundingBox3D(V0, V1, V2, V3);
+
         public bool Inside(Vector3D v) {
             Vector3D u = ortho_matrix * (v - V0);
 

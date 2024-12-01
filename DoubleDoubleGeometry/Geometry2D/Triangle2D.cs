@@ -126,6 +126,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Triangle2D Zero { get; } = new(Vector2D.Zero, Vector2D.Zero, Vector2D.Zero);
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private BoundingBox2D bbox = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public BoundingBox2D BoundingBox => bbox ??= new BoundingBox2D(V0, V1, V2);
+
         public bool Inside(Vector2D v) {
             Vector2D u = ortho_matrix * (v - V0);
 

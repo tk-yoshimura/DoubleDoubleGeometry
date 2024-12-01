@@ -145,7 +145,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static implicit operator Polygon2D(Rectangle2D g) {
-            return new Polygon2D(g.Vertex);
+            return g.Polygon;
         }
 
         public void Deconstruct(out Vector2D v0, out Vector2D v1, out Vector2D v2, out Vector2D v3)
@@ -157,10 +157,16 @@ namespace DoubleDoubleGeometry.Geometry2D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Rectangle2D Zero { get; } = new(Vector2D.Zero, (ddouble.Zero, ddouble.Zero), ddouble.Zero);
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private BoundingBox2D bbox = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public BoundingBox2D BoundingBox => bbox ??= new BoundingBox2D(Vertex);
+
         public bool Inside(Vector2D v) {
             Vector2D u = Rotation.Conj * (v - Center);
+            ddouble sx = ddouble.Abs(Scale.X), sy = ddouble.Abs(Scale.Y);
 
-            bool inside = ddouble.Abs(u.X) <= Scale.X && ddouble.Abs(u.Y) <= Scale.Y;
+            bool inside = ddouble.Abs(u.X) <= sx && ddouble.Abs(u.Y) <= sy;
 
             return inside;
         }
@@ -168,10 +174,12 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public IEnumerable<bool> Inside(IEnumerable<Vector2D> vs) {
             Complex c = Rotation.Conj;
 
+            ddouble sx = ddouble.Abs(Scale.X), sy = ddouble.Abs(Scale.Y);
+ 
             foreach (Vector2D v in vs) {
                 Vector2D u = c * (v - Center);
 
-                bool inside = ddouble.Abs(u.X) <= Scale.X && ddouble.Abs(u.Y) <= Scale.Y;
+                bool inside = ddouble.Abs(u.X) <= sx && ddouble.Abs(u.Y) <= sy;
 
                 yield return inside;
             }
@@ -206,7 +214,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
                 return ToString();
             }
 
-            return $"center={Center.ToString(format)}, scale=({Scale.ToString(format)}), rotation={Rotation.ToString(format)}";
+            return $"center={Center.ToString(format)}, scale={Scale.ToString(format)}, rotation={Rotation.ToString(format)}";
         }
 
         public string ToString(string format) {

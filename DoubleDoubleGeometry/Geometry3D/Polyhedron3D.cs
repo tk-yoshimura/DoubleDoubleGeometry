@@ -126,6 +126,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Polyhedron3D Zero { get; } = new(new Connection(1), Vector3D.Zero);
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private BoundingBox3D bbox = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public BoundingBox3D BoundingBox => bbox ??= new BoundingBox3D(Vertex);
+
         public bool Inside(Vector3D v) {
             if (IsConvex(this)) {
                 Vector3D u = v - Center;

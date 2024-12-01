@@ -143,21 +143,28 @@ namespace DoubleDoubleGeometry.Geometry3D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Cuboid3D Zero { get; } = new(Vector3D.Zero, Vector3D.Zero, Quaternion.Zero, 0);
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private BoundingBox3D bbox = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public BoundingBox3D BoundingBox => bbox ??= new BoundingBox3D(Vertex);
+
         public bool Inside(Vector3D v) {
             Vector3D u = Rotation.Conj * (v - Center);
+            ddouble sx = Scale.X, sy = Scale.Y, sz = Scale.Y;
 
-            bool inside = ddouble.Abs(u.X) <= Scale.X && ddouble.Abs(u.Y) <= Scale.Y && ddouble.Abs(u.Z) <= Scale.Z;
+            bool inside = ddouble.Abs(u.X) <= sx && ddouble.Abs(u.Y) <= sy && ddouble.Abs(u.Z) <= sz;
 
             return inside;
         }
 
         public IEnumerable<bool> Inside(IEnumerable<Vector3D> vs) {
             Quaternion q = Rotation.Conj;
+            ddouble sx = Scale.X, sy = Scale.Y, sz = Scale.Y;
 
             foreach (Vector3D v in vs) {
                 Vector3D u = q * (v - Center);
 
-                bool inside = ddouble.Abs(u.X) <= Scale.X && ddouble.Abs(u.Y) <= Scale.Y && ddouble.Abs(u.Z) <= Scale.Z;
+                bool inside = ddouble.Abs(u.X) <= sx && ddouble.Abs(u.Y) <= sy && ddouble.Abs(u.Z) <= sz;
 
                 yield return inside;
             }

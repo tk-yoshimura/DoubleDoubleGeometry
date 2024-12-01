@@ -153,6 +153,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Circle2D Zero { get; } = new(Vector2D.Zero, ddouble.Zero);
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private BoundingBox2D bbox = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public BoundingBox2D BoundingBox => bbox ??= new BoundingBox2D(Center, (Radius, Radius)); 
+
         public bool Inside(Vector2D v) {
             ddouble radius = ddouble.Abs(Radius);
 
