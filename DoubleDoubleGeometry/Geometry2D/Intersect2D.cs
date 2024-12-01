@@ -1,4 +1,5 @@
 ﻿using DoubleDouble;
+using System.Linq;
 
 namespace DoubleDoubleGeometry.Geometry2D {
 
@@ -16,34 +17,34 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return y;
         }
 
-        public static Vector2D[] CircleLine(Circle2D circle, Line2D line) {
+        public static (Vector2D v, ddouble t)[] CircleLine(Circle2D circle, Line2D line) {
             Vector2D ev = circle.Center - line.Origin, dv = line.Direction;
             ddouble dv_sqnorm = dv.SquareNorm, radius = ddouble.Abs(circle.Radius);
 
-            ddouble v = radius * radius * dv_sqnorm - dv.X * dv.X * ev.Y * ev.Y - dv.Y * dv.Y * ev.X * ev.X + 2 * dv.X * dv.Y * ev.X * ev.Y;
+            ddouble u = radius * radius * dv_sqnorm - dv.X * dv.X * ev.Y * ev.Y - dv.Y * dv.Y * ev.X * ev.X + 2 * dv.X * dv.Y * ev.X * ev.Y;
 
-            if (!(v >= 0d)) {
+            if (!(u >= 0d)) {
                 return [];
             }
 
             ddouble ed_inner_product = Vector2D.Dot(ev, dv);
 
-            if (ddouble.IsZero(v)) {
+            if (ddouble.IsZero(u)) {
                 ddouble t = ed_inner_product / dv_sqnorm;
 
-                Vector2D v1 = line.Origin + t * line.Direction;
+                Vector2D v = line.Origin + t * line.Direction;
 
-                return [v1];
+                return [(v, t)];
             }
             else {
-                ddouble d = ddouble.Sqrt(v);
+                ddouble d = ddouble.Sqrt(u);
                 ddouble t1 = (ed_inner_product - d) / dv_sqnorm;
                 ddouble t2 = (ed_inner_product + d) / dv_sqnorm;
 
                 Vector2D v1 = line.Origin + t1 * line.Direction;
                 Vector2D v2 = line.Origin + t2 * line.Direction;
 
-                return [v1, v2];
+                return [(v1, t1), (v2, t2)];
             }
         }
 
@@ -54,7 +55,9 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
             Line2D line = Line2D.FromImplicit(a, b, c);
 
-            return CircleLine(circle1, line);
+            (Vector2D v, ddouble t)[] cross = CircleLine(circle1, line);
+
+            return cross.Select(c => c.v).ToArray();
         }
     }
 }

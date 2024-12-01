@@ -31,14 +31,16 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return y;
         }
 
-        public static Vector3D LinePlane(Line3D line, Plane3D plane) {
+        public static (Vector3D v, ddouble t) LinePlane(Line3D line, Plane3D plane) {
             ddouble inn = Vector3D.Dot(line.Direction, plane.Normal);
             ddouble t = -(Vector3D.Dot(line.Origin, plane.Normal) + plane.D) / inn;
 
-            return line.Origin + line.Direction * t;
+            Vector3D v = line.Origin + line.Direction * t;
+
+            return (v, t);
         }
 
-        public static Vector3D LineTriangle(Line3D line, Triangle3D triangle) {
+        public static (Vector3D v, ddouble t) LineTriangle(Line3D line, Triangle3D triangle) {
             Vector3D dir = line.Direction;
 
             Vector3D eu = triangle.V1 - triangle.V0;
@@ -51,73 +53,110 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 Vector3D tvec = line.Origin - triangle.V0;
                 ddouble inv_u = Vector3D.Dot(tvec, pvec);
                 if (inv_u < 0d || inv_u > det) {
-                    return Vector3D.Invalid;
+                    return (Vector3D.Invalid, ddouble.NaN);
                 }
 
                 qvec = Vector3D.Cross(tvec, eu);
                 ddouble inv_v = Vector3D.Dot(dir, qvec);
                 if (inv_v < 0d || inv_u + inv_v > det) {
-                    return Vector3D.Invalid;
+                    return (Vector3D.Invalid, ddouble.NaN);
                 }
             }
             else if (det < 0d) {
                 Vector3D tvec = line.Origin - triangle.V0;
                 ddouble inv_u = Vector3D.Dot(tvec, pvec);
                 if (inv_u > 0d || inv_u < det) {
-                    return Vector3D.Invalid;
+                    return (Vector3D.Invalid, ddouble.NaN);
                 }
 
                 qvec = Vector3D.Cross(tvec, eu);
                 ddouble inv_v = Vector3D.Dot(dir, qvec);
                 if (inv_v > 0d || inv_u + inv_v < det) {
-                    return Vector3D.Invalid;
+                    return (Vector3D.Invalid, ddouble.NaN);
                 }
             }
             else {
-                return Vector3D.Invalid;
+                return (Vector3D.Invalid, ddouble.NaN);
             }
 
             ddouble t = Vector3D.Dot(ev, qvec) / det;
 
-            Vector3D y = line.Origin + dir * t;
+            Vector3D v = line.Origin + dir * t;
 
-            return y;
+            return (v, t);
         }
 
-        public static Vector3D LineCircle(Line3D line, Circle3D circle) {
-            Vector3D cross = LinePlane(line, Plane3D.FromNormal(circle.Center, circle.Normal));
+        public static (Vector3D v, ddouble t) LineRectangle(Line3D line, Rectangle3D rectangle) {
+            Line3D line_rot = rectangle.Rotation.Conj * (line - rectangle.Center);
 
-            Vector3D y = Vector3D.SquareDistance(cross, circle.Center) < circle.Radius * circle.Radius
-                ? cross
-                : Vector3D.Invalid;
+            ddouble t = -line_rot.Origin.Z / line.Direction.Z;
+            ddouble x = line_rot.Origin.X + line.Direction.X * t;
+            ddouble y = line_rot.Origin.Y + line.Direction.Y * t;
 
-            return y;
+            bool inside = (ddouble.Abs(x) <= rectangle.Size.X) && (ddouble.Abs(y) <= rectangle.Size.Y);
+
+            if (!inside) {
+                return (Vector3D.Invalid, ddouble.NaN);
+            }
+
+            Vector3D v = line.Point(t);
+
+            return (v, t);
         }
 
-        public static Vector3D[] LineSphere(Line3D line, Sphere3D sphere) {
+        public static (Vector3D v, ddouble t) LinePolygon(Line3D line, Polygon3D polygon) {
+            Line3D line_rot = polygon.Rotation.Conj * (line - polygon.Center);
+
+            ddouble t = -line_rot.Origin.Z / line.Direction.Z;
+            ddouble x = line_rot.Origin.X + line.Direction.X * t;
+            ddouble y = line_rot.Origin.Y + line.Direction.Y * t;
+
+            bool inside = polygon.Polygon.Inside((x, y));
+
+            if (!inside) {
+                return (Vector3D.Invalid, ddouble.NaN);
+            }
+
+            Vector3D v = line.Point(t);
+
+            return (v, t);
+        }
+
+        public static (Vector3D v, ddouble t) LineCircle(Line3D line, Circle3D circle) {
+            (Vector3D v, ddouble t) = LinePlane(line, Plane3D.FromNormal(circle.Center, circle.Normal));
+
+            if (Vector3D.SquareDistance(v, circle.Center) <= circle.Radius * circle.Radius) {
+                return (v, t);
+            }
+            else {
+                return (Vector3D.Invalid, ddouble.NaN);
+            }
+        }
+
+        public static (Vector3D v, ddouble t)[] LineSphere(Line3D line, Sphere3D sphere) {
             Vector3D otoc = line.Origin - sphere.Center;
 
             ddouble b = 2d * Vector3D.Dot(line.Direction, otoc);
             ddouble c = otoc.SquareNorm - sphere.Radius * sphere.Radius;
-            ddouble v = b * b - 4d * c;
+            ddouble u = b * b - 4d * c;
 
-            if (!(v >= 0d)) {
+            if (!(u >= 0d)) {
                 return [];
             }
 
-            if (ddouble.IsZero(v)) {
+            if (ddouble.IsZero(u)) {
                 ddouble t = -0.5d * b;
-                Vector3D v1 = line.Origin + t * line.Direction;
+                Vector3D v = line.Origin + t * line.Direction;
 
-                return [v1];
+                return [(v, t)];
             }
             else {
-                ddouble d = ddouble.Sqrt(v);
+                ddouble d = ddouble.Sqrt(u);
                 ddouble t1 = -0.5 * (b + d), t2 = -0.5 * (b - d);
                 Vector3D v1 = line.Origin + t1 * line.Direction;
                 Vector3D v2 = line.Origin + t2 * line.Direction;
 
-                return [v1, v2];
+                return [(v1, t1), (v2, t2)];
             }
         }
 

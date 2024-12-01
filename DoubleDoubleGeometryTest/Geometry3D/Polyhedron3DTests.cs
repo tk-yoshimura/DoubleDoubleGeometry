@@ -583,10 +583,10 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Vector3D[] vs = p.Connection[0].Select(index => p.Vertex[index]).ToArray();
 
-            Vector3D[] vertex = [..p.Vertex];
+            Vector3D[] vertex = [.. p.Vertex];
             int[] nodes = [.. p.Connection[0]];
 
-            for (int i = 0; i < 5; i++) { 
+            for (int i = 0; i < 5; i++) {
                 for (int j = i + 1; j < 5; j++) {
                     Console.WriteLine($"{i + 1}, {j + 1}, {Vector3D.Distance(p.Vertex[nodes[i]], p.Vertex[nodes[j]])}");
                 }

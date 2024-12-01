@@ -19,10 +19,12 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Line2D line = Line2D.FromDirection((4, 1), (1, 3));
             Circle2D circle = new((6, 12), 5);
 
-            Vector2D[] cross = Intersect2D.CircleLine(circle, line);
+            (Vector2D v, ddouble t)[] cross = Intersect2D.CircleLine(circle, line);
 
-            Vector2DAssert.AreEqual((6, 7), cross[0], 1e-30);
-            Vector2DAssert.AreEqual((9, 16), cross[1], 1e-30);
+            Vector2DAssert.AreEqual((6, 7), cross[0].v, 1e-30);
+            Vector2DAssert.AreEqual((6, 7), line.Point(cross[0].t), 1e-30);
+            Vector2DAssert.AreEqual((9, 16), cross[1].v, 1e-30);
+            Vector2DAssert.AreEqual((9, 16), line.Point(cross[1].t), 1e-30);
         }
 
         [TestMethod()]

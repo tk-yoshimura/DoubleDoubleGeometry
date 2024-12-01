@@ -1,4 +1,5 @@
-﻿using DoubleDoubleGeometry.Geometry3D;
+﻿using DoubleDouble;
+using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry3D {
@@ -24,13 +25,17 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Plane3D plane = Plane3D.FromIntersection(matrix * v1, matrix * v2, matrix * v3);
 
-            Vector3D cross1 = Intersect3D.LinePlane(matrix * Line3D.FromDirection(Vector3D.Zero, v1), plane);
+            Line3D line1 = matrix * Line3D.FromDirection(Vector3D.Zero, v1);
+            (Vector3D v, ddouble t) cross1 = Intersect3D.LinePlane(line1, plane);
 
-            Vector3DAssert.AreEqual(matrix * v1, cross1, 1e-30);
+            Vector3DAssert.AreEqual(matrix * v1, cross1.v, 1e-30);
+            Vector3DAssert.AreEqual(matrix * v1, line1.Point(cross1.t), 1e-30);
 
-            Vector3D cross2 = Intersect3D.LinePlane(matrix * Line3D.FromDirection(Vector3D.Zero, -v1), plane);
+            Line3D line2 = matrix * Line3D.FromDirection(Vector3D.Zero, -v1);
+            (Vector3D v, ddouble t) cross2 = Intersect3D.LinePlane(line2, plane);
 
-            Vector3DAssert.AreEqual(matrix * v1, cross2, 1e-30);
+            Vector3DAssert.AreEqual(matrix * v1, cross2.v, 1e-30);
+            Vector3DAssert.AreEqual(matrix * v1, line2.Point(cross2.t), 1e-30);
         }
 
         [TestMethod()]
@@ -44,21 +49,25 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Triangle3D triangle = new(matrix * v1, matrix * v2, matrix * v3);
 
-            Vector3D cross1 = Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v4), triangle);
+            Line3D line1 = matrix * Line3D.FromDirection(Vector3D.Zero, v4);
+            (Vector3D v, ddouble t) cross1 = Intersect3D.LineTriangle(line1, triangle);
 
-            Vector3DAssert.AreEqual(matrix * v4, cross1, 1e-30);
+            Vector3DAssert.AreEqual(matrix * v4, cross1.v, 1e-30);
+            Vector3DAssert.AreEqual(matrix * v4, line1.Point(cross1.t), 1e-30);
 
-            Vector3D cross2 = Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, -v4), triangle);
+            Line3D line2 = matrix * Line3D.FromDirection(Vector3D.Zero, -v4);
+            (Vector3D v, ddouble t) cross2 = Intersect3D.LineTriangle(line2, triangle);
 
-            Vector3DAssert.AreEqual(matrix * v4, cross2, 1e-30);
+            Vector3DAssert.AreEqual(matrix * v4, cross2.v, 1e-30);
+            Vector3DAssert.AreEqual(matrix * v4, line2.Point(cross2.t), 1e-30);
 
-            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v5), triangle)));
-            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v6), triangle)));
-            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v7), triangle)));
-            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v8), triangle)));
-            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v9), triangle)));
-            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v10), triangle)));
-            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v11), triangle)));
+            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v5), triangle).v));
+            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v6), triangle).v));
+            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v7), triangle).v));
+            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v8), triangle).v));
+            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v9), triangle).v));
+            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v10), triangle).v));
+            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v11), triangle).v));
         }
 
         [TestMethod()]
@@ -70,17 +79,22 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Circle3D circle = Circle3D.FromCircum(new Triangle3D(matrix * v1, matrix * v2, matrix * v3));
 
-            Vector3D cross1 = Intersect3D.LineCircle(matrix * Line3D.FromDirection(Vector3D.Zero, v4), circle);
+            Line3D line1 = matrix * Line3D.FromDirection(Vector3D.Zero, v4);
+            (Vector3D v, ddouble t) cross1 = Intersect3D.LineCircle(line1, circle);
 
-            Vector3DAssert.AreEqual(matrix * v4, cross1, 1e-30);
+            Vector3DAssert.AreEqual(matrix * v4, cross1.v, 1e-30);
+            Vector3DAssert.AreEqual(matrix * v4, line1.Point(cross1.t), 1e-30);
 
-            Vector3D cross2 = Intersect3D.LineCircle(matrix * Line3D.FromDirection(Vector3D.Zero, -v4), circle);
+            Line3D line2 = matrix * Line3D.FromDirection(Vector3D.Zero, -v4);
+            (Vector3D v, ddouble t) cross2 = Intersect3D.LineCircle(line2, circle);
 
-            Vector3DAssert.AreEqual(matrix * v4, cross2, 1e-30);
+            Vector3DAssert.AreEqual(matrix * v4, cross2.v, 1e-30);
+            Vector3DAssert.AreEqual(matrix * v4, line2.Point(cross2.t), 1e-30);
 
-            Vector3D cross3 = Intersect3D.LineCircle(matrix * Line3D.FromDirection(Vector3D.Zero, v5), circle);
+            Line3D line3 = matrix * Line3D.FromDirection(Vector3D.Zero, v5);
+            (Vector3D v, ddouble t) cross3 = Intersect3D.LineCircle(line3, circle);
 
-            Assert.IsFalse(Vector3D.IsValid(cross3));
+            Assert.IsFalse(Vector3D.IsValid(cross3.v));
         }
 
         [TestMethod()]
@@ -93,10 +107,12 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Sphere3D sphere = new(matrix * Vector3D.Zero, 5);
 
-            Vector3D[] cross = Intersect3D.LineSphere(line, sphere);
+            (Vector3D v, ddouble t)[] cross = Intersect3D.LineSphere(line, sphere);
 
-            Vector3DAssert.AreEqual(matrix * v0, cross[0], 1e-30);
-            Vector3DAssert.AreEqual(matrix * v1, cross[1], 1e-30);
+            Vector3DAssert.AreEqual(matrix * v0, cross[0].v, 1e-30);
+            Vector3DAssert.AreEqual(matrix * v0, line.Point(cross[0].t), 1e-30);
+            Vector3DAssert.AreEqual(matrix * v1, cross[1].v, 1e-30);
+            Vector3DAssert.AreEqual(matrix * v1, line.Point(cross[1].t), 1e-30);
         }
 
         [TestMethod()]
