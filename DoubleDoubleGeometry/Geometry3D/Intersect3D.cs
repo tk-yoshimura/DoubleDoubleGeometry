@@ -89,11 +89,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public static (Vector3D v, ddouble t) LineRectangle(Line3D line, Rectangle3D rectangle) {
             Line3D line_rot = rectangle.Rotation.Conj * (line - rectangle.Center);
 
-            ddouble t = -line_rot.Origin.Z / line.Direction.Z;
-            ddouble x = line_rot.Origin.X + line.Direction.X * t;
-            ddouble y = line_rot.Origin.Y + line.Direction.Y * t;
+            ddouble t = -line_rot.Origin.Z / line_rot.Direction.Z;
+            ddouble x = line_rot.Origin.X + line_rot.Direction.X * t;
+            ddouble y = line_rot.Origin.Y + line_rot.Direction.Y * t;
 
-            bool inside = (ddouble.Abs(x) <= rectangle.Size.X) && (ddouble.Abs(y) <= rectangle.Size.Y);
+            bool inside = (ddouble.Abs(x) <= ddouble.Abs(rectangle.Scale.X)) && (ddouble.Abs(y) <= ddouble.Abs(rectangle.Scale.Y));
 
             if (!inside) {
                 return (Vector3D.Invalid, ddouble.NaN);
@@ -107,9 +107,9 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public static (Vector3D v, ddouble t) LinePolygon(Line3D line, Polygon3D polygon) {
             Line3D line_rot = polygon.Rotation.Conj * (line - polygon.Center);
 
-            ddouble t = -line_rot.Origin.Z / line.Direction.Z;
-            ddouble x = line_rot.Origin.X + line.Direction.X * t;
-            ddouble y = line_rot.Origin.Y + line.Direction.Y * t;
+            ddouble t = -line_rot.Origin.Z / line_rot.Direction.Z;
+            ddouble x = line_rot.Origin.X + line_rot.Direction.X * t;
+            ddouble y = line_rot.Origin.Y + line_rot.Direction.Y * t;
 
             bool inside = polygon.Polygon.Inside((x, y));
 

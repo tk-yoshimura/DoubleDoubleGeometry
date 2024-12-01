@@ -1,4 +1,6 @@
 ﻿using DoubleDouble;
+using DoubleDoubleComplex;
+using DoubleDoubleGeometry.Geometry2D;
 using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 
@@ -68,6 +70,93 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v9), triangle).v));
             Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v10), triangle).v));
             Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineTriangle(matrix * Line3D.FromDirection(Vector3D.Zero, v11), triangle).v));
+        }
+
+        [TestMethod()]
+        public void LineRectangleTest() {
+            Quaternion rot = Quaternion.FromAxisAngle((1, 2, 3), 4).Normal;
+            Vector3D move = (5, 6, 7);
+
+            Vector3D v1 = new(1, 2, 3), v2 = new(4, 5, 3), v3 = new(-2, 1, 3);
+            Vector3D v4 = new(5.125, 8.125, 3), v5 = new(-3.125, -3.125, 3);
+
+            Rectangle3D rectangle = rot * new Rectangle3D(v1, (4, 5), (0, 0, 1)) + move;
+
+            Line3D line1 = rot * Line3D.FromDirection(Vector3D.Zero, v2) + move;
+            (Vector3D v, ddouble t) cross1 = Intersect3D.LineRectangle(line1, rectangle);
+
+            Vector3DAssert.AreEqual(rot * v2 + move, cross1.v, 1e-30);
+            Vector3DAssert.AreEqual(rot * v2 + move, line1.Point(cross1.t), 1e-30);
+
+            Line3D line2 = rot * Line3D.FromDirection(Vector3D.Zero, v3) + move;
+            (Vector3D v, ddouble t) cross2 = Intersect3D.LineRectangle(line2, rectangle);
+
+            Vector3DAssert.AreEqual(rot * v3 + move, cross2.v, 1e-30);
+            Vector3DAssert.AreEqual(rot * v3 + move, line2.Point(cross2.t), 1e-30);
+
+            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineRectangle(rot * Line3D.FromDirection(Vector3D.Zero, v4) + move, rectangle).v));
+            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LineRectangle(rot * Line3D.FromDirection(Vector3D.Zero, v5) + move, rectangle).v));
+        }
+
+        [TestMethod()]
+        public void LineConvexPolygonTest() {
+            Polygon2D p = Polygon2D.Regular(6);
+
+            Quaternion rot = Quaternion.FromAxisAngle((1, 2, 3), 4).Normal;
+            Vector3D move = (5, 6, 7);
+
+            Vector3D v1 = new(1, 2, 3), v2 = v1 + (Vector3D)p.Vertex[0] * 0.95, v3 = v1 + (Vector3D)p.Vertex[2] * 0.95;
+            Vector3D v4 = v1 + (Vector3D)p.Vertex[1] * 1.05, v5 = v1 + (Vector3D)p.Vertex[4] * 1.05;
+
+            Polygon3D polygon = rot * new Polygon3D(p, v1, (0, 0, 1)) + move;
+
+            Line3D line1 = rot * Line3D.FromDirection(Vector3D.Zero, v2) + move;
+            (Vector3D v, ddouble t) cross1 = Intersect3D.LinePolygon(line1, polygon);
+
+            Vector3DAssert.AreEqual(rot * v2 + move, cross1.v, 1e-30);
+            Vector3DAssert.AreEqual(rot * v2 + move, line1.Point(cross1.t), 1e-30);
+
+            Line3D line2 = rot * Line3D.FromDirection(Vector3D.Zero, v3) + move;
+            (Vector3D v, ddouble t) cross2 = Intersect3D.LinePolygon(line2, polygon);
+
+            Vector3DAssert.AreEqual(rot * v3 + move, cross2.v, 1e-30);
+            Vector3DAssert.AreEqual(rot * v3 + move, line2.Point(cross2.t), 1e-30);
+
+            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LinePolygon(rot * Line3D.FromDirection(Vector3D.Zero, v4) + move, polygon).v));
+            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LinePolygon(rot * Line3D.FromDirection(Vector3D.Zero, v5) + move, polygon).v));
+        }
+
+        [TestMethod()]
+        public void LineConcavePolygonTest() {
+            Vector2D[] vertex = Polygon2D.Regular(6).Vertex.ToArray();
+            vertex[2] *= -0.5;
+
+            Polygon2D p = new(vertex);
+
+            Assert.IsTrue(Polygon2D.IsConcave(p));
+
+            Quaternion rot = Quaternion.FromAxisAngle((1, 2, 3), 4).Normal;
+            Vector3D move = (5, 6, 7);
+
+            Vector3D v1 = new(1, 2, 3), v2 = v1 + (Vector3D)p.Vertex[0] * 0.95, v3 = v1 + (Vector3D)p.Vertex[2] * 1.05;
+            Vector3D v4 = v1 + (Vector3D)p.Vertex[1] * 1.05, v5 = v1 + (Vector3D)p.Vertex[4] * 1.05;
+
+            Polygon3D polygon = rot * new Polygon3D(p, v1, (0, 0, 1)) + move;
+
+            Line3D line1 = rot * Line3D.FromDirection(Vector3D.Zero, v2) + move;
+            (Vector3D v, ddouble t) cross1 = Intersect3D.LinePolygon(line1, polygon);
+
+            Vector3DAssert.AreEqual(rot * v2 + move, cross1.v, 1e-30);
+            Vector3DAssert.AreEqual(rot * v2 + move, line1.Point(cross1.t), 1e-30);
+
+            Line3D line2 = rot * Line3D.FromDirection(Vector3D.Zero, v3) + move;
+            (Vector3D v, ddouble t) cross2 = Intersect3D.LinePolygon(line2, polygon);
+
+            Vector3DAssert.AreEqual(rot * v3 + move, cross2.v, 1e-30);
+            Vector3DAssert.AreEqual(rot * v3 + move, line2.Point(cross2.t), 1e-30);
+
+            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LinePolygon(rot * Line3D.FromDirection(Vector3D.Zero, v4) + move, polygon).v));
+            Assert.IsFalse(Vector3D.IsValid(Intersect3D.LinePolygon(rot * Line3D.FromDirection(Vector3D.Zero, v5) + move, polygon).v));
         }
 
         [TestMethod()]
