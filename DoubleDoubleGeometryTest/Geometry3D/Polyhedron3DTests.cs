@@ -1,6 +1,7 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry;
+using DoubleDoubleGeometry.Geometry2D;
 using DoubleDoubleGeometry.Geometry3D;
 using PrecisionTestTools;
 using System.Collections.ObjectModel;
@@ -588,12 +589,6 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Vector3D[] vertex = [.. p.Vertex];
             int[] nodes = [.. p.Connection[0]];
 
-            for (int i = 0; i < 5; i++) {
-                for (int j = i + 1; j < 5; j++) {
-                    Console.WriteLine($"{i + 1}, {j + 1}, {Vector3D.Distance(p.Vertex[nodes[i]], p.Vertex[nodes[j]])}");
-                }
-            }
-
             for (int theta = 0; theta < 32; theta++) {
                 Vector3D v = (0, 0.5 * ddouble.CosPi(theta / 16d), 0.5 * ddouble.SinPi(theta / 16d));
 
@@ -601,7 +596,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
                 Polyhedron3D p2 = new(new Connection(7,
                     (0, 1), (0, 2), (0, 3), (0, 4), (0, 5),
-                    (1, 2), (1, 3), (2, 5), (3, 4), (4, 5),
+                    (1, 2), (2, 3), (3, 4), (4, 5), (5, 1),
                     (6, 1), (6, 2), (6, 3), (6, 4), (6, 5)), [p.Vertex[0], .. vs, v]
                 );
 
@@ -610,6 +605,45 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 PrecisionAssert.AreEqual(p.Volume, p2.Volume + p3.Volume, 1e-30);
                 PrecisionAssert.AreEqual(p.Volume, (p2 + (1, 2, 3)).Volume + p3.Volume, 1e-30);
                 PrecisionAssert.AreEqual(p.Volume, (-p2).Volume + p3.Volume, 1e-30);
+            }
+        }
+
+        [TestMethod()]
+        public void VertexSortTest() {
+            Polyhedron3D p = Polyhedron3D.Octahedron;
+
+            Quaternion rot = Vector3D.Rot(p.Vertex[0], (0, 0, 1));
+
+            Polyhedron3D q = rot * p;
+
+            List<int> selected = [];
+            List<int> index_order = [];
+
+            while (selected.Count < q.Vertices) {
+                ddouble z = q.Vertex.Select((v, i) => (v, i)).Where(item => !selected.Contains(item.i)).Select(item => item.v.Z).Max();
+
+                int[] indexes = q.Vertex.Select((v, i) => (v, i)).Where(item => ddouble.Abs(item.v.Z - z) < 0.05).Select(item => item.i).ToArray();
+                Vector3D[] vertex = indexes.Select(i => q.Vertex[i]).ToArray();
+
+                int[] indexes_sorted = vertex.Select((v, i) => (i, phase: ddouble.Atan2Pi(v.Y, v.X))).OrderBy(item => item.phase).Select(item => item.i).ToArray();
+
+                selected.AddRange(indexes);
+
+                index_order.AddRange(indexes_sorted.Select(i => indexes[i]));
+            }
+
+            int[] index_perm = new int[p.Vertices];
+
+            for (int i = 0; i < index_order.Count; i++) {
+                index_perm[index_order[i]] = i;
+            }
+
+            foreach ((int i, int j) in p.Connection) {
+                Console.WriteLine($"({int.Min(index_perm[i], index_perm[j])}, {int.Max(index_perm[i], index_perm[j])}), ");
+            }
+
+            foreach (int i in index_order) {
+                Console.WriteLine(p.Vertex[i]);
             }
         }
     }

@@ -129,7 +129,7 @@ namespace DoubleDoubleGeometry {
             return ReferenceEquals(this, other) || (other is not null && other == this);
         }
 
-        public IEnumerator<(int i, int j)> GetEnumerator() => (IEnumerator<(int i, int j)>)EnumerateEdge();
+        public IEnumerator<(int i, int j)> GetEnumerator() => Edge.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
