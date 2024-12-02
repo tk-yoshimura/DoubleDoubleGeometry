@@ -579,6 +579,86 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void InsideTest3() {
+            Vector3D[] vertex = [.. Polyhedron3D.Icosahedron.Vertex];
+
+            vertex[0] *= 0.25;
+
+            Polyhedron3D p = new(Polyhedron3D.Icosahedron.Connection, vertex);
+
+            Assert.IsFalse(Polyhedron3D.IsConvex(p));
+
+            List<Vector3D> insides = [], outsides = [];
+
+            //foreach (Polygon3D polygon in p.Polygons) {
+            //    insides.Add(polygon.Center * 0.95);
+            //    insides.Add(polygon.Center * 0.75);
+
+            //    outsides.Add(polygon.Center * 1.05);
+            //    outsides.Add(polygon.Center * 1.25);
+
+            //    foreach (Vector3D v in polygon.Vertex) {
+            //        insides.Add((polygon.Center + v) / 2 * 0.95);
+            //        insides.Add((polygon.Center + v) / 2 * 0.75);
+
+            //        outsides.Add((polygon.Center + v) / 2 * 1.05);
+            //        outsides.Add((polygon.Center + v) / 2 * 1.25);
+
+            //        insides.Add((polygon.Center * 3 + v) / 4 * 0.95);
+            //        insides.Add((polygon.Center * 3 + v) / 4 * 0.75);
+
+            //        outsides.Add((polygon.Center * 3 + v) / 4 * 1.05);
+            //        outsides.Add((polygon.Center * 3 + v) / 4 * 1.25);
+
+            //        insides.Add((polygon.Center + v * 3) / 4 * 0.95);
+            //        insides.Add((polygon.Center + v * 3) / 4 * 0.75);
+
+            //        outsides.Add((polygon.Center + v * 3) / 4 * 1.05);
+            //        outsides.Add((polygon.Center + v * 3) / 4 * 1.25);
+            //    }
+            //}
+
+            foreach (Vector3D v in p.Vertex.Skip(1)) {
+                insides.Add(v * 0.95);
+                insides.Add(v * 0.75);
+
+                outsides.Add(v * 1.05);
+                outsides.Add(v * 1.25);
+            }
+
+            foreach (Vector3D v in insides) {
+                Console.WriteLine(v);
+
+                Assert.IsTrue(p.Inside(v));
+            }
+
+            Assert.IsTrue(p.Inside(insides).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(p.Inside(v));
+            }
+
+            Assert.IsTrue(p.Inside(outsides).All(b => !b));
+
+            Matrix3D m = new double[,] { { 1, 2, 7 }, { 3, 5, 8 }, { -2, 4, 6 } };
+            Vector3D s = (4, 6, 5);
+
+            Polyhedron3D p2 = m * p + s;
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(p2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(p2.Inside(insides.Select(v => m * v + s)).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(p2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(p2.Inside(outsides.Select(v => m * v + s)).All(b => !b));
+        }
+
+        [TestMethod()]
         public void ConcaveVolumeTest() {
             Polyhedron3D p = Polyhedron3D.Icosahedron;
 
@@ -590,7 +670,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             int[] nodes = [.. p.Connection[0]];
 
             for (int theta = 0; theta < 32; theta++) {
-                Vector3D v = (0, 0.5 * ddouble.CosPi(theta / 16d), 0.5 * ddouble.SinPi(theta / 16d));
+                Vector3D v = (0, 0.75 * ddouble.CosPi(theta / 16d), 0.75 * ddouble.SinPi(theta / 16d));
 
                 vertex[0] = v;
 
@@ -644,6 +724,22 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             foreach (int i in index_order) {
                 Console.WriteLine(p.Vertex[i]);
+            }
+        }
+
+        [TestMethod()]
+        public void AdjacencyMatrixTest() {
+            Polyhedron3D p = Polyhedron3D.Tetrahedron;
+
+            int n = p.Vertices;
+            bool[,] matrix = p.Connection.AdjacencyMatrix;
+
+            for (int i = 0; i < n; i++) { 
+                for (int j = 0; j < n; j++) {
+                    Console.Write($"{(matrix[i, j] ? "■" : "□")}");
+                }
+
+                Console.Write("\n");
             }
         }
     }

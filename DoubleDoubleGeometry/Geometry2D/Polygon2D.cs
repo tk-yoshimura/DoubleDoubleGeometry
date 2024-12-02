@@ -172,7 +172,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
             Vector2D u = v - Center;
 
-            if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y) {
+            if (!(ddouble.Ldexp(u.X, 1) <= Size.X && ddouble.Ldexp(u.Y, 1) <= Size.Y)) {
                 return false;
             }
 
@@ -211,18 +211,16 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
                 Vector2D[] dv = Vertex.Select(vertex => vertex - v).ToArray();
 
-                int crosses = 0;
+                bool inside = false;
 
                 if (is_cross_h(dv[n - 1], dv[0])) {
-                    crosses++;
+                    inside = !inside;
                 }
                 for (int i = 1; i < n; i++) {
                     if (is_cross_h(dv[i - 1], dv[i])) {
-                        crosses++;
+                        inside = !inside;
                     }
                 }
-
-                bool inside = (crosses & 1) == 1;
 
                 return inside;
             }
@@ -237,7 +235,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
                 foreach (Vector2D v in vs) {
                     Vector2D u = v - Center;
 
-                    if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y) {
+                    if (!(ddouble.Ldexp(u.X, 1) <= Size.X && ddouble.Ldexp(u.Y, 1) <= Size.Y)) {
                         yield return false;
                         continue;
                     }
@@ -266,12 +264,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
                 foreach (Vector2D v in vs) {
                     Vector2D u = v - Center;
 
-                    if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y) {
+                    if (!(ddouble.Ldexp(u.X, 1) <= Size.X && ddouble.Ldexp(u.Y, 1) <= Size.Y)) {
                         yield return false;
                         continue;
                     }
-
-                    int crosses = 0;
 
                     static bool is_cross_h(Vector2D v0, Vector2D v1) {
                         if ((v0.Y <= 0d) != (v1.Y > 0d)) {
@@ -290,17 +286,17 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
                     Vector2D[] dv = Vertex.Select(vertex => vertex - v).ToArray();
 
+                    bool inside = false;
+
                     if (is_cross_h(dv[n - 1], dv[0])) {
-                        crosses++;
+                        inside = !inside;
                     }
 
                     for (int i = 1; i < n; i++) {
                         if (is_cross_h(dv[i - 1], dv[i])) {
-                            crosses++;
+                            inside = !inside;
                         }
                     }
-
-                    bool inside = (crosses & 1) == 1;
 
                     yield return inside;
                 }

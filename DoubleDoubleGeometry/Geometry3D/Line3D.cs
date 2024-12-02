@@ -76,15 +76,15 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static Line3D operator *(Matrix3D m, Line3D g) {
-            Vector3D v0 = m * g.Origin, v1 = m * (g.Origin + g.Direction);
+            Vector3D v0 = m * g.Origin, v1 = m * g.Direction;
 
-            return FromIntersection(v0, v1);
+            return FromDirection(v0, v1);
         }
 
         public static Line3D operator *(Quaternion q, Line3D g) {
-            Vector3D v0 = q * g.Origin, v1 = q * (g.Origin + g.Direction);
+            Vector3D v0 = q * g.Origin, v1 = q * g.Direction;
 
-            return FromIntersection(v0, v1);
+            return FromDirection(v0, v1);
         }
 
         public static bool operator ==(Line3D g1, Line3D g2) {

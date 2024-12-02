@@ -87,15 +87,15 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public static Line2D operator *(Complex c, Line2D g) {
-            Vector2D v0 = c * g.Origin, v1 = c * (g.Origin + g.Direction);
+            Vector2D v0 = c * g.Origin, v1 = c * g.Direction;
 
-            return FromIntersection(v0, v1);
+            return FromDirection(v0, v1);
         }
 
         public static Line2D operator *(Matrix2D m, Line2D g) {
-            Vector2D v0 = m * g.Origin, v1 = m * (g.Origin + g.Direction);
+            Vector2D v0 = m * g.Origin, v1 = m * g.Direction;
 
-            return FromIntersection(v0, v1);
+            return FromDirection(v0, v1);
         }
 
         public static bool operator ==(Line2D g1, Line2D g2) {

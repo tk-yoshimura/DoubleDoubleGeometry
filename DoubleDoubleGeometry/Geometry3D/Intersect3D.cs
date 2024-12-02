@@ -107,15 +107,17 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public static (Vector3D v, ddouble t) LinePolygon(Line3D line, Polygon3D polygon) {
             Line3D line_rot = polygon.Rotation.Conj * (line - polygon.Center);
 
-            ddouble t = -line_rot.Origin.Z / line_rot.Direction.Z;
-            ddouble x = line_rot.Origin.X + line_rot.Direction.X * t;
-            ddouble y = line_rot.Origin.Y + line_rot.Direction.Y * t;
+            ddouble t = line_rot.Origin.Z / line_rot.Direction.Z;
+            ddouble x = line_rot.Origin.X - line_rot.Direction.X * t;
+            ddouble y = line_rot.Origin.Y - line_rot.Direction.Y * t;
 
             bool inside = polygon.Polygon.Inside((x, y));
 
             if (!inside) {
                 return (Vector3D.Invalid, ddouble.NaN);
             }
+
+            t = -t;
 
             Vector3D v = line.Point(t);
 

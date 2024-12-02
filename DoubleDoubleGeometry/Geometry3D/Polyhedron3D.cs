@@ -132,54 +132,126 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public BoundingBox3D BoundingBox => bbox ??= new BoundingBox3D(Vertex);
 
         public bool Inside(Vector3D v) {
-            if (IsConvex(this)) {
-                Vector3D u = v - Center;
+            Vector3D u = v - Center;
 
-                if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y
-                    || ddouble.Ldexp(u.Z, 1) > Size.Z) {
+            if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y
+                || ddouble.Ldexp(u.Z, 1) > Size.Z) {
+                return false;
+            }
+
+            ReadOnlyCollection<Plane3D> hull_planes = HullPlanes;
+
+            foreach (Plane3D plane in hull_planes) {
+                ddouble s = Vector3D.Dot(plane.Normal, v) + plane.D;
+
+                if (s > 0d) {
                     return false;
                 }
+            }
 
-                foreach (Polygon3D p in Polygons) {
-                    if (Vector3D.Dot(v - p.Center, p.Normal) > 0d) {
-                        return false;
-                    }
-                }
-
+            if (IsConvex(this)) {
                 return true;
             }
             else {
-                throw new NotImplementedException("not implemented: concave");
+                bool inside = false;
+                int c = 0;
+
+                foreach (Polygon3D p in Polygons) {
+                    BoundingBox3D bbox = p.BoundingBox;
+
+                    if (v.X <= bbox.Max.X && v.Y >= bbox.Min.Y && v.Y < bbox.Max.Y && v.Z >= bbox.Min.Z && v.Z < bbox.Max.Z) {
+                        //Quaternion rot = p.Rotation.Conj;
+
+                        //Vector3D origin = rot * (v - p.Center);
+                        //Vector3D dir = rot * new Vector3D(1d, 0d, 0d);
+
+                        //ddouble t = origin.Z / dir.Z;
+
+                        //if (t > 0d) {
+                        //    continue;
+                        //}
+
+                        //ddouble x = origin.X - dir.X * t;
+                        //ddouble y = origin.Y - dir.Y * t;
+
+                        //if (!p.Polygon.Inside((x, y))) { 
+                        //    continue;
+                        //}
+
+                        (Vector3D h, ddouble t) = Intersect3D.LinePolygon(Line3D.FromDirection(v, (1, 0, 0)), p);
+                        (Vector3D h2, ddouble t2) = Intersect3D.LineTriangle(Line3D.FromDirection(v, (1, 0, 0)),
+                            new Triangle3D(p.Vertex[0], p.Vertex[1], p.Vertex[2])
+                        );
+
+                        if (t >= 0d) {
+                            inside = !inside;
+                            c++;
+                        }
+                    }
+                }
+
+                return inside;
             }
         }
 
         public IEnumerable<bool> Inside(IEnumerable<Vector3D> vs) {
-            if (IsConvex(this)) {
-                Vector3D c = Center;
+            Vector3D c = Center;
+            ReadOnlyCollection<Plane3D> hull_planes = HullPlanes;
 
-                foreach (Vector3D v in vs) {
-                    Vector3D u = v - c;
+            foreach (Vector3D v in vs) {
+                Vector3D u = v - c;
 
-                    if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y
-                        || ddouble.Ldexp(u.Z, 1) > Size.Z) {
-                        yield return false;
-                        continue;
+                if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y
+                    || ddouble.Ldexp(u.Z, 1) > Size.Z) {
+                    yield return false;
+                    continue;
+                }
+
+                bool inside = true;
+
+                foreach (Plane3D plane in hull_planes) {
+                    ddouble s = Vector3D.Dot(plane.Normal, v) + plane.D;
+
+                    if (s > 0d) {
+                        inside = false;
+                        break;
                     }
+                }
 
-                    bool inside = true;
-
+                if (IsConvex(this)) {
+                    yield return inside;
+                }
+                else {
                     foreach (Polygon3D p in Polygons) {
-                        if (Vector3D.Dot(v - p.Center, p.Normal) > 0d) {
-                            inside = false;
-                            break;
+                        BoundingBox3D bbox = p.BoundingBox;
+
+                        if (v.X > bbox.Max.X || v.Y < bbox.Min.Y || v.Y >= bbox.Max.Y || v.Z < bbox.Min.Z || v.Z >= bbox.Max.Z) {
+                            continue;
                         }
+
+                        Quaternion rot = p.Rotation.Conj;
+
+                        Vector3D origin = rot * (v - p.Center);
+                        Vector3D dir = rot * new Vector3D(1d, 0d, 0d);
+
+                        ddouble t = origin.Z / dir.Z;
+
+                        if (t > 0d) {
+                            continue;
+                        }
+
+                        ddouble x = origin.X - dir.X * t;
+                        ddouble y = origin.Y - dir.Y * t;
+
+                        if (!p.Polygon.Inside((x, y))) {
+                            continue;
+                        }
+
+                        inside = !inside;
                     }
 
                     yield return inside;
                 }
-            }
-            else {
-                throw new NotImplementedException("not implemented: concave");
             }
         }
 
@@ -230,7 +302,44 @@ namespace DoubleDoubleGeometry.Geometry3D {
                         return convex ??= false;
                     }
 
-                    List<ddouble> ss = [];
+                    for (int vertex_index = 0; vertex_index < Vertices; vertex_index++) {
+                        if (face.Contains(vertex_index)) {
+                            continue;
+                        }
+
+                        Vector3D p = Vertex[vertex_index];
+
+                        ddouble s = Vector3D.Dot(plane.Normal, p) + plane.D;
+
+                        if (s > 0d) {
+                            return convex ??= false;
+                        }
+                    }
+                }
+
+                return convex ??= true;
+            }
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ReadOnlyCollection<Polygon3D> Polygons => (property ??= new PolyhedronProperty(this)).Polygons;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ReadOnlyCollection<Plane3D> hull_planes = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ReadOnlyCollection<Plane3D> HullPlanes {
+            get {
+                if (hull_planes is not null) {
+                    return hull_planes;
+                }
+
+                List<Plane3D> hull_plane_list = [];
+
+                ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = Planes;
+                ReadOnlyCollection<ReadOnlyCollection<int>> faces = Faces;
+
+                foreach (((Plane3D plane, bool is_convex), ReadOnlyCollection<int> face) in planes.Zip(faces)) {
+                    bool convex = true;
 
                     for (int vertex_index = 0; vertex_index < Vertices; vertex_index++) {
                         if (face.Contains(vertex_index)) {
@@ -241,20 +350,22 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
                         ddouble s = Vector3D.Dot(plane.Normal, p) + plane.D;
 
-                        ss.Add(s);
+                        if (s > 0d) {
+                            convex = false;
+                            break;
+                        }
                     }
 
-                    if (ss.Any(s => s < 0d) && ss.Any(s => s > 0d)) {
-                        return convex ??= false;
+                    if (convex) {
+                        hull_plane_list.Add(plane);
                     }
                 }
 
-                return convex ??= true;
+                hull_planes = hull_plane_list.AsReadOnly();
+
+                return hull_planes;
             }
         }
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ReadOnlyCollection<Polygon3D> Polygons => (property ??= new PolyhedronProperty(this)).Polygons;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IEnumerable<ddouble> FaceFlatness {
