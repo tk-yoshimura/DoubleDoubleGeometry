@@ -129,7 +129,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private BoundingBox3D bbox = null;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public BoundingBox3D BoundingBox => bbox ??= new BoundingBox3D(Center, (Radius, Radius, Radius)); 
+        public BoundingBox3D BoundingBox => bbox ??= new BoundingBox3D(Center, (Radius, Radius, Radius));
 
         public bool Inside(Vector3D v) {
             ddouble radius = ddouble.Abs(Radius);

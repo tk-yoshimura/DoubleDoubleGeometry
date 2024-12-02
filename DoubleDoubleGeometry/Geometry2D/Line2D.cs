@@ -10,19 +10,17 @@ namespace DoubleDoubleGeometry.Geometry2D {
     public class Line2D : IGeometry<Line2D, Vector2D>, IFormattable {
         public readonly Vector2D Origin, Direction;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public readonly ddouble A, B, C;
+
         private Line2D(Vector2D origin, Vector2D direction) {
             this.Origin = origin;
             this.Direction = direction;
+
+            this.A = -Direction.Y;
+            this.B = Direction.X;
+            this.C = -(Origin.X * A + Origin.Y * B);
         }
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble A => -Direction.Y;
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble B => Direction.X;
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ddouble C => -(Origin.X * A + Origin.Y * B);
 
         public Vector2D Point(ddouble t) {
             return Origin + t * Direction;
@@ -123,8 +121,15 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return (g.Origin, g.Direction);
         }
 
+        public static implicit operator (ddouble a, ddouble b, ddouble c)(Line2D g) {
+            return (g.A, g.B, g.C);
+        }
+
         public void Deconstruct(out Vector2D origin, out Vector2D direction)
             => (origin, direction) = (Origin, Direction);
+
+        public void Deconstruct(out ddouble a, out ddouble b, out ddouble c)
+            => (a, b, c) = (A, B, C);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static Line2D Invalid { get; } = new(Vector2D.Invalid, Vector2D.Invalid);

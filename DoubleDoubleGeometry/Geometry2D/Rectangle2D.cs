@@ -175,7 +175,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
             Complex c = Rotation.Conj;
 
             ddouble sx = ddouble.Abs(Scale.X), sy = ddouble.Abs(Scale.Y);
- 
+
             foreach (Vector2D v in vs) {
                 Vector2D u = c * (v - Center);
 

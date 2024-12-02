@@ -132,10 +132,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public BoundingBox3D BoundingBox => bbox ??= new BoundingBox3D(Vertex);
 
         public bool Inside(Vector3D v) {
+            bool is_convex = IsConvex(this);
             Vector3D u = v - Center;
 
-            if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y
-                || ddouble.Ldexp(u.Z, 1) > Size.Z) {
+            if (!(ddouble.Ldexp(u.X, 1) <= Size.X && ddouble.Ldexp(u.Y, 1) <= Size.Y && ddouble.Ldexp(u.Z, 1) <= Size.Z)) {
                 return false;
             }
 
@@ -195,14 +195,14 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public IEnumerable<bool> Inside(IEnumerable<Vector3D> vs) {
+            bool is_convex = IsConvex(this);
             Vector3D c = Center;
             ReadOnlyCollection<Plane3D> hull_planes = HullPlanes;
 
             foreach (Vector3D v in vs) {
                 Vector3D u = v - c;
 
-                if (ddouble.Ldexp(u.X, 1) > Size.X || ddouble.Ldexp(u.Y, 1) > Size.Y
-                    || ddouble.Ldexp(u.Z, 1) > Size.Z) {
+                if (!(ddouble.Ldexp(u.X, 1) <= Size.X && ddouble.Ldexp(u.Y, 1) <= Size.Y && ddouble.Ldexp(u.Z, 1) <= Size.Z)) {
                     yield return false;
                     continue;
                 }
@@ -218,7 +218,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                     }
                 }
 
-                if (IsConvex(this)) {
+                if (is_convex) {
                     yield return inside;
                 }
                 else {

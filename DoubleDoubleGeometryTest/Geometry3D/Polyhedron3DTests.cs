@@ -734,7 +734,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             int n = p.Vertices;
             bool[,] matrix = p.Connection.AdjacencyMatrix;
 
-            for (int i = 0; i < n; i++) { 
+            for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
                     Console.Write($"{(matrix[i, j] ? "■" : "□")}");
                 }

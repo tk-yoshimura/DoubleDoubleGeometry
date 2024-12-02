@@ -168,6 +168,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public BoundingBox2D BoundingBox => bbox ??= new BoundingBox2D(Vertex);
 
         public bool Inside(Vector2D v) {
+            bool is_convex = IsConvex(this);
             int n = Vertices;
 
             Vector2D u = v - Center;
@@ -176,21 +177,17 @@ namespace DoubleDoubleGeometry.Geometry2D {
                 return false;
             }
 
-            if (IsConvex(this)) {
-                int sgn = ddouble.Sign(Vector2D.Cross(v - Vertex[0], Vertex[n - 1] - Vertex[0]));
+            ReadOnlyCollection<Line2D> hull_lines = HullLines;
 
-                for (int i = 1; i < n; i++) {
-                    int s = ddouble.Sign(Vector2D.Cross(v - Vertex[i], Vertex[i - 1] - Vertex[i]));
+            foreach (Line2D line in hull_lines) {
+                ddouble s = line.A * v.X + line.B * v.Y + line.C;
 
-                    if (sgn * s < 0) {
-                        return false;
-                    }
-
-                    if (sgn == 0 && s != 0) {
-                        sgn = s;
-                    }
+                if (s > 0d) {
+                    return false;
                 }
+            }
 
+            if (is_convex) {
                 return true;
             }
             else {
@@ -227,48 +224,33 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public IEnumerable<bool> Inside(IEnumerable<Vector2D> vs) {
+            bool is_convex = IsConvex(this);
             int n = Vertices;
+            Vector2D c = Center;
+            ReadOnlyCollection<Line2D> hull_lines = HullLines;
 
-            if (IsConvex(this)) {
-                Vector2D[] delta = Vertex.Select((Vector2D v, int index) => Vertex[(index + n - 1) % n] - v).ToArray();
+            foreach (Vector2D v in vs) {
+                Vector2D u = v - c;
 
-                foreach (Vector2D v in vs) {
-                    Vector2D u = v - Center;
+                if (!(ddouble.Ldexp(u.X, 1) <= Size.X && ddouble.Ldexp(u.Y, 1) <= Size.Y)) {
+                    yield return false;
+                }
 
-                    if (!(ddouble.Ldexp(u.X, 1) <= Size.X && ddouble.Ldexp(u.Y, 1) <= Size.Y)) {
-                        yield return false;
-                        continue;
+                bool inside = true;
+
+                foreach (Line2D line in hull_lines) {
+                    ddouble s = line.A * v.X + line.B * v.Y + line.C;
+
+                    if (s > 0d) {
+                        inside = false;
+                        break;
                     }
+                }
 
-                    int sgn = ddouble.Sign(Vector2D.Cross(v - Vertex[0], delta[0]));
-
-                    bool inside = true;
-
-                    for (int i = 1; i < n; i++) {
-                        int s = ddouble.Sign(Vector2D.Cross(v - Vertex[i], delta[i]));
-
-                        if (sgn * s < 0) {
-                            inside = false;
-                            break;
-                        }
-
-                        if (sgn == 0 && s != 0) {
-                            sgn = s;
-                        }
-                    }
-
+                if (is_convex) {
                     yield return inside;
                 }
-            }
-            else {
-                foreach (Vector2D v in vs) {
-                    Vector2D u = v - Center;
-
-                    if (!(ddouble.Ldexp(u.X, 1) <= Size.X && ddouble.Ldexp(u.Y, 1) <= Size.Y)) {
-                        yield return false;
-                        continue;
-                    }
-
+                else {
                     static bool is_cross_h(Vector2D v0, Vector2D v1) {
                         if ((v0.Y <= 0d) != (v1.Y > 0d)) {
                             return false;
@@ -286,12 +268,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
                     Vector2D[] dv = Vertex.Select(vertex => vertex - v).ToArray();
 
-                    bool inside = false;
+                    inside = false;
 
                     if (is_cross_h(dv[n - 1], dv[0])) {
                         inside = !inside;
                     }
-
                     for (int i = 1; i < n; i++) {
                         if (is_cross_h(dv[i - 1], dv[i])) {
                             inside = !inside;
@@ -384,6 +365,55 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public static bool IsValid(Polygon2D g) {
             return g.Valid;
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ReadOnlyCollection<Line2D> hull_lines = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ReadOnlyCollection<Line2D> HullLines {
+            get {
+                if (hull_lines is not null) {
+                    return hull_lines;
+                }
+
+                List<Line2D> hull_line_list = [];
+
+                int n = Vertices;
+
+                for (int i0 = 0, i1 = 1; i0 < n; i0++, i1 = (i0 + 1) % n) {
+                    Line2D line = Line2D.FromIntersection(Vertex[i0], Vertex[i1]);
+
+                    (ddouble a, ddouble b, ddouble c) = line;
+
+                    List<ddouble> ss = [];
+
+                    for (int j = 0; j < n; j++) {
+                        if (j == i0 || j == i1) {
+                            continue;
+                        }
+
+                        Vector2D v = Vertex[j];
+
+                        ddouble s = a * v.X + b * v.Y + c;
+
+                        ss.Add(s);
+                    }
+
+                    if (ss.Any(s => s < 0d) && ss.Any(s => s > 0d)) {
+                        continue;
+                    }
+
+                    if (ss.All(s => s > 0d)) {
+                        (a, b, c) = (-a, -b, -c);
+                    }
+
+                    hull_line_list.Add(Line2D.FromImplicit(a, b, c));
+                }
+
+                hull_lines = hull_line_list.AsReadOnly();
+
+                return hull_lines;
+            }
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

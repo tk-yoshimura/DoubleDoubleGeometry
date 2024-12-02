@@ -19,6 +19,7 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         public void FromImplicitTest() {
             Line2D line1 = Line2D.FromDirection((6, 1), (-1, 2));
             Line2D line2 = Line2D.FromImplicit("0.8", "0.6", 2);
+            Line2D line3 = Line2D.FromImplicit("-0.8", "-0.6", -2);
 
             PrecisionAssert.AreEqual(Vector2D.Dot(line1.Point(0), (line1.A, line1.B)) + line1.C, 0d, 1e-30);
             PrecisionAssert.AreEqual(Vector2D.Dot(line1.Point(1), (line1.A, line1.B)) + line1.C, 0d, 1e-30);
@@ -27,6 +28,10 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             PrecisionAssert.AreEqual("0.8", line2.A, 1e-30);
             PrecisionAssert.AreEqual("0.6", line2.B, 1e-30);
             PrecisionAssert.AreEqual(2, line2.C, 1e-30);
+
+            PrecisionAssert.AreEqual("-0.8", line3.A, 1e-30);
+            PrecisionAssert.AreEqual("-0.6", line3.B, 1e-30);
+            PrecisionAssert.AreEqual(-2, line3.C, 1e-30);
         }
 
         [TestMethod()]

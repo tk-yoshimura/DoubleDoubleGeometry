@@ -22,7 +22,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public BoundingBox2D(params Vector2D[] vs) {
             Vector2D min = vs.Min(), max = vs.Max();
-            
+
             this.Center = (min + max) / 2d;
             this.Scale = (max - min) / 2d;
             this.Max = max;
@@ -31,7 +31,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public BoundingBox2D(IEnumerable<Vector2D> vs) {
             Vector2D min = vs.Min(), max = vs.Max();
-            
+
             this.Center = (min + max) / 2d;
             this.Scale = (max - min) / 2d;
             this.Max = max;
