@@ -208,11 +208,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
                 Vector2D[] dv = Vertex.Select(vertex => vertex - v).ToArray();
 
-                bool inside = false;
-
-                if (is_cross_h(dv[n - 1], dv[0])) {
-                    inside = !inside;
-                }
+                bool inside = is_cross_h(dv[n - 1], dv[0]);
                 for (int i = 1; i < n; i++) {
                     if (is_cross_h(dv[i - 1], dv[i])) {
                         inside = !inside;
@@ -268,11 +264,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
                     Vector2D[] dv = Vertex.Select(vertex => vertex - v).ToArray();
 
-                    inside = false;
-
-                    if (is_cross_h(dv[n - 1], dv[0])) {
-                        inside = !inside;
-                    }
+                    inside = is_cross_h(dv[n - 1], dv[0]);
                     for (int i = 1; i < n; i++) {
                         if (is_cross_h(dv[i - 1], dv[i])) {
                             inside = !inside;
