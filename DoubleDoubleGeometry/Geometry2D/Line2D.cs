@@ -15,6 +15,15 @@ namespace DoubleDoubleGeometry.Geometry2D {
             this.Direction = direction;
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble A => -Direction.Y;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble B => Direction.X;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble C => -(Origin.X * A + Origin.Y * B);
+
         public Vector2D Point(ddouble t) {
             return Origin + t * Direction;
         }

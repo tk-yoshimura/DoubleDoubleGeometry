@@ -1,6 +1,7 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
+using PrecisionTestTools;
 
 namespace DoubleDoubleGeometryTest.Geometry2D {
     [TestClass()]
@@ -12,6 +13,20 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
             Vector2DAssert.AreEqual((6 * 1 + 2, 1 * 2 + 4), line2.Origin, 1e-30);
             Vector2DAssert.AreEqual(new Vector2D(-1 * 1, 2 * 2).Normal, line2.Direction, 1e-30);
+        }
+
+        [TestMethod()]
+        public void FromImplicitTest() {
+            Line2D line1 = Line2D.FromDirection((6, 1), (-1, 2));
+            Line2D line2 = Line2D.FromImplicit("0.8", "0.6", 2);
+
+            PrecisionAssert.AreEqual(Vector2D.Dot(line1.Point(0), (line1.A, line1.B)) + line1.C, 0d, 1e-30);
+            PrecisionAssert.AreEqual(Vector2D.Dot(line1.Point(1), (line1.A, line1.B)) + line1.C, 0d, 1e-30);
+            PrecisionAssert.AreEqual(Vector2D.Dot(line1.Point(2), (line1.A, line1.B)) + line1.C, 0d, 1e-30);
+
+            PrecisionAssert.AreEqual("0.8", line2.A, 1e-30);
+            PrecisionAssert.AreEqual("0.6", line2.B, 1e-30);
+            PrecisionAssert.AreEqual(2, line2.C, 1e-30);
         }
 
         [TestMethod()]
