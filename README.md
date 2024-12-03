@@ -1,5 +1,5 @@
 # DoubleDoubleGeometry
- Double-Double Geometry 2D/3D Implements
+ Double-Double Geometry 2D/3D Implements 
 
 ## Requirement
  .NET 8.0
