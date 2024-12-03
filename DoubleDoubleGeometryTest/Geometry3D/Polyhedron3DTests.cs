@@ -590,33 +590,33 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             List<Vector3D> insides = [], outsides = [];
 
-            //foreach (Polygon3D polygon in p.Polygons) {
-            //    insides.Add(polygon.Center * 0.95);
-            //    insides.Add(polygon.Center * 0.75);
+            foreach (Polygon3D polygon in p.Polygons) {
+                insides.Add(polygon.Center * 0.95);
+                insides.Add(polygon.Center * 0.75);
 
-            //    outsides.Add(polygon.Center * 1.05);
-            //    outsides.Add(polygon.Center * 1.25);
+                outsides.Add(polygon.Center * 1.05);
+                outsides.Add(polygon.Center * 1.25);
 
-            //    foreach (Vector3D v in polygon.Vertex) {
-            //        insides.Add((polygon.Center + v) / 2 * 0.95);
-            //        insides.Add((polygon.Center + v) / 2 * 0.75);
+                foreach (Vector3D v in polygon.Vertex) {
+                    insides.Add((polygon.Center + v) / 2 * 0.95);
+                    insides.Add((polygon.Center + v) / 2 * 0.75);
 
-            //        outsides.Add((polygon.Center + v) / 2 * 1.05);
-            //        outsides.Add((polygon.Center + v) / 2 * 1.25);
+                    outsides.Add((polygon.Center + v) / 2 * 1.05);
+                    outsides.Add((polygon.Center + v) / 2 * 1.25);
 
-            //        insides.Add((polygon.Center * 3 + v) / 4 * 0.95);
-            //        insides.Add((polygon.Center * 3 + v) / 4 * 0.75);
+                    insides.Add((polygon.Center * 3 + v) / 4 * 0.95);
+                    insides.Add((polygon.Center * 3 + v) / 4 * 0.75);
 
-            //        outsides.Add((polygon.Center * 3 + v) / 4 * 1.05);
-            //        outsides.Add((polygon.Center * 3 + v) / 4 * 1.25);
+                    outsides.Add((polygon.Center * 3 + v) / 4 * 1.05);
+                    outsides.Add((polygon.Center * 3 + v) / 4 * 1.25);
 
-            //        insides.Add((polygon.Center + v * 3) / 4 * 0.95);
-            //        insides.Add((polygon.Center + v * 3) / 4 * 0.75);
+                    insides.Add((polygon.Center + v * 3) / 4 * 0.95);
+                    insides.Add((polygon.Center + v * 3) / 4 * 0.75);
 
-            //        outsides.Add((polygon.Center + v * 3) / 4 * 1.05);
-            //        outsides.Add((polygon.Center + v * 3) / 4 * 1.25);
-            //    }
-            //}
+                    outsides.Add((polygon.Center + v * 3) / 4 * 1.05);
+                    outsides.Add((polygon.Center + v * 3) / 4 * 1.25);
+                }
+            }
 
             foreach (Vector3D v in p.Vertex.Skip(1)) {
                 insides.Add(v * 0.95);
@@ -624,6 +624,154 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
                 outsides.Add(v * 1.05);
                 outsides.Add(v * 1.25);
+            }
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(p.Inside(v));
+            }
+
+            Assert.IsTrue(p.Inside(insides).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(p.Inside(v));
+            }
+
+            Assert.IsTrue(p.Inside(outsides).All(b => !b));
+
+            Matrix3D m = new double[,] { { 1, 2, 7 }, { 3, 5, 8 }, { -2, 4, 6 } };
+            Vector3D s = (4, 6, 5);
+
+            Polyhedron3D p2 = m * p + s;
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(p2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(p2.Inside(insides.Select(v => m * v + s)).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(p2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(p2.Inside(outsides.Select(v => m * v + s)).All(b => !b));
+        }
+
+        [TestMethod()]
+        public void InsideTest4() {
+            Polyhedron3D p = new(
+                new Connection(12, 
+                    (0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 0), 
+                    (6, 7), (7, 8), (8, 9), (9, 10), (10, 11), (11, 6),
+                    (0, 6), (1, 7), (2, 8), (3, 9), (4, 10), (5, 11)
+                ), 
+                (-1, 1, -1), (0, 1, -1), (0.25, 0.25, -1), (1, 0, -1), (1, -1, -1), (-1, -1, -1),
+                (-1, 1, +1), (0, 1, +1), (0.25, 0.25, +1), (1, 0, +1), (1, -1, +1), (-1, -1, +1)
+            );
+
+            Assert.IsFalse(Polyhedron3D.IsConvex(p));
+
+            PrecisionAssert.AreEqual(6.5, p.Volume);
+
+            Assert.AreEqual(8, p.Faces.Count);
+
+            List<Vector3D> insides = [], outsides = [];
+
+            foreach (Polygon3D polygon in p.Polygons) {
+                insides.Add(polygon.Center * 0.95);
+                insides.Add(polygon.Center * 0.75);
+
+                outsides.Add(polygon.Center * 1.05);
+                outsides.Add(polygon.Center * 1.25);
+
+                foreach (Vector3D v in polygon.Vertex) {
+                    insides.Add((polygon.Center + v) / 2 * 0.95);
+                    insides.Add((polygon.Center + v) / 2 * 0.75);
+
+                    outsides.Add((polygon.Center + v) / 2 * 1.05);
+                    outsides.Add((polygon.Center + v) / 2 * 1.25);
+
+                    insides.Add((polygon.Center * 3 + v) / 4 * 0.95);
+                    insides.Add((polygon.Center * 3 + v) / 4 * 0.75);
+
+                    outsides.Add((polygon.Center * 3 + v) / 4 * 1.05);
+                    outsides.Add((polygon.Center * 3 + v) / 4 * 1.25);
+
+                    insides.Add((polygon.Center + v * 3) / 4 * 0.95);
+                    insides.Add((polygon.Center + v * 3) / 4 * 0.75);
+
+                    outsides.Add((polygon.Center + v * 3) / 4 * 1.05);
+                    outsides.Add((polygon.Center + v * 3) / 4 * 1.25);
+                }
+            }
+
+            foreach (Vector3D v in p.Vertex.Skip(1)) {
+                insides.Add(v * 0.95);
+                insides.Add(v * 0.75);
+
+                outsides.Add(v * 1.05);
+                outsides.Add(v * 1.25);
+            }
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(p.Inside(v));
+            }
+
+            Assert.IsTrue(p.Inside(insides).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(p.Inside(v));
+            }
+
+            Assert.IsTrue(p.Inside(outsides).All(b => !b));
+
+            Matrix3D m = new double[,] { { 1, 2, 7 }, { 3, 5, 8 }, { -2, 4, 6 } };
+            Vector3D s = (4, 6, 5);
+
+            Polyhedron3D p2 = m * p + s;
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(p2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(p2.Inside(insides.Select(v => m * v + s)).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(p2.Inside(m * v + s));
+            }
+
+            Assert.IsTrue(p2.Inside(outsides.Select(v => m * v + s)).All(b => !b));
+        }
+
+        [TestMethod()]
+        public void InsideTest5() {
+            Polyhedron3D p = new(
+                new Connection(16, 
+                    (0, 1), (1, 2), (2, 3), (3, 0), 
+                    (4, 5), (5, 6), (6, 7), (7, 4), 
+                    (8, 9), (9, 10), (10, 11), (11, 8), 
+                    (12, 13), (13, 14), (14, 15), (15, 12),
+                    (0, 4), (4, 8), (8, 12), (12, 0),
+                    (1, 5), (5, 9), (9, 13), (13, 1),
+                    (2, 6), (6, 10), (10, 14), (14, 2),
+                    (3, 7), (7, 11), (11, 15), (15, 3)
+                ), 
+                (0, 1, 0), (0, 2, -1), (0, 3, 0), (0, 2, 1), 
+                (1, 0, 0), (2, 0, -1), (3, 0, 0), (2, 0, 1),
+                (0, -1, 0), (0, -2, -1), (0, -3, 0), (0, -2, 1), 
+                (-1, 0, 0), (-2, 0, -1), (-3, 0, 0), (-2, 0, 1)
+            );
+
+            Assert.IsFalse(Polyhedron3D.IsConvex(p));
+
+            PrecisionAssert.AreEqual(8, p.Volume);
+
+            List<Vector3D> insides = [], outsides = [];
+
+            foreach (Polygon3D polygon in p.Polygons) {
+                insides.Add((0, 1.125, 0));
+                insides.Add((0, 2, -0.875));
+                insides.Add((0, 2.875, 0));
+                insides.Add((0, 2, 0.875));
             }
 
             foreach (Vector3D v in insides) {

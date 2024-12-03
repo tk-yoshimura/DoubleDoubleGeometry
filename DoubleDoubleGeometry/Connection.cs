@@ -209,8 +209,8 @@ namespace DoubleDoubleGeometry {
             }
         }
 
-        public IEnumerable<ReadOnlyCollection<int>> EnumerateCycle() {
-            ReadOnlyCollection<ReadOnlyCollection<int>> cycles = Cycles;
+        public IEnumerable<Cycle> EnumerateCycle() {
+            ReadOnlyCollection<Cycle> cycles = Cycles;
 
             foreach (var c in cycles) {
                 yield return c;
@@ -218,98 +218,94 @@ namespace DoubleDoubleGeometry {
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ReadOnlyCollection<ReadOnlyCollection<int>> cycles = null;
+        private ReadOnlyCollection<Cycle> cycles = null;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ReadOnlyCollection<ReadOnlyCollection<int>> Cycles {
+        public ReadOnlyCollection<Cycle> Cycles {
             get {
                 if (this.cycles is not null) {
                     return this.cycles;
                 }
 
-                static (int, int) edge_index(int from, int to) {
-                    return (int.Min(from, to), int.Max(from, to));
-                }
+                List<Cycle> cycles = [];
 
-                List<ReadOnlyCollection<int>> cycles = [];
-                List<(int from, int to)> used_edge = [];
-                Dictionary<(int from, int to), int> edge_count = [];
+                List<(int from, int to)> start_edge = [];
+
+                List<(int from, int to)> unused_edge = [];
                 foreach ((int from, int to) in EnumerateEdge()) {
-                    edge_count[(from, to)] = 0;
+                    unused_edge.Add((from, to));
+                    unused_edge.Add((to, from));
                 }
 
-                for (int start_node = 0; start_node < Vertices;) {
-                    List<(int from, int to)> visited_edge = [];
-                    Queue<(int from, int to)> queue = new();
-                    Dictionary<(int from, int to), List<int>> paths = [];
-
-                    foreach (int next_node in map[start_node]) {
-                        if (edge_count[edge_index(start_node, next_node)] >= 2) {
-                            continue;
-                        }
-
-                        queue.Enqueue((start_node, next_node));
-                        paths[(start_node, next_node)] = [start_node, next_node];
-                    }
-
-                    if (queue.Count <= 1) {
-                        start_node++;
-                        continue;
+                while (unused_edge.Count > 0) {
+                    if (start_edge.Count <= 0) {
+                        start_edge.Add(unused_edge.First());
+                        unused_edge.RemoveAt(0);
                     }
 
                     bool searched = false;
 
-                    while (queue.Count > 0 && !searched) {
-                        (int from_node, int to_node) = queue.Dequeue();
-                        List<int> path = paths[(from_node, to_node)];
+                    while (start_edge.Count > 0 && !searched) {
+                        (int start_node, int to_node) = start_edge.First();
+                        start_edge.RemoveAt(0);
 
-                        visited_edge.Add((from_node, to_node));
+                        List<(int from, int to)> visited_edge = [];
 
-                        foreach (int next_node in map[to_node]) {
-                            if (next_node == from_node || edge_count[edge_index(to_node, next_node)] >= 2) {
-                                continue;
-                            }
+                        Queue<(int from, int to)> queue = new();
+                        queue.Enqueue((start_node, to_node));
 
-                            if (next_node == start_node && !cycles.Any(cycle => cycle.SequenceEqual(path))) {
-                                if (used_edge.Contains((path[0], path[1]))) {
-                                    cycles.Add(ReverseCycleIndexes(path.AsReadOnly()));
+                        Dictionary<(int from, int to), List<int>> paths = [];
+                        paths[(start_node, to_node)] = [start_node, to_node];
+
+                        while (queue.Count > 0 && !searched) {
+                            (int from_node, to_node) = queue.Dequeue();
+                            List<int> path = paths[(from_node, to_node)];
+
+                            visited_edge.Add((from_node, to_node));
+
+                            foreach (int next_node in map[to_node]) {
+                                if (next_node == from_node || !unused_edge.Contains((to_node, next_node))) {
+                                    continue;
                                 }
-                                else {
-                                    cycles.Add(path.AsReadOnly());
+
+                                if (next_node == start_node) {
+                                    Cycle new_cycle = new(path.AsReadOnly());
+
+                                    if (cycles.Contains(new_cycle) || cycles.Contains(Cycle.Opposite(new_cycle))) {
+                                        continue;
+                                    }
+
+                                    cycles.Add(new_cycle);
+
+                                    searched = true;
+                                    break;
                                 }
 
-                                searched = true;
-                                break;
-                            }
+                                if (path.Contains(next_node)) {
+                                    continue;
+                                }
 
-                            if (path.Contains(next_node)) {
-                                continue;
+                                (int, int) edge = (to_node, next_node);
+                                queue.Enqueue(edge);
+                                paths[edge] = [.. path, next_node];
                             }
-
-                            (int, int) edge = (to_node, next_node);
-                            queue.Enqueue(edge);
-                            paths[edge] = [.. path, next_node];
                         }
                     }
 
-                    if (!searched) {
-                        start_node++;
-                        continue;
-                    }
+                    if (searched) {
+                        Cycle cycle = cycles.Last();
 
-                    ReadOnlyCollection<int> cycle = cycles.Last();
+                        foreach ((int i, int j) in cycle.Edge) {
+                            unused_edge.Remove((i, j));
+                            start_edge.Remove((i, j));
 
-                    for (int i = 1; i < cycle.Count; i++) {
-                        edge_count[edge_index(cycle[i - 1], cycle[i])]++;
-                        used_edge.Add((cycle[i - 1], cycle[i]));
+                            if (unused_edge.Contains((j, i)) && !start_edge.Contains((j, i))) {
+                                start_edge.Add((j, i));
+                            }
+                        }
                     }
-                    edge_count[edge_index(cycle[^1], cycle[0])]++;
-                    used_edge.Add((cycle[^1], cycle[0]));
                 }
-
-                Debug.Assert(used_edge.Count == Edges * 2);
-                Debug.Assert(used_edge.Distinct().Count() == used_edge.Count);
-
-                this.cycles = cycles.AsReadOnly();
+                
+                this.cycles = cycles.Order().ToArray().AsReadOnly();
 
                 return this.cycles;
             }
@@ -365,20 +361,6 @@ namespace DoubleDoubleGeometry {
 
         public static bool IsValid(Connection c) {
             return c.Valid;
-        }
-
-        public static ReadOnlyCollection<int> ReverseCycleIndexes(ReadOnlyCollection<int> indexes) {
-            if (indexes.Count < 2) {
-                return indexes;
-            }
-
-            List<int> indexes_reversed = [indexes[0]];
-
-            for (int i = 1; i < indexes.Count; i++) {
-                indexes_reversed.Add(indexes[^i]);
-            }
-
-            return indexes_reversed.AsReadOnly();
         }
 
         public override string ToString() {

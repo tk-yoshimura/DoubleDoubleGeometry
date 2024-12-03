@@ -222,11 +222,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public IEnumerable<bool> Inside(IEnumerable<Vector2D> vs) {
             bool is_convex = IsConvex(this);
             int n = Vertices;
-            Vector2D c = Center;
+            Vector2D center = Center;
             ReadOnlyCollection<Line2D> hull_lines = HullLines;
 
             foreach (Vector2D v in vs) {
-                Vector2D u = v - c;
+                Vector2D u = v - center;
 
                 if (!(ddouble.Ldexp(u.X, 1) <= Size.X && ddouble.Ldexp(u.Y, 1) <= Size.Y)) {
                     yield return false;

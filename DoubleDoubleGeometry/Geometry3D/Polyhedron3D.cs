@@ -153,42 +153,37 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 return true;
             }
             else {
-                bool inside = false;
-                int c = 0;
+                ReadOnlyCollection<Cycle> faces = Faces;
 
-                foreach (Polygon3D p in Polygons) {
-                    BoundingBox3D bbox = p.BoundingBox;
+                Vector3D[] dv = Vertex.Select(vertex => vertex - v).ToArray();
 
-                    if (v.X <= bbox.Max.X && v.Y >= bbox.Min.Y && v.Y < bbox.Max.Y && v.Z >= bbox.Min.Z && v.Z < bbox.Max.Z) {
-                        //Quaternion rot = p.Rotation.Conj;
+                ddouble s = 0d;
 
-                        //Vector3D origin = rot * (v - p.Center);
-                        //Vector3D dir = rot * new Vector3D(1d, 0d, 0d);
+                foreach (Cycle face in faces) {
+                    Vector3D v0 = dv[face[0]];
 
-                        //ddouble t = origin.Z / dir.Z;
+                    for (int i = 2, n = face.Count; i < n; i++) {
+                        Vector3D v1 = dv[face[i - 1]], v2 = dv[face[i]];
 
-                        //if (t > 0d) {
-                        //    continue;
-                        //}
+                        Vector3D n01 = Vector3D.Cross(v0, v1).Normal;
+                        Vector3D n12 = Vector3D.Cross(v1, v2).Normal;
+                        Vector3D n20 = Vector3D.Cross(v2, v0).Normal;
 
-                        //ddouble x = origin.X - dir.X * t;
-                        //ddouble y = origin.Y - dir.Y * t;
+                        ddouble a = ddouble.Acos(ddouble.Clamp(-Vector3D.Dot(n01, n12), -1d, 1d));
+                        ddouble b = ddouble.Acos(ddouble.Clamp(-Vector3D.Dot(n12, n20), -1d, 1d));
+                        ddouble c = ddouble.Acos(ddouble.Clamp(-Vector3D.Dot(n20, n01), -1d, 1d));
 
-                        //if (!p.Polygon.Inside((x, y))) { 
-                        //    continue;
-                        //}
+                        ddouble r = Vector3D.Dot(v0, Vector3D.Cross(v1 - v0, v2 - v0));
 
-                        (Vector3D h, ddouble t) = Intersect3D.LinePolygon(Line3D.FromDirection(v, (1, 0, 0)), p);
-                        (Vector3D h2, ddouble t2) = Intersect3D.LineTriangle(Line3D.FromDirection(v, (1, 0, 0)),
-                            new Triangle3D(p.Vertex[0], p.Vertex[1], p.Vertex[2])
-                        );
+                        ddouble abc = ddouble.Sign(r) * (a + b + c - ddouble.Pi);
 
-                        if (t >= 0d) {
-                            inside = !inside;
-                            c++;
+                        if (ddouble.IsFinite(abc)) {
+                            s += abc;
                         }
                     }
                 }
+
+                bool inside = s >= ddouble.Ldexp(ddouble.Pi, 1);
 
                 return inside;
             }
@@ -196,11 +191,12 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public IEnumerable<bool> Inside(IEnumerable<Vector3D> vs) {
             bool is_convex = IsConvex(this);
-            Vector3D c = Center;
+            Vector3D center = Center;
             ReadOnlyCollection<Plane3D> hull_planes = HullPlanes;
+            ReadOnlyCollection<Cycle> faces = Faces;
 
             foreach (Vector3D v in vs) {
-                Vector3D u = v - c;
+                Vector3D u = v - center;
 
                 if (!(ddouble.Ldexp(u.X, 1) <= Size.X && ddouble.Ldexp(u.Y, 1) <= Size.Y && ddouble.Ldexp(u.Z, 1) <= Size.Z)) {
                     yield return false;
@@ -222,33 +218,35 @@ namespace DoubleDoubleGeometry.Geometry3D {
                     yield return inside;
                 }
                 else {
-                    foreach (Polygon3D p in Polygons) {
-                        BoundingBox3D bbox = p.BoundingBox;
+                    Vector3D[] dv = Vertex.Select(vertex => vertex - v).ToArray();
 
-                        if (v.X > bbox.Max.X || v.Y < bbox.Min.Y || v.Y >= bbox.Max.Y || v.Z < bbox.Min.Z || v.Z >= bbox.Max.Z) {
-                            continue;
+                    ddouble s = 0d;
+
+                    foreach (Cycle face in faces) {
+                        Vector3D v0 = dv[face[0]];
+
+                        for (int i = 2, n = face.Count; i < n; i++) {
+                            Vector3D v1 = dv[face[i - 1]], v2 = dv[face[i]];
+
+                            Vector3D n01 = Vector3D.Cross(v0, v1).Normal;
+                            Vector3D n12 = Vector3D.Cross(v1, v2).Normal;
+                            Vector3D n20 = Vector3D.Cross(v2, v0).Normal;
+
+                            ddouble a = ddouble.Acos(ddouble.Clamp(-Vector3D.Dot(n01, n12), -1d, 1d));
+                            ddouble b = ddouble.Acos(ddouble.Clamp(-Vector3D.Dot(n12, n20), -1d, 1d));
+                            ddouble c = ddouble.Acos(ddouble.Clamp(-Vector3D.Dot(n20, n01), -1d, 1d));
+
+                            ddouble r = Vector3D.Dot(v0, Vector3D.Cross(v1 - v0, v2 - v0));
+
+                            ddouble abc = ddouble.Sign(r) * (a + b + c - ddouble.Pi);
+
+                            if (ddouble.IsFinite(abc)) {
+                                s += abc;
+                            }
                         }
-
-                        Quaternion rot = p.Rotation.Conj;
-
-                        Vector3D origin = rot * (v - p.Center);
-                        Vector3D dir = rot * new Vector3D(1d, 0d, 0d);
-
-                        ddouble t = origin.Z / dir.Z;
-
-                        if (t > 0d) {
-                            continue;
-                        }
-
-                        ddouble x = origin.X - dir.X * t;
-                        ddouble y = origin.Y - dir.Y * t;
-
-                        if (!p.Polygon.Inside((x, y))) {
-                            continue;
-                        }
-
-                        inside = !inside;
                     }
+
+                    inside = s >= ddouble.Ldexp(ddouble.Pi, 1);
 
                     yield return inside;
                 }
@@ -279,7 +277,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public ReadOnlyCollection<(Plane3D plane, bool is_convex)> Planes => (property ??= new PolyhedronProperty(this)).Planes;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ReadOnlyCollection<ReadOnlyCollection<int>> Faces => (property ??= new PolyhedronProperty(this)).Faces;
+        public ReadOnlyCollection<Cycle> Faces => (property ??= new PolyhedronProperty(this)).Faces;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private bool? convex = null;
@@ -295,9 +293,9 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 }
 
                 ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = Planes;
-                ReadOnlyCollection<ReadOnlyCollection<int>> faces = Faces;
+                ReadOnlyCollection<Cycle> faces = Faces;
 
-                foreach (((Plane3D plane, bool is_convex), ReadOnlyCollection<int> face) in planes.Zip(faces)) {
+                foreach (((Plane3D plane, bool is_convex), Cycle face) in planes.Zip(faces)) {
                     if (!is_convex) {
                         return convex ??= false;
                     }
@@ -336,9 +334,9 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 List<Plane3D> hull_plane_list = [];
 
                 ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = Planes;
-                ReadOnlyCollection<ReadOnlyCollection<int>> faces = Faces;
+                ReadOnlyCollection<Cycle> faces = Faces;
 
-                foreach (((Plane3D plane, bool is_convex), ReadOnlyCollection<int> face) in planes.Zip(faces)) {
+                foreach (((Plane3D plane, bool is_convex), Cycle face) in planes.Zip(faces)) {
                     bool convex = true;
 
                     for (int vertex_index = 0; vertex_index < Vertices; vertex_index++) {
@@ -371,9 +369,9 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public IEnumerable<ddouble> FaceFlatness {
             get {
                 ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = Planes;
-                ReadOnlyCollection<ReadOnlyCollection<int>> faces = Faces;
+                ReadOnlyCollection<Cycle> faces = Faces;
 
-                foreach (((Plane3D plane, bool is_convex), ReadOnlyCollection<int> face) in planes.Zip(faces)) {
+                foreach (((Plane3D plane, bool is_convex), Cycle face) in planes.Zip(faces)) {
                     IEnumerable<Vector3D> vs = face.Select(i => Vertex[i]);
                     IEnumerable<Vector3D> us = plane.Projection(vs);
 
@@ -494,23 +492,22 @@ namespace DoubleDoubleGeometry.Geometry3D {
             public readonly ddouble Volume;
             public readonly ReadOnlyCollection<Polygon3D> Polygons;
             public readonly ReadOnlyCollection<(Plane3D plane, bool is_convex)> Planes;
-            public readonly ReadOnlyCollection<ReadOnlyCollection<int>> Faces;
+            public readonly ReadOnlyCollection<Cycle> Faces;
 
             public PolyhedronProperty(Polyhedron3D g) {
-                ReadOnlyCollection<ReadOnlyCollection<int>> faces = g.Connection.Cycles;
+                ReadOnlyCollection<Cycle> faces = g.Connection.Cycles;
                 ddouble volume = EvalVolume(g, faces);
 
                 if (ddouble.IsNegative(volume)) {
                     volume = -volume;
-                    faces = faces.Select(Connection.ReverseCycleIndexes).ToList().AsReadOnly();
+                    faces = faces.Select(Cycle.Opposite).ToList().AsReadOnly();
                 }
 
                 (List<(Plane3D, bool)> plane_list, List<Polygon3D> polygon_list) = EnumPolygons(g, faces);
 
                 int[] indexes = faces
                     .Select((face, idx) => (face, idx))
-                    .OrderBy(item => item.face[0])
-                    .ThenBy(item => item.face[1])
+                    .OrderBy(item => item.face)
                     .Select(item => item.idx).ToArray();
 
                 Volume = volume;
@@ -519,14 +516,14 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 Polygons = indexes.Select(index => polygon_list[index]).ToList().AsReadOnly();
             }
 
-            private static ddouble EvalVolume(Polyhedron3D g, ReadOnlyCollection<ReadOnlyCollection<int>> faces) {
+            private static ddouble EvalVolume(Polyhedron3D g, ReadOnlyCollection<Cycle> faces) {
                 static ddouble vol(Vector3D v1, Vector3D v2, Vector3D v3) {
                     return Vector3D.Dot(Vector3D.Cross(v1, v2), v3);
                 }
 
                 ddouble volume = 0d;
 
-                foreach (ReadOnlyCollection<int> face in faces) {
+                foreach (Cycle face in faces) {
                     for (int i = 1; i < face.Count - 1; i++) {
                         volume += vol(g.Vertex[face[0]], g.Vertex[face[i]], g.Vertex[face[i + 1]]);
                     }
@@ -536,11 +533,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 return volume;
             }
 
-            private static (List<(Plane3D, bool)> plane_list, List<Polygon3D> polygon_list) EnumPolygons(Polyhedron3D g, ReadOnlyCollection<ReadOnlyCollection<int>> faces) {
+            private static (List<(Plane3D, bool)> plane_list, List<Polygon3D> polygon_list) EnumPolygons(Polyhedron3D g, ReadOnlyCollection<Cycle> faces) {
                 List<(Plane3D, bool)> plane_list = [];
                 List<Polygon3D> polygon_list = [];
 
-                foreach (ReadOnlyCollection<int> face in faces) {
+                foreach (Cycle face in faces) {
                     int n = face.Count;
                     Vector3D[] vertex_polygon = face.Select(idx => g.Vertex[idx]).ToArray();
 
