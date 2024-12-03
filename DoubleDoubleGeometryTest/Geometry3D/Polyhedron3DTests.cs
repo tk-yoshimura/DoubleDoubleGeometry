@@ -746,14 +746,23 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         public void InsideTest5() {
             Polyhedron3D p = new(
                 new Connection(16, 
-                    (0, 1), (1, 2), (2, 3), (3, 0), 
-                    (4, 5), (5, 6), (6, 7), (7, 4), 
-                    (8, 9), (9, 10), (10, 11), (11, 8), 
-                    (12, 13), (13, 14), (14, 15), (15, 12),
-                    (0, 4), (4, 8), (8, 12), (12, 0),
-                    (1, 5), (5, 9), (9, 13), (13, 1),
-                    (2, 6), (6, 10), (10, 14), (14, 2),
-                    (3, 7), (7, 11), (11, 15), (15, 3)
+                    new Cycle(0, 1, 5, 4), 
+                    new Cycle(4, 5, 9, 8),
+                    new Cycle(8, 9, 13, 12),
+                    new Cycle(12, 13, 1, 0),
+                    new Cycle(1, 2, 6, 5),
+                    new Cycle(5, 6, 10, 9),
+                    new Cycle(9, 10, 14, 13),
+                    new Cycle(13, 14, 2, 1),
+                    //new Cycle(2, 3, 7, 6),
+                    new Cycle(2, 6, 7, 3),
+                    new Cycle(6, 7, 11, 10),
+                    new Cycle(10, 11, 15, 14),
+                    new Cycle(14, 15, 3, 2),
+                    new Cycle(3, 0, 4, 7),
+                    new Cycle(7, 4, 8, 11),
+                    new Cycle(11, 8, 12, 15),
+                    new Cycle(15, 12, 0, 3)
                 ), 
                 (0, 1, 0), (0, 2, -1), (0, 3, 0), (0, 2, 1), 
                 (1, 0, 0), (2, 0, -1), (3, 0, 0), (2, 0, 1),
@@ -761,9 +770,14 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 (-1, 0, 0), (-2, 0, -1), (-3, 0, 0), (-2, 0, 1)
             );
 
+            int n = p.Vertices;
+            bool[,] matrix = p.Connection.AdjacencyMatrix;
+
             Assert.IsFalse(Polyhedron3D.IsConvex(p));
 
-            PrecisionAssert.AreEqual(8, p.Volume);
+            PrecisionAssert.AreEqual(32, p.Edges);
+            PrecisionAssert.AreEqual(16, p.Volume);
+            Assert.AreEqual(16, p.Faces.Count);
 
             List<Vector3D> insides = [], outsides = [];
 

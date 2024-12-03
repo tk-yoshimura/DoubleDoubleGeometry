@@ -121,10 +121,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public static Polyhedron3D Invalid { get; } = new(new Connection(1), Vector3D.Invalid);
+        public static Polyhedron3D Invalid { get; } = new(new Connection(1, new bool[1, 1]), Vector3D.Invalid);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public static Polyhedron3D Zero { get; } = new(new Connection(1), Vector3D.Zero);
+        public static Polyhedron3D Zero { get; } = new(new Connection(1, new bool[1, 1]), Vector3D.Zero);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private BoundingBox3D bbox = null;

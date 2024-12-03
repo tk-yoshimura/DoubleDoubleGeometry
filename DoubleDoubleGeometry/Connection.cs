@@ -93,6 +93,46 @@ namespace DoubleDoubleGeometry {
             this.Edges = count;
         }
 
+        public Connection(int n, params Cycle[] faces) {
+            List<Cycle> face_list = [];
+
+            for (int i = 0; i < faces.Length; i++) {
+                Cycle face = faces[i];
+
+                if (face.Max() >= n) { 
+                    throw new ArgumentOutOfRangeException(nameof(faces), "contains invalid index");
+                }
+
+                for (int j = 0; j < face_list.Count; j++) {
+                    if (face_list[j].IsOverlap(face)) {
+                        face = Cycle.Opposite(face);
+                        if (face_list[j].IsOverlap(face)) {
+                            throw new ArgumentOutOfRangeException(nameof(faces), "duplicated edge");
+                        }
+                    }
+                }
+
+                face_list.Add(face);
+            }
+
+            List<int>[] map = (new List<int>[n]).Select(_ => new List<int>()).ToArray();
+
+            long count = 0;
+
+            foreach (Cycle face in face_list) {
+                foreach ((int i, int j) in face.Edge) {
+                    map[i].Add(j);
+                    map[j].Add(i);
+                    count++;
+                }
+            }
+
+            this.map = map.Select(item => item.AsReadOnly()).ToArray().AsReadOnly();
+            this.Vertices = n;
+            this.Edges = count / 2;
+            this.cycles = face_list.AsReadOnly();
+        }
+
         public Connection(int n, IEnumerable<(int a, int b)> connection_indexes) : this(n, connection_indexes.ToArray()) { }
 
         public ReadOnlyCollection<int> this[int index] => map[index];
@@ -228,66 +268,59 @@ namespace DoubleDoubleGeometry {
 
                 List<Cycle> cycles = [];
 
-                List<(int from, int to)> start_edge = [];
-
                 List<(int from, int to)> unused_edge = [];
                 foreach ((int from, int to) in EnumerateEdge()) {
                     unused_edge.Add((from, to));
                     unused_edge.Add((to, from));
                 }
 
-                while (unused_edge.Count > 0) {
-                    if (start_edge.Count <= 0) {
-                        start_edge.Add(unused_edge.First());
-                        unused_edge.RemoveAt(0);
-                    }
+                List<(int from, int to)> start_edge = [unused_edge.First()];
+
+                while (start_edge.Count > 0) {
+                    (int start_node, int to_node) = start_edge.First();
+                    start_edge.RemoveAt(0);
+
+                    List<(int from, int to)> visited_edge = [];
+
+                    Queue<(int from, int to)> queue = new();
+                    queue.Enqueue((start_node, to_node));
+
+                    Dictionary<(int from, int to), List<int>> paths = [];
+                    paths[(start_node, to_node)] = [start_node, to_node];
 
                     bool searched = false;
 
-                    while (start_edge.Count > 0 && !searched) {
-                        (int start_node, int to_node) = start_edge.First();
-                        start_edge.RemoveAt(0);
+                    while (queue.Count > 0 && !searched) {
+                        (int from_node, to_node) = queue.Dequeue();
+                        List<int> path = paths[(from_node, to_node)];
 
-                        List<(int from, int to)> visited_edge = [];
+                        visited_edge.Add((from_node, to_node));
 
-                        Queue<(int from, int to)> queue = new();
-                        queue.Enqueue((start_node, to_node));
-
-                        Dictionary<(int from, int to), List<int>> paths = [];
-                        paths[(start_node, to_node)] = [start_node, to_node];
-
-                        while (queue.Count > 0 && !searched) {
-                            (int from_node, to_node) = queue.Dequeue();
-                            List<int> path = paths[(from_node, to_node)];
-
-                            visited_edge.Add((from_node, to_node));
-
-                            foreach (int next_node in map[to_node]) {
-                                if (next_node == from_node || !unused_edge.Contains((to_node, next_node))) {
-                                    continue;
-                                }
-
-                                if (next_node == start_node) {
-                                    Cycle new_cycle = new(path.AsReadOnly());
-
-                                    if (cycles.Contains(new_cycle) || cycles.Contains(Cycle.Opposite(new_cycle))) {
-                                        continue;
-                                    }
-
-                                    cycles.Add(new_cycle);
-
-                                    searched = true;
-                                    break;
-                                }
-
-                                if (path.Contains(next_node)) {
-                                    continue;
-                                }
-
-                                (int, int) edge = (to_node, next_node);
-                                queue.Enqueue(edge);
-                                paths[edge] = [.. path, next_node];
+                        foreach (int next_node in map[to_node]) {
+                            if (next_node == from_node || !unused_edge.Contains((to_node, next_node))) {
+                                continue;
                             }
+
+                            if (next_node == start_node) {
+                                Cycle new_cycle = new(path.AsReadOnly());
+
+                                if (cycles.Contains(new_cycle) || cycles.Contains(Cycle.Opposite(new_cycle))) {
+                                    continue;
+                                }
+
+                                cycles.Add(new_cycle);
+
+                                searched = true;
+                                break;
+                            }
+
+                            if (path.Contains(next_node)) {
+                                continue;
+                            }
+
+                            (int, int) edge = (to_node, next_node);
+                            queue.Enqueue(edge);
+                            paths[edge] = [.. path, next_node];
                         }
                     }
 
@@ -295,6 +328,8 @@ namespace DoubleDoubleGeometry {
                         Cycle cycle = cycles.Last();
 
                         foreach ((int i, int j) in cycle.Edge) {
+                            Debug.Assert(unused_edge.Contains((i, j)), $"{i}, {j}");
+
                             unused_edge.Remove((i, j));
                             start_edge.Remove((i, j));
 
