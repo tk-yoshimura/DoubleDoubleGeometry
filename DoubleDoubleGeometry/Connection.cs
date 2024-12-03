@@ -339,6 +339,13 @@ namespace DoubleDoubleGeometry {
                         }
                     }
                 }
+
+                if (unused_edge.Count > 0) {
+                    throw new ArithmeticException(
+                        $"unreachable edges: " +
+                        $"{string.Join(", ", unused_edge.Where(e => e.from < e.to))}"
+                    );
+                }
                 
                 this.cycles = cycles.Order().ToArray().AsReadOnly();
 
