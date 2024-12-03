@@ -822,8 +822,6 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             outsides.Add((-2, 0, 1.125));
 
             foreach (Vector3D v in insides) {
-                Console.WriteLine(v);
-
                 Assert.IsTrue(p.Inside(v));
             }
 
