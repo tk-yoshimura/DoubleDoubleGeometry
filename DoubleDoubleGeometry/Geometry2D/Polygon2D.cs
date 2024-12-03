@@ -20,19 +20,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
 
         public int Vertices => Vertex.Count;
 
-#pragma warning disable CS8632
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Vector2D? center = null;
-#pragma warning restore CS8632
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Vector2D Center => center ??= (Vertex.Max() + Vertex.Min()) / 2d;
+        public Vector2D Center => BoundingBox.Center;
 
-#pragma warning disable CS8632
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Vector2D? size = null;
-#pragma warning restore CS8632
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Vector2D Size => size ??= Vertex.Max() - Vertex.Min();
+        public Vector2D Size => BoundingBox.Size;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private ddouble? area = null;
@@ -171,9 +163,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
             bool is_convex = IsConvex(this);
             int n = Vertices;
 
-            Vector2D u = v - Center;
-
-            if (!(ddouble.Ldexp(u.X, 1) <= Size.X && ddouble.Ldexp(u.Y, 1) <= Size.Y)) {
+            if (!BoundingBox.Inside(v)) {
                 return false;
             }
 
@@ -222,13 +212,11 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public IEnumerable<bool> Inside(IEnumerable<Vector2D> vs) {
             bool is_convex = IsConvex(this);
             int n = Vertices;
-            Vector2D center = Center;
+            BoundingBox2D bbox = BoundingBox;
             ReadOnlyCollection<Line2D> hull_lines = HullLines;
 
             foreach (Vector2D v in vs) {
-                Vector2D u = v - center;
-
-                if (!(ddouble.Ldexp(u.X, 1) <= Size.X && ddouble.Ldexp(u.Y, 1) <= Size.Y)) {
+                if (!bbox.Inside(v)) {
                     yield return false;
                 }
 

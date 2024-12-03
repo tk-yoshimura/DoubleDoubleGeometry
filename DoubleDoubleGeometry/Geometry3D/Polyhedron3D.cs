@@ -31,19 +31,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public int Vertices => Vertex.Count;
         public long Edges => Connection.Edges;
 
-#pragma warning disable CS8632
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Vector3D? center = null;
-#pragma warning restore CS8632
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Vector3D Center => center ??= (Vertex.Max() + Vertex.Min()) / 2d;
+        public Vector3D Center => BoundingBox.Center;
 
-#pragma warning disable CS8632
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Vector3D? size = null;
-#pragma warning restore CS8632
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Vector3D Size => size ??= Vertex.Max() - Vertex.Min();
+        public Vector3D Size => BoundingBox.Size;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private ddouble? area = null;
@@ -135,7 +127,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
             bool is_convex = IsConvex(this);
             Vector3D u = v - Center;
 
-            if (!(ddouble.Ldexp(u.X, 1) <= Size.X && ddouble.Ldexp(u.Y, 1) <= Size.Y && ddouble.Ldexp(u.Z, 1) <= Size.Z)) {
+            if (!BoundingBox.Inside(v)) {
                 return false;
             }
 
@@ -191,14 +183,12 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public IEnumerable<bool> Inside(IEnumerable<Vector3D> vs) {
             bool is_convex = IsConvex(this);
-            Vector3D center = Center;
+            BoundingBox3D bbox = BoundingBox;
             ReadOnlyCollection<Plane3D> hull_planes = HullPlanes;
             ReadOnlyCollection<Cycle> faces = Faces;
 
             foreach (Vector3D v in vs) {
-                Vector3D u = v - center;
-
-                if (!(ddouble.Ldexp(u.X, 1) <= Size.X && ddouble.Ldexp(u.Y, 1) <= Size.Y && ddouble.Ldexp(u.Z, 1) <= Size.Z)) {
+                if (!bbox.Inside(v)) {
                     yield return false;
                     continue;
                 }
