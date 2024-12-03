@@ -781,12 +781,45 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             List<Vector3D> insides = [], outsides = [];
 
-            foreach (Polygon3D polygon in p.Polygons) {
-                insides.Add((0, 1.125, 0));
-                insides.Add((0, 2, -0.875));
-                insides.Add((0, 2.875, 0));
-                insides.Add((0, 2, 0.875));
-            }
+            insides.Add((0, 1.125, 0));
+            insides.Add((0, 2, -0.875));
+            insides.Add((0, 2.875, 0));
+            insides.Add((0, 2, 0.875));
+
+            insides.Add((1.125, 0, 0));
+            insides.Add((2, 0, -0.875));
+            insides.Add((2.875, 0, 0));
+            insides.Add((2, 0, 0.875));
+
+            insides.Add((0, -1.125, 0));
+            insides.Add((0, -2, -0.875));
+            insides.Add((0, -2.875, 0));
+            insides.Add((0, -2, 0.875));
+
+            insides.Add((-1.125, 0, 0));
+            insides.Add((-2, 0, -0.875));
+            insides.Add((-2.875, 0, 0));
+            insides.Add((-2, 0, 0.875));
+
+            outsides.Add((0, 0.875, 0));
+            outsides.Add((0, 2, -1.125));
+            outsides.Add((0, 3.125, 0));
+            outsides.Add((0, 2, 1.125));
+
+            outsides.Add((0.875, 0, 0));
+            outsides.Add((2, 0, -1.125));
+            outsides.Add((3.125, 0, 0));
+            outsides.Add((2, 0, 1.125));
+
+            outsides.Add((0, -0.875, 0));
+            outsides.Add((0, -2, -1.125));
+            outsides.Add((0, -3.125, 0));
+            outsides.Add((0, -2, 1.125));
+
+            outsides.Add((-0.875, 0, 0));
+            outsides.Add((-2, 0, -1.125));
+            outsides.Add((-3.125, 0, 0));
+            outsides.Add((-2, 0, 1.125));
 
             foreach (Vector3D v in insides) {
                 Console.WriteLine(v);
