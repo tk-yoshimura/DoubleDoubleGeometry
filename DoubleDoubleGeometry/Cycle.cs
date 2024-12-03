@@ -17,7 +17,7 @@ namespace DoubleDoubleGeometry {
                 if (indexes.Distinct().Count() != indexes.Count) {
                     throw new ArgumentException("duplicated index", nameof(indexes));
                 }
-                if (indexes.Any(i => i < 0)) { 
+                if (indexes.Any(i => i < 0)) {
                     throw new ArgumentException("negative index", nameof(indexes));
                 }
             }
@@ -65,7 +65,7 @@ namespace DoubleDoubleGeometry {
             int i1 = (i0 + 1) % Count;
 
             bool is_contains = to == indexes[i1];
-            
+
             return is_contains;
         }
 

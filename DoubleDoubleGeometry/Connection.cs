@@ -99,7 +99,7 @@ namespace DoubleDoubleGeometry {
             for (int i = 0; i < faces.Length; i++) {
                 Cycle face = faces[i];
 
-                if (face.Max() >= n) { 
+                if (face.Max() >= n) {
                     throw new ArgumentOutOfRangeException(nameof(faces), "contains invalid index");
                 }
 
@@ -349,7 +349,7 @@ namespace DoubleDoubleGeometry {
                         $"{string.Join(", ", unused_edge.Where(e => e.from < e.to))}"
                     );
                 }
-                
+
                 this.cycles = cycles.Order().ToArray().AsReadOnly();
 
                 return this.cycles;

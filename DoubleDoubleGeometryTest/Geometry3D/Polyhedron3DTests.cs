@@ -707,11 +707,11 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         [TestMethod()]
         public void InsideTest4() {
             Polyhedron3D p = new(
-                new Connection(12, 
-                    (0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 0), 
+                new Connection(12,
+                    (0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 0),
                     (6, 7), (7, 8), (8, 9), (9, 10), (10, 11), (11, 6),
                     (0, 6), (1, 7), (2, 8), (3, 9), (4, 10), (5, 11)
-                ), 
+                ),
                 (-1, 1, -1), (0, 1, -1), (0.25, 0.25, -1), (1, 0, -1), (1, -1, -1), (-1, -1, -1),
                 (-1, 1, +1), (0, 1, +1), (0.25, 0.25, +1), (1, 0, +1), (1, -1, +1), (-1, -1, +1)
             );
@@ -793,8 +793,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         [TestMethod()]
         public void InsideTest5() {
             Polyhedron3D p = new(
-                new Connection(16, 
-                    new Cycle(0, 1, 5, 4), 
+                new Connection(16,
+                    new Cycle(0, 1, 5, 4),
                     new Cycle(4, 5, 9, 8),
                     new Cycle(8, 9, 13, 12),
                     new Cycle(12, 13, 1, 0),
@@ -811,10 +811,10 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                     new Cycle(7, 4, 8, 11),
                     new Cycle(11, 8, 12, 15),
                     new Cycle(15, 12, 0, 3)
-                ), 
-                (0, 1, 0), (0, 2, -1), (0, 3, 0), (0, 2, 1), 
+                ),
+                (0, 1, 0), (0, 2, -1), (0, 3, 0), (0, 2, 1),
                 (1, 0, 0), (2, 0, -1), (3, 0, 0), (2, 0, 1),
-                (0, -1, 0), (0, -2, -1), (0, -3, 0), (0, -2, 1), 
+                (0, -1, 0), (0, -2, -1), (0, -3, 0), (0, -2, 1),
                 (-1, 0, 0), (-2, 0, -1), (-3, 0, 0), (-2, 0, 1)
             );
 

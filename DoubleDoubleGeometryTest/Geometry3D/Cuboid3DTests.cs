@@ -52,6 +52,62 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void InsideTest() {
+            Cuboid3D t = new((0, 0, 0), (2, 3, 4), Quaternion.One);
+
+            List<Vector3D> insides = [
+                (1.875, 2.875, 3.875),
+                (-1.875, 2.875, 3.875),
+                (1.875, -2.875, 3.875),
+                (-1.875, -2.875, 3.875),
+                (1.875, 2.875, -3.875),
+                (-1.875, 2.875, -3.875),
+                (1.875, -2.875, -3.875),
+                (-1.875, -2.875, -3.875),
+            ];
+
+            Vector3D[] outsides = [
+                (2.125, 3.125, 4.125),
+                (-2.125, 3.125, 4.125),
+                (2.125, -3.125, 4.125),
+                (-2.125, -3.125, 4.125),
+                (2.125, 3.125, -4.125),
+                (-2.125, 3.125, -4.125),
+                (2.125, -3.125, -4.125),
+                (-2.125, -3.125, -4.125),
+            ];
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(t.Inside(v));
+            }
+
+            Assert.IsTrue(t.Inside(insides).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(t.Inside(v));
+            }
+
+            Assert.IsTrue(t.Inside(outsides).All(b => !b));
+
+            Quaternion q = (5, 6, -3, 6);
+            Vector3D s = (4, 6, 2);
+
+            Cuboid3D t2 = q * t + s;
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(t2.Inside(q * v + s));
+            }
+
+            Assert.IsTrue(t2.Inside(insides.Select(v => q * v + s)).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(t2.Inside(q * v + s));
+            }
+
+            Assert.IsTrue(t2.Inside(outsides.Select(v => q * v + s)).All(b => !b));
+        }
+
+        [TestMethod()]
         public void PointTest() {
             Cuboid3D cuboid1 = new(Vector3D.Zero, (4, 3, 5), Quaternion.One);
             Cuboid3D cuboid2 = new Cuboid3D(Vector3D.Zero, (4, 3, 5), Quaternion.One) * 2;

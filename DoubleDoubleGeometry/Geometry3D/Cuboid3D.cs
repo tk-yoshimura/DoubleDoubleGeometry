@@ -150,7 +150,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public bool Inside(Vector3D v) {
             Vector3D u = Rotation.Conj * (v - Center);
-            ddouble sx = Scale.X, sy = Scale.Y, sz = Scale.Y;
+            ddouble sx = ddouble.Abs(Scale.X), sy = ddouble.Abs(Scale.Y), sz = ddouble.Abs(Scale.Z);
 
             bool inside = ddouble.Abs(u.X) <= sx && ddouble.Abs(u.Y) <= sy && ddouble.Abs(u.Z) <= sz;
 
@@ -159,10 +159,11 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public IEnumerable<bool> Inside(IEnumerable<Vector3D> vs) {
             Quaternion q = Rotation.Conj;
-            ddouble sx = Scale.X, sy = Scale.Y, sz = Scale.Y;
+            Vector3D center = Center;
+            ddouble sx = ddouble.Abs(Scale.X), sy = ddouble.Abs(Scale.Y), sz = ddouble.Abs(Scale.Z);
 
             foreach (Vector3D v in vs) {
-                Vector3D u = q * (v - Center);
+                Vector3D u = q * (v - center);
 
                 bool inside = ddouble.Abs(u.X) <= sx && ddouble.Abs(u.Y) <= sy && ddouble.Abs(u.Z) <= sz;
 

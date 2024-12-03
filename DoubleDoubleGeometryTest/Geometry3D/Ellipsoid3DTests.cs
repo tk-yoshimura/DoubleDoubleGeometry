@@ -52,6 +52,49 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void InsideTest() {
+            Ellipsoid3D t = new((0, 0, 0), (2, 3, 4), Quaternion.One);
+
+            List<Vector3D> insides = [], outsides = [];
+
+            for (double u = 0; u < 8; u += 0.25) {
+                for (double v = 0; v < 8; v += 0.25) {
+                    insides.Add(t.Point(u, v) * 0.95);
+                    outsides.Add(t.Point(u, v) * 1.05);
+                }
+            }
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(t.Inside(v));
+            }
+
+            Assert.IsTrue(t.Inside(insides).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(t.Inside(v));
+            }
+
+            Assert.IsTrue(t.Inside(outsides).All(b => !b));
+
+            Quaternion q = (5, 6, -3, 6);
+            Vector3D s = (4, 6, 2);
+
+            Ellipsoid3D t2 = q * t + s;
+
+            foreach (Vector3D v in insides) {
+                Assert.IsTrue(t2.Inside(q * v + s));
+            }
+
+            Assert.IsTrue(t2.Inside(insides.Select(v => q * v + s)).All(b => b));
+
+            foreach (Vector3D v in outsides) {
+                Assert.IsFalse(t2.Inside(q * v + s));
+            }
+
+            Assert.IsTrue(t2.Inside(outsides.Select(v => q * v + s)).All(b => !b));
+        }
+
+        [TestMethod()]
         public void PointTest() {
             Ellipsoid3D ellipsoid1 = new(Vector3D.Zero, (4, 3, 5), Quaternion.One);
             Ellipsoid3D ellipsoid2 = new Ellipsoid3D(Vector3D.Zero, (4, 3, 5), Quaternion.One) * 2;

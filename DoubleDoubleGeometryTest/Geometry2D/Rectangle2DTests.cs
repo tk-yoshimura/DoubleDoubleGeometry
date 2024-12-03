@@ -50,6 +50,48 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
         }
 
         [TestMethod()]
+        public void InsideTest() {
+            Rectangle2D t = new((0, 0), (3, 3), Complex.One);
+
+            Vector2D[] insides = [
+                (0.25, 0.25), (0.25, 0.5), (0.5, 0.25), (1, 2), (0, 2.5), (-1, -2), (2, -1), (2, 2), (-2.5, 2)
+            ];
+
+            Vector2D[] outsides = [
+                (0, 4), (2, 3.5), (-2, -3.5), (-4, 4), (0, -4), (2, -3.5),
+            ];
+
+            foreach (Vector2D v in insides) {
+                Assert.IsTrue(t.Inside(v));
+            }
+
+            Assert.IsTrue(t.Inside(insides).All(b => b));
+
+            foreach (Vector2D v in outsides) {
+                Assert.IsFalse(t.Inside(v));
+            }
+
+            Assert.IsTrue(t.Inside(outsides).All(b => !b));
+
+            Complex c = (1, 2);
+            Vector2D s = (4, 6);
+
+            Rectangle2D t2 = c * t + s;
+
+            foreach (Vector2D v in insides) {
+                Assert.IsTrue(t2.Inside(c * v + s));
+            }
+
+            Assert.IsTrue(t2.Inside(insides.Select(v => c * v + s)).All(b => b));
+
+            foreach (Vector2D v in outsides) {
+                Assert.IsFalse(t2.Inside(c * v + s));
+            }
+
+            Assert.IsTrue(t2.Inside(outsides.Select(v => c * v + s)).All(b => !b));
+        }
+
+        [TestMethod()]
         public void PointTest() {
             Rectangle2D rectangle1 = new(Vector2D.Zero, (3, 2), 0);
             Rectangle2D rectangle2 = new Rectangle2D(Vector2D.Zero, (3, 2), 0) * 2;

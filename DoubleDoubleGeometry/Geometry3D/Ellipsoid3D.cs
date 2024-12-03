@@ -131,9 +131,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public IEnumerable<bool> Inside(IEnumerable<Vector3D> vs) {
             Matrix3D m = Matrix3D.Scale(1d / ddouble.Abs(Axis.X), 1d / ddouble.Abs(Axis.Y), 1d / ddouble.Abs(Axis.Z)) * new Matrix3D(Rotation.Conj);
+            Vector3D center = Center;
 
             foreach (Vector3D v in vs) {
-                bool inside = (m * (v - Center)).SquareNorm <= 1d;
+                bool inside = (m * (v - center)).SquareNorm <= 1d;
 
                 yield return inside;
             }
