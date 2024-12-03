@@ -69,6 +69,10 @@ namespace DoubleDoubleGeometry {
             return is_contains;
         }
 
+        public bool Contains(int index) {
+            return indexes.Contains(index);
+        }
+
         public bool IsOverlap(Cycle cycle) {
             foreach ((int from, int to) in cycle.Edge) {
                 if (Contains(from, to)) {

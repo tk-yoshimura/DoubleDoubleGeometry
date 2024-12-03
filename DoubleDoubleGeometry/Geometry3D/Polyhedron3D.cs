@@ -260,7 +260,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public static bool IsValid(Polyhedron3D g) {
-            return g.Vertices > 0 && IsFinite(g) && Connection.IsValid(g.Connection);
+            return g.Valid;
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -306,6 +306,73 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 }
 
                 return convex ??= true;
+            }
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool? valid = null;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool Valid {
+            get {
+                if (valid is not null) {
+                    return valid.Value;
+                }
+
+                if (IsConvex(this)) {
+                    return valid ??= true;
+                }
+
+                if (Vertices <= 0 || !IsFinite(this) || !Connection.IsValid(Connection)) {
+                    return valid ??= false;
+                }
+
+                ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = Planes;
+                ReadOnlyCollection<Cycle> faces = Faces;
+                ReadOnlyCollection<Polygon3D> polygons = Polygons;
+
+                int index_a = 0;
+                foreach (((Plane3D plane_a, _), Cycle face_a, Polygon3D polygon_a) in planes.Zip(faces, polygons)) {
+                    for (int index_b = 0; index_b < Planes.Count; index_b++) {
+                        if (index_a == index_b) {
+                            continue;
+                        }
+
+                        Cycle face_b = faces[index_b];
+                        if (face_a.Any(face_b.Contains)) {
+                            continue;
+                        }
+
+                        Polygon3D polygon_b = polygons[index_b];
+
+                        ddouble[] ss = polygon_b.Vertex.Select(v => Vector3D.Dot(plane_a.Normal, v) + plane_a.D).ToArray();
+
+                        if (ss.All(s => s < 0d) || ss.All(s => s > 0d)) {
+                            continue;
+                        }
+
+                        for (int i = 0, n = face_b.Count; i < n; i++) {
+                            if (!(ss[i] * ss[(i + 1) % n] < 0d)) {
+                                continue;
+                            }
+
+                            Vector3D v0 = polygon_b.Vertex[i], v1 = polygon_b.Vertex[(i + 1) % n];
+
+                            Line3D line = Line3D.FromIntersection(v0, v1);
+
+                            ddouble t = Intersect3D.LinePolygon(line, polygon_a).t;
+
+                            if (!ddouble.IsFinite(t)) {
+                                continue;
+                            }
+
+                            return valid ??= false;
+                        }
+                    }
+
+                    index_a++;
+                }
+
+                return valid ??= true;
             }
         }
 
@@ -372,6 +439,10 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static bool IsConvex(Polyhedron3D g) {
             return g.Convex;
+        }
+
+        public static bool IsConcave(Polyhedron3D g) {
+            return !IsConvex(g) && IsValid(g);
         }
 
         public override string ToString() {

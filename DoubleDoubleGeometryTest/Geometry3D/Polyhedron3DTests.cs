@@ -358,21 +358,6 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.IsTrue(Polyhedron3D.IsConvex(-Polyhedron3D.Icosahedron));
 
             {
-                Vector3D[] vertex = [.. Polyhedron3D.Cube.Vertex];
-
-                for (int i = 0; i < vertex.Length; i++) {
-                    Vector3D[] vertex_copy = (Vector3D[])vertex.Clone();
-
-                    vertex_copy[i] *= -0.5;
-
-                    Polyhedron3D g = new(Polyhedron3D.Cube.Connection, vertex_copy);
-
-                    Assert.IsFalse(Polyhedron3D.IsConvex(g));
-                    Assert.IsFalse(Polyhedron3D.IsConvex(-g));
-                }
-            }
-
-            {
                 Vector3D[] vertex = [.. Polyhedron3D.Octahedron.Vertex];
 
                 for (int i = 0; i < vertex.Length; i++) {
@@ -381,21 +366,6 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                     vertex_copy[i] *= -0.5;
 
                     Polyhedron3D g = new(Polyhedron3D.Octahedron.Connection, vertex_copy);
-
-                    Assert.IsFalse(Polyhedron3D.IsConvex(g));
-                    Assert.IsFalse(Polyhedron3D.IsConvex(-g));
-                }
-            }
-
-            {
-                Vector3D[] vertex = [.. Polyhedron3D.Dodecahedron.Vertex];
-
-                for (int i = 0; i < vertex.Length; i++) {
-                    Vector3D[] vertex_copy = (Vector3D[])vertex.Clone();
-
-                    vertex_copy[i] *= -0.5;
-
-                    Polyhedron3D g = new(Polyhedron3D.Dodecahedron.Connection, vertex_copy);
 
                     Assert.IsFalse(Polyhedron3D.IsConvex(g));
                     Assert.IsFalse(Polyhedron3D.IsConvex(-g));
@@ -414,6 +384,84 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
                     Assert.IsFalse(Polyhedron3D.IsConvex(g));
                     Assert.IsFalse(Polyhedron3D.IsConvex(-g));
+                }
+            }
+        }
+
+        [TestMethod()]
+        public void IsConcaveTest() {
+            Assert.IsFalse(Polyhedron3D.IsConcave(Polyhedron3D.Tetrahedron));
+            Assert.IsFalse(Polyhedron3D.IsConcave(-Polyhedron3D.Tetrahedron));
+
+            Assert.IsFalse(Polyhedron3D.IsConcave(Polyhedron3D.Cube));
+            Assert.IsFalse(Polyhedron3D.IsConcave(-Polyhedron3D.Cube));
+
+            Assert.IsFalse(Polyhedron3D.IsConcave(Polyhedron3D.Octahedron));
+            Assert.IsFalse(Polyhedron3D.IsConcave(-Polyhedron3D.Octahedron));
+
+            Assert.IsFalse(Polyhedron3D.IsConcave(Polyhedron3D.Dodecahedron));
+            Assert.IsFalse(Polyhedron3D.IsConcave(-Polyhedron3D.Dodecahedron));
+
+            Assert.IsFalse(Polyhedron3D.IsConcave(Polyhedron3D.Icosahedron));
+            Assert.IsFalse(Polyhedron3D.IsConcave(-Polyhedron3D.Icosahedron));
+
+            {
+                Vector3D[] vertex = [.. Polyhedron3D.Octahedron.Vertex];
+
+                for (int i = 0; i < vertex.Length; i++) {
+                    Vector3D[] vertex_copy = (Vector3D[])vertex.Clone();
+
+                    vertex_copy[i] *= -0.5;
+
+                    Polyhedron3D g = new(Polyhedron3D.Octahedron.Connection, vertex_copy);
+
+                    Assert.IsTrue(Polyhedron3D.IsConcave(g));
+                    Assert.IsTrue(Polyhedron3D.IsConcave(-g));
+                }
+            }
+
+            {
+                Vector3D[] vertex = [.. Polyhedron3D.Icosahedron.Vertex];
+
+                for (int i = 0; i < vertex.Length; i++) {
+                    Vector3D[] vertex_copy = (Vector3D[])vertex.Clone();
+
+                    vertex_copy[i] *= -0.5;
+
+                    Polyhedron3D g = new(Polyhedron3D.Icosahedron.Connection, vertex_copy);
+
+                    Assert.IsTrue(Polyhedron3D.IsConcave(g));
+                    Assert.IsTrue(Polyhedron3D.IsConcave(-g));
+                }
+            }
+
+            {
+                Vector3D[] vertex = [.. Polyhedron3D.Octahedron.Vertex];
+
+                for (int i = 0; i < vertex.Length; i++) {
+                    Vector3D[] vertex_copy = (Vector3D[])vertex.Clone();
+
+                    vertex_copy[i] *= -1.5;
+
+                    Polyhedron3D g = new(Polyhedron3D.Octahedron.Connection, vertex_copy);
+
+                    Assert.IsTrue(Polyhedron3D.IsConcave(g));
+                    Assert.IsTrue(Polyhedron3D.IsConcave(-g));
+                }
+            }
+
+            {
+                Vector3D[] vertex = [.. Polyhedron3D.Icosahedron.Vertex];
+
+                for (int i = 0; i < vertex.Length; i++) {
+                    Vector3D[] vertex_copy = (Vector3D[])vertex.Clone();
+
+                    vertex_copy[i] *= -1.5;
+
+                    Polyhedron3D g = new(Polyhedron3D.Icosahedron.Connection, vertex_copy);
+
+                    Assert.IsFalse(Polyhedron3D.IsConcave(g));
+                    Assert.IsFalse(Polyhedron3D.IsConcave(-g));
                 }
             }
         }
@@ -668,7 +716,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
                 (-1, 1, +1), (0, 1, +1), (0.25, 0.25, +1), (1, 0, +1), (1, -1, +1), (-1, -1, +1)
             );
 
-            Assert.IsFalse(Polyhedron3D.IsConvex(p));
+            Assert.IsTrue(Polyhedron3D.IsConcave(p));
 
             PrecisionAssert.AreEqual(6.5, p.Volume);
 
@@ -773,7 +821,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             int n = p.Vertices;
             bool[,] matrix = p.Connection.AdjacencyMatrix;
 
-            Assert.IsFalse(Polyhedron3D.IsConvex(p));
+            Assert.IsTrue(Polyhedron3D.IsConcave(p));
 
             PrecisionAssert.AreEqual(32, p.Edges);
             PrecisionAssert.AreEqual(16, p.Volume);

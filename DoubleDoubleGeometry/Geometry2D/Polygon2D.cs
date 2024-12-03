@@ -289,12 +289,12 @@ namespace DoubleDoubleGeometry.Geometry2D {
                     return valid.Value;
                 }
 
-                if (Vertices <= 0 || !IsFinite(this)) {
-                    return valid ??= false;
+                if (IsConvex(this)) {
+                    return valid ??= true;
                 }
 
-                if (Vertices <= 3) {
-                    return valid ??= true;
+                if (Vertices <= 0 || !IsFinite(this)) {
+                    return valid ??= false;
                 }
 
                 static bool is_cross(Vector2D a, Vector2D b, Vector2D c, Vector2D d) {
