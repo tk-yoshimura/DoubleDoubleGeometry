@@ -29,7 +29,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void CircumTest() {
-            Vector3D v0 = new(3, 9, 1), v1 = new(4, 2, 1), v2 = new(12, 6, 1);
+            Vector3D v0 = (3, 9, 1), v1 = (4, 2, 1), v2 = (12, 6, 1);
 
             Circle3D circle1 = Circle3D.FromCircum(new Triangle3D(v0, v1, v2));
 
@@ -48,7 +48,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void IncircleTest() {
-            Vector3D v0 = new(2, 1, 1), v1 = new(6, 1, 1), v2 = new(6, 4, 1);
+            Vector3D v0 = (2, 1, 1), v1 = (6, 1, 1), v2 = (6, 4, 1);
 
             Circle3D circle1 = Circle3D.FromIncircle(new Triangle3D(v0, v1, v2));
 

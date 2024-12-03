@@ -144,52 +144,52 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
         [TestMethod()]
         public void RotateXTest() {
-            Vector3D vector = new(1, 2, 3);
+            Vector3D vector = (1, 2, 3);
 
-            Vector3DAssert.AreEqual(new Vector3D(1, 2, 3), Matrix3D.RotateX(0) * vector, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(1, -3, 2), Matrix3D.RotateX(ddouble.Pi / 2) * vector, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(1, -2, -3), Matrix3D.RotateX(ddouble.Pi) * vector, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(1, 3, -2), Matrix3D.RotateX(ddouble.Pi * 3 / 2) * vector, 1e-30);
+            Vector3DAssert.AreEqual((1, 2, 3), Matrix3D.RotateX(0) * vector, 1e-30);
+            Vector3DAssert.AreEqual((1, -3, 2), Matrix3D.RotateX(ddouble.Pi / 2) * vector, 1e-30);
+            Vector3DAssert.AreEqual((1, -2, -3), Matrix3D.RotateX(ddouble.Pi) * vector, 1e-30);
+            Vector3DAssert.AreEqual((1, 3, -2), Matrix3D.RotateX(ddouble.Pi * 3 / 2) * vector, 1e-30);
         }
 
         [TestMethod()]
         public void RotateYTest() {
-            Vector3D vector = new(1, 2, 3);
+            Vector3D vector = (1, 2, 3);
 
-            Vector3DAssert.AreEqual(new Vector3D(1, 2, 3), Matrix3D.RotateY(0) * vector, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(3, 2, -1), Matrix3D.RotateY(ddouble.Pi / 2) * vector, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(-1, 2, -3), Matrix3D.RotateY(ddouble.Pi) * vector, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(-3, 2, 1), Matrix3D.RotateY(ddouble.Pi * 3 / 2) * vector, 1e-30);
+            Vector3DAssert.AreEqual((1, 2, 3), Matrix3D.RotateY(0) * vector, 1e-30);
+            Vector3DAssert.AreEqual((3, 2, -1), Matrix3D.RotateY(ddouble.Pi / 2) * vector, 1e-30);
+            Vector3DAssert.AreEqual((-1, 2, -3), Matrix3D.RotateY(ddouble.Pi) * vector, 1e-30);
+            Vector3DAssert.AreEqual((-3, 2, 1), Matrix3D.RotateY(ddouble.Pi * 3 / 2) * vector, 1e-30);
         }
 
         [TestMethod()]
         public void RotateZTest() {
-            Vector3D vector = new(1, 2, 3);
+            Vector3D vector = (1, 2, 3);
 
-            Vector3DAssert.AreEqual(new Vector3D(1, 2, 3), Matrix3D.RotateZ(0) * vector, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(-2, 1, 3), Matrix3D.RotateZ(ddouble.Pi / 2) * vector, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(-1, -2, 3), Matrix3D.RotateZ(ddouble.Pi) * vector, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(2, -1, 3), Matrix3D.RotateZ(ddouble.Pi * 3 / 2) * vector, 1e-30);
+            Vector3DAssert.AreEqual((1, 2, 3), Matrix3D.RotateZ(0) * vector, 1e-30);
+            Vector3DAssert.AreEqual((-2, 1, 3), Matrix3D.RotateZ(ddouble.Pi / 2) * vector, 1e-30);
+            Vector3DAssert.AreEqual((-1, -2, 3), Matrix3D.RotateZ(ddouble.Pi) * vector, 1e-30);
+            Vector3DAssert.AreEqual((2, -1, 3), Matrix3D.RotateZ(ddouble.Pi * 3 / 2) * vector, 1e-30);
         }
 
         [TestMethod()]
         public void RotateAxisTest() {
             Vector3D vector = new(1, 2, 3);
 
-            Vector3DAssert.AreEqual(new Vector3D(1, -3, 2), Matrix3D.RotateAxis(new Vector3D(+1, 0, 0), ddouble.Pi / 2) * vector, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(1, 3, -2), Matrix3D.RotateAxis(new Vector3D(-1, 0, 0), ddouble.Pi / 2) * vector, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(3, 2, -1), Matrix3D.RotateAxis(new Vector3D(0, +1, 0), ddouble.Pi / 2) * vector, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(-3, 2, 1), Matrix3D.RotateAxis(new Vector3D(0, -1, 0), ddouble.Pi / 2) * vector, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(-2, 1, 3), Matrix3D.RotateAxis(new Vector3D(0, 0, +1), ddouble.Pi / 2) * vector, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(2, -1, 3), Matrix3D.RotateAxis(new Vector3D(0, 0, -1), ddouble.Pi / 2) * vector, 1e-30);
+            Vector3DAssert.AreEqual((1, -3, 2), Matrix3D.RotateAxis((+1, 0, 0), ddouble.Pi / 2) * vector, 1e-30);
+            Vector3DAssert.AreEqual((1, 3, -2), Matrix3D.RotateAxis((-1, 0, 0), ddouble.Pi / 2) * vector, 1e-30);
+            Vector3DAssert.AreEqual((3, 2, -1), Matrix3D.RotateAxis((0, +1, 0), ddouble.Pi / 2) * vector, 1e-30);
+            Vector3DAssert.AreEqual((-3, 2, 1), Matrix3D.RotateAxis((0, -1, 0), ddouble.Pi / 2) * vector, 1e-30);
+            Vector3DAssert.AreEqual((-2, 1, 3), Matrix3D.RotateAxis((0, 0, +1), ddouble.Pi / 2) * vector, 1e-30);
+            Vector3DAssert.AreEqual((2, -1, 3), Matrix3D.RotateAxis((0, 0, -1), ddouble.Pi / 2) * vector, 1e-30);
             Vector3DAssert.AreEqual(vector, Matrix3D.RotateAxis(vector, ddouble.Pi / 2) * vector, 1e-30);
         }
 
         [TestMethod()]
         public void ScaleTest() {
-            Vector3D vector = new(1, 2, 3);
+            Vector3D vector = (1, 2, 3);
 
-            Assert.AreEqual(new Vector3D(2, 6, 12), Matrix3D.Scale(2, 3, 4) * vector);
+            Assert.AreEqual((2, 6, 12), Matrix3D.Scale(2, 3, 4) * vector);
         }
 
         [TestMethod()]

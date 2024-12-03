@@ -14,7 +14,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             PrecisionAssert.AreEqual(ddouble.Sqrt(7 * 7 + 1 * 1 + 2 * 2), segment1.Length, 1e-30);
 
             Vector3DAssert.AreEqual((6 * 1 + 2, 1 * 2 + 4, 4 * 5 - 1), segment2.V0, 1e-30);
-            Vector3DAssert.AreEqual(new Vector3D(-1 * 1 + 2, 2 * 2 + 4, 6 * 5 - 1), segment2.V1, 1e-30);
+            Vector3DAssert.AreEqual((-1 * 1 + 2, 2 * 2 + 4, 6 * 5 - 1), segment2.V1, 1e-30);
         }
 
         [TestMethod()]

@@ -103,19 +103,19 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
         [TestMethod()]
         public void RotateTest() {
-            Vector2D vector = new(1, 2);
+            Vector2D vector = (1, 2);
 
-            Vector2DAssert.AreEqual(new Vector2D(1, 2), Matrix2D.Rotate(0) * vector, 1e-30);
-            Vector2DAssert.AreEqual(new Vector2D(-2, 1), Matrix2D.Rotate(ddouble.Pi / 2) * vector, 1e-30);
-            Vector2DAssert.AreEqual(new Vector2D(-1, -2), Matrix2D.Rotate(ddouble.Pi) * vector, 1e-30);
-            Vector2DAssert.AreEqual(new Vector2D(2, -1), Matrix2D.Rotate(ddouble.Pi * 3 / 2) * vector, 1e-30);
+            Vector2DAssert.AreEqual((1, 2), Matrix2D.Rotate(0) * vector, 1e-30);
+            Vector2DAssert.AreEqual((-2, 1), Matrix2D.Rotate(ddouble.Pi / 2) * vector, 1e-30);
+            Vector2DAssert.AreEqual((-1, -2), Matrix2D.Rotate(ddouble.Pi) * vector, 1e-30);
+            Vector2DAssert.AreEqual((2, -1), Matrix2D.Rotate(ddouble.Pi * 3 / 2) * vector, 1e-30);
         }
 
         [TestMethod()]
         public void ScaleTest() {
-            Vector2D vector = new(1, 2);
+            Vector2D vector = (1, 2);
 
-            Assert.AreEqual(new Vector2D(2, 6), Matrix2D.Scale(2, 3) * vector);
+            Assert.AreEqual((2, 6), Matrix2D.Scale(2, 3) * vector);
         }
 
         [TestMethod()]

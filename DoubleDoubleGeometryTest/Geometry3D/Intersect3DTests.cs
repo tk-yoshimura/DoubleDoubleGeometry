@@ -23,7 +23,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         public void LinePlaneTest() {
             Matrix3D matrix = Matrix3D.RotateAxis((1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
 
-            Vector3D v1 = new(1, 0, 0), v2 = new(0, 2, 0), v3 = new(0, 0, 3);
+            Vector3D v1 = (1, 0, 0), v2 = (0, 2, 0), v3 = (0, 0, 3);
 
             Plane3D plane = Plane3D.FromIntersection(matrix * v1, matrix * v2, matrix * v3);
 
@@ -44,10 +44,10 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         public void LineTriangleTest() {
             Matrix3D matrix = Matrix3D.RotateAxis((1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
 
-            Vector3D v1 = new(1, 0, 0), v2 = new(0, 1, 0), v3 = new(0, 0, 1);
+            Vector3D v1 = (1, 0, 0), v2 = (0, 1, 0), v3 = (0, 0, 1);
 
-            Vector3D v4 = new Vector3D(1, 1, 1) / 3, v5 = new(1, -0.1, -0.1), v6 = new(-0.1, 1, -0.1), v7 = new(-0.1, -0.1, 1);
-            Vector3D v8 = new(1, -0.1, 0.1), v9 = new(1, 0.1, -0.1), v10 = new(-0.1, -1, 0.1), v11 = new(-0.1, 0.1, -1);
+            Vector3D v4 = new Vector3D(1, 1, 1) / 3, v5 = (1, -0.1, -0.1), v6 = (-0.1, 1, -0.1), v7 = (-0.1, -0.1, 1);
+            Vector3D v8 = (1, -0.1, 0.1), v9 = (1, 0.1, -0.1), v10 = (-0.1, -1, 0.1), v11 = (-0.1, 0.1, -1);
 
             Triangle3D triangle = new(matrix * v1, matrix * v2, matrix * v3);
 
@@ -77,8 +77,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Quaternion rot = Quaternion.FromAxisAngle((1, 2, 3), 4).Normal;
             Vector3D move = (5, 6, 7);
 
-            Vector3D v1 = new(1, 2, 3), v2 = new(4, 5, 3), v3 = new(-2, 1, 3);
-            Vector3D v4 = new(5.125, 8.125, 3), v5 = new(-3.125, -3.125, 3);
+            Vector3D v1 = (1, 2, 3), v2 = (4, 5, 3), v3 = (-2, 1, 3);
+            Vector3D v4 = (5.125, 8.125, 3), v5 = (-3.125, -3.125, 3);
 
             Rectangle3D rectangle = rot * new Rectangle3D(v1, (4, 5), (0, 0, 1)) + move;
 
@@ -105,7 +105,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Quaternion rot = Quaternion.FromAxisAngle((1, 2, 3), 4).Normal;
             Vector3D move = (5, 6, 7);
 
-            Vector3D v1 = new(1, 2, 3), v2 = v1 + (Vector3D)p.Vertex[0] * 0.95, v3 = v1 + (Vector3D)p.Vertex[2] * 0.95;
+            Vector3D v1 = (1, 2, 3), v2 = v1 + (Vector3D)p.Vertex[0] * 0.95, v3 = v1 + (Vector3D)p.Vertex[2] * 0.95;
             Vector3D v4 = v1 + (Vector3D)p.Vertex[1] * 1.05, v5 = v1 + (Vector3D)p.Vertex[4] * 1.05;
 
             Polygon3D polygon = rot * new Polygon3D(p, v1, (0, 0, 1)) + move;
@@ -138,7 +138,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Quaternion rot = Quaternion.FromAxisAngle((1, 2, 3), 4).Normal;
             Vector3D move = (5, 6, 7);
 
-            Vector3D v1 = new(1, 2, 3), v2 = v1 + (Vector3D)p.Vertex[0] * 0.95, v3 = v1 + (Vector3D)p.Vertex[2] * 1.05;
+            Vector3D v1 = (1, 2, 3), v2 = v1 + (Vector3D)p.Vertex[0] * 0.95, v3 = v1 + (Vector3D)p.Vertex[2] * 1.05;
             Vector3D v4 = v1 + (Vector3D)p.Vertex[1] * 1.05, v5 = v1 + (Vector3D)p.Vertex[4] * 1.05;
 
             Polygon3D polygon = rot * new Polygon3D(p, v1, (0, 0, 1)) + move;
@@ -163,8 +163,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         public void LineCircleTest() {
             Matrix3D matrix = Matrix3D.RotateAxis((1, 2, 3), 4) * Matrix3D.Scale(1, 2, 3);
 
-            Vector3D v1 = new(1, 0, 0), v2 = new(0, 1, 0), v3 = new(0, 0, 1);
-            Vector3D v4 = new Vector3D(1, 2, 3) / 6, v5 = new(1, -0.1, -0.1);
+            Vector3D v1 = (1, 0, 0), v2 = (0, 1, 0), v3 = (0, 0, 1);
+            Vector3D v4 = new Vector3D(1, 2, 3) / 6, v5 = (1, -0.1, -0.1);
 
             Circle3D circle = Circle3D.FromCircum(new Triangle3D(matrix * v1, matrix * v2, matrix * v3));
 
@@ -190,7 +190,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         public void LineSphereTest() {
             Matrix3D matrix = Matrix3D.RotateAxis((1, 2, 3), 4);
 
-            Vector3D v0 = new(3, 4, 0), v1 = new(0, 3, -4);
+            Vector3D v0 = (3, 4, 0), v1 = (0, 3, -4);
 
             Line3D line = matrix * Line3D.FromIntersection(v0, v1);
 
