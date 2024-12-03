@@ -302,8 +302,11 @@ namespace DoubleDoubleGeometry {
                             }
 
                             if (next_node == start_node) {
+#if DEBUG
                                 Cycle new_cycle = new(path.AsReadOnly());
-
+#else
+                                Cycle new_cycle = new(path.AsReadOnly(), enable_validation: false);
+#endif
                                 if (cycles.Contains(new_cycle) || cycles.Contains(Cycle.Opposite(new_cycle))) {
                                     continue;
                                 }
