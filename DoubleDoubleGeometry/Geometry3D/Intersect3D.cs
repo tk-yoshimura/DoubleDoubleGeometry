@@ -25,7 +25,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
             Vector3D rt2 = v2 + dv2 * t2;
 
             Vector3D y = Vector3D.Distance(rt1, rt2) < distance_threshold
-                ? (rt1 + rt2) / 2d
+                ? (rt1 + rt2) * 0.5d
                 : Vector3D.Invalid;
 
             return y;
@@ -138,23 +138,23 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public static (Vector3D v, ddouble t)[] LineSphere(Line3D line, Sphere3D sphere) {
             Vector3D otoc = line.Origin - sphere.Center;
 
-            ddouble b = 2d * Vector3D.Dot(line.Direction, otoc);
+            ddouble b = ddouble.Ldexp(Vector3D.Dot(line.Direction, otoc), 1);
             ddouble c = otoc.SquareNorm - sphere.Radius * sphere.Radius;
-            ddouble u = b * b - 4d * c;
+            ddouble u = b * b - ddouble.Ldexp(c, 2);
 
             if (!(u >= 0d)) {
                 return [];
             }
 
             if (ddouble.IsZero(u)) {
-                ddouble t = -0.5d * b;
+                ddouble t = -ddouble.Ldexp(b, -1);
                 Vector3D v = line.Origin + t * line.Direction;
 
                 return [(v, t)];
             }
             else {
                 ddouble d = ddouble.Sqrt(u);
-                ddouble t1 = -0.5 * (b + d), t2 = -0.5 * (b - d);
+                ddouble t1 = -ddouble.Ldexp(b + d, -1), t2 = -ddouble.Ldexp(b - d, -1);
                 Vector3D v1 = line.Origin + t1 * line.Direction;
                 Vector3D v2 = line.Origin + t2 * line.Direction;
 
