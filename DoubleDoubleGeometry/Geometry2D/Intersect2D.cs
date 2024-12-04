@@ -21,9 +21,9 @@ namespace DoubleDoubleGeometry.Geometry2D {
             Vector2D ev = circle.Center - line.Origin, dv = line.Direction;
             ddouble dv_sqnorm = dv.SquareNorm, radius = ddouble.Abs(circle.Radius);
 
-            ddouble u = radius * radius * dv_sqnorm 
-                - dv.X * dv.X * ev.Y * ev.Y 
-                - dv.Y * dv.Y * ev.X * ev.X 
+            ddouble u = radius * radius * dv_sqnorm
+                - dv.X * dv.X * ev.Y * ev.Y
+                - dv.Y * dv.Y * ev.X * ev.X
                 + ddouble.Ldexp(dv.X * dv.Y * ev.X * ev.Y, 1);
 
             if (!(u >= 0d)) {

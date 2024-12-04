@@ -44,6 +44,14 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             PrecisionAssert.AreEqual(4.52471777797, ellipse.Axis.X, 1e-10);
             PrecisionAssert.AreEqual(2.24080472704, ellipse.Axis.Y, 1e-10);
             PrecisionAssert.AreEqual(1.96349540849, ellipse.Angle, 1e-10);
+
+            Ellipse2D ellipse2 = Ellipse2D.FromImplicit(ellipse.A, ellipse.B, ellipse.C, ellipse.D, ellipse.E, ellipse.F);
+
+            PrecisionAssert.AreEqual(ellipse.Center.X, ellipse2.Center.X, 1e-30);
+            PrecisionAssert.AreEqual(ellipse.Center.Y, ellipse2.Center.Y, 1e-30);
+            PrecisionAssert.AreEqual(ellipse.Axis.X, ellipse2.Axis.X, 1e-30);
+            PrecisionAssert.AreEqual(ellipse.Axis.Y, ellipse2.Axis.Y, 1e-30);
+            PrecisionAssert.AreEqual(ellipse.Angle, ellipse2.Angle, 1e-30);
         }
 
         [TestMethod()]
@@ -57,6 +65,14 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             PrecisionAssert.AreEqual(2.07364413533, ellipse.Axis.X, 1e-10);
             PrecisionAssert.AreEqual(2.07364413533, ellipse.Axis.Y, 1e-10);
             PrecisionAssert.AreEqual(0.0, ellipse.Angle, 1e-10);
+
+            Ellipse2D ellipse2 = Ellipse2D.FromImplicit(ellipse.A, ellipse.B, ellipse.C, ellipse.D, ellipse.E, ellipse.F);
+
+            PrecisionAssert.AreEqual(ellipse.Center.X, ellipse2.Center.X, 1e-30);
+            PrecisionAssert.AreEqual(ellipse.Center.Y, ellipse2.Center.Y, 1e-30);
+            PrecisionAssert.AreEqual(ellipse.Axis.X, ellipse2.Axis.X, 1e-30);
+            PrecisionAssert.AreEqual(ellipse.Axis.Y, ellipse2.Axis.Y, 1e-30);
+            PrecisionAssert.AreEqual(ellipse.Angle, ellipse2.Angle, 1e-30);
         }
 
         [TestMethod()]
@@ -148,6 +164,28 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Vector2DAssert.AreEqual(c * ellipse5.Point(0), ellipse6.Point(0), 1e-30);
             Vector2DAssert.AreEqual(c * ellipse5.Point(ddouble.Pi / 4), ellipse6.Point(ddouble.Pi / 4), 1e-30);
             Vector2DAssert.AreEqual(c * ellipse5.Point(ddouble.Pi / 2), ellipse6.Point(ddouble.Pi / 2), 1e-30);
+        }
+
+        [TestMethod()]
+        public void BoundingBoxTest() {
+            Ellipse2D ellipse1 = new((0, 0), (8, 3), 0);
+            Ellipse2D ellipse2 = new((0, 0), (8, 3), 5);
+            Ellipse2D ellipse3 = new((1, 2), (8, 3), 5);
+            Ellipse2D ellipse4 = new((0, 0), (8, 3), 0.1);
+
+            Vector2DAssert.AreEqual((8, 3), ellipse1.BoundingBox.Scale, 1e-30);
+
+            for (double t = 0; t < 8; t += 0.25) {
+                ellipse2.BoundingBox.Inside(ellipse2.Point(t) * 0.9999);
+            }
+
+            for (double t = 0; t < 8; t += 0.25) {
+                ellipse3.BoundingBox.Inside(ellipse2.Point(t) * 0.9999 + (1, 2));
+            }
+
+            for (double t = 0; t < 8; t += 0.25) {
+                ellipse4.BoundingBox.Inside(ellipse4.Point(t) * 0.9999);
+            }
         }
 
         [TestMethod()]
