@@ -65,6 +65,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             }
 
             foreach (Vector3D v in insides) {
+                Console.WriteLine(v);
+
                 Assert.IsTrue(t.Inside(v));
             }
 
@@ -129,6 +131,101 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Vector3DAssert.AreEqual(q * (ellipsoid1.Point(ddouble.Pi / 2, 0) * 5 + (2, 3, 4)), ellipsoid5.Point(ddouble.Pi / 2, 0), 2e-29);
             Vector3DAssert.AreEqual(q * (ellipsoid1.Point(ddouble.Pi / 2, ddouble.Pi / 4) * 5 + (2, 3, 4)), ellipsoid5.Point(ddouble.Pi / 2, ddouble.Pi / 4), 2e-29);
             Vector3DAssert.AreEqual(q * (ellipsoid1.Point(ddouble.Pi / 2, ddouble.Pi / 2) * 5 + (2, 3, 4)), ellipsoid5.Point(ddouble.Pi / 2, ddouble.Pi / 2), 2e-29);
+        }
+
+        [TestMethod()]
+        public void ImplicitParamTest() {
+            Ellipsoid3D ellipsoid1 = new(Vector3D.Zero, (4, 3, 5), Quaternion.One);
+            Ellipsoid3D ellipsoid2 = new(Vector3D.Zero, (4, 3, 5), (1, -2, 3, -4));
+            Ellipsoid3D ellipsoid3 = new((1, 2, 3), (4, 3, 5), (1, -2, 3, -4));
+
+            for (double u = 0; u < 8; u += 0.25) {
+                for (double v = 0; v < 8; v += 0.25) {
+                    (ddouble x, ddouble y, ddouble z) = ellipsoid1.Point(u, v);
+
+                    ddouble s =
+                        ellipsoid1.A * x * x + ellipsoid1.B * y * y + ellipsoid1.C * z * z
+                        + ellipsoid1.D * x * y + ellipsoid1.E * x * z + ellipsoid1.F * y * z + ellipsoid1.J;
+
+                    PrecisionAssert.AreEqual(0, s, 1e-25);
+                }
+            }
+
+            for (double u = 0; u < 8; u += 0.25) {
+                for (double v = 0; v < 8; v += 0.25) {
+                    (ddouble x, ddouble y, ddouble z) = ellipsoid2.Point(u, v);
+
+                    ddouble s =
+                        ellipsoid2.A * x * x + ellipsoid2.B * y * y + ellipsoid2.C * z * z
+                        + ellipsoid2.D * x * y + ellipsoid2.E * x * z + ellipsoid2.F * y * z + ellipsoid2.J;
+
+                    PrecisionAssert.AreEqual(0, s, 1e-25);
+                }
+            }
+
+            for (double u = 0; u < 8; u += 0.25) {
+                for (double v = 0; v < 8; v += 0.25) {
+                    (ddouble x, ddouble y, ddouble z) = ellipsoid3.Point(u, v);
+
+                    ddouble s =
+                        ellipsoid3.A * x * x + ellipsoid3.B * y * y + ellipsoid3.C * z * z
+                        + ellipsoid3.D * x * y + ellipsoid3.E * x * z + ellipsoid3.F * y * z
+                        + ellipsoid3.G * x + ellipsoid3.H * y + ellipsoid3.I * z
+                        + ellipsoid3.J;
+
+                    PrecisionAssert.AreEqual(0, s, 1e-25);
+                }
+            }
+
+            for (double u = 0; u < 8; u += 0.25) {
+                for (double v = 0; v < 8; v += 0.25) {
+                    (ddouble x, ddouble y, ddouble z) = ellipsoid3.Point(u, v);
+                    (ddouble a, ddouble b, ddouble c, ddouble d, ddouble e, ddouble f, ddouble g, ddouble h, ddouble i, ddouble j) = ellipsoid3.ImplicitParameter;
+
+                    ddouble s =
+                        a * x * x + b * y * y + c * z * z
+                        + d * x * y + e * x * z + f * y * z
+                        + g * x + h * y + i * z
+                        + j;
+
+                    PrecisionAssert.AreEqual(0, s, 1e-25);
+                }
+            }
+        }
+
+        [TestMethod()]
+        public void BoundingBoxTest() {
+            Ellipsoid3D ellipsoid1 = new((0, 0, 0), (8, 3, 4), Quaternion.One);
+            Ellipsoid3D ellipsoid2 = new((0, 0, 0), (8, 3, 4), (1, -2, 3, 4));
+            Ellipsoid3D ellipsoid3 = new((1, 2, 3), (8, 3, 4), (1, -2, 3, 4));
+
+            Vector3DAssert.AreEqual((8, 3, 4), ellipsoid1.BoundingBox.Scale, 1e-30);
+
+            bool any_outside = false;
+            for (double u = 0; u < 8; u += 0.25) {
+                for (double v = 0; v < 8; v += 0.25) {
+                    Assert.IsTrue(ellipsoid2.BoundingBox.Inside(ellipsoid2.Point(u, v) * 0.9999));
+
+                    if (!ellipsoid2.BoundingBox.Inside(ellipsoid2.Point(u, v) * 1.01)) {
+                        any_outside = true;
+                    }
+                }
+            }
+
+            Assert.IsTrue(any_outside);
+
+            any_outside = false;
+            for (double u = 0; u < 8; u += 0.25) {
+                for (double v = 0; v < 8; v += 0.25) {
+                    Assert.IsTrue(ellipsoid3.BoundingBox.Inside(ellipsoid2.Point(u, v) * 0.9999 + (1, 2, 3)));
+
+                    if (!ellipsoid3.BoundingBox.Inside(ellipsoid3.Point(u, v) * 1.01)) {
+                        any_outside = true;
+                    }
+                }
+            }
+
+            Assert.IsTrue(any_outside);
         }
 
         [TestMethod()]

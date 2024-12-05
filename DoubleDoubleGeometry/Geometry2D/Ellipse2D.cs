@@ -105,6 +105,10 @@ namespace DoubleDoubleGeometry.Geometry2D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble F => (implicit_param ??= new EllipseImplicitParameter(this)).F;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public (ddouble a, ddouble b, ddouble c, ddouble d, ddouble e, ddouble f) 
+            ImplicitParameter => implicit_param ??= new EllipseImplicitParameter(this);
+
         public static Ellipse2D operator +(Ellipse2D g) {
             return g;
         }
@@ -193,7 +197,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
                     return bbox;
                 }
 
-                EllipseImplicitParameter param = new((Vector2D.Zero, Axis, Rotation));
+                EllipseImplicitParameter param = new(Axis, Rotation);
 
                 (ddouble a, ddouble b, ddouble c, ddouble f) = (param.A, param.B, param.C, param.F);
 
@@ -207,16 +211,26 @@ namespace DoubleDoubleGeometry.Geometry2D {
         }
 
         public bool Inside(Vector2D v) {
+            if (!BoundingBox.Inside(v)) {
+                return false;
+            }
+
             bool inside = ((Rotation.Conj * (v - Center)) / (ddouble.Abs(Axis.X), ddouble.Abs(Axis.Y))).SquareNorm <= 1d;
 
             return inside;
         }
 
         public IEnumerable<bool> Inside(IEnumerable<Vector2D> vs) {
+            BoundingBox2D bbox = BoundingBox;
             Matrix2D m = Matrix2D.Scale(1d / ddouble.Abs(Axis.X), 1d / ddouble.Abs(Axis.Y)) * new Matrix2D(Rotation.Conj);
+            Vector2D center = Center;
 
             foreach (Vector2D v in vs) {
-                bool inside = (m * (v - Center)).SquareNorm <= 1d;
+                if (!bbox.Inside(v)) {
+                    yield return false;
+                }
+
+                bool inside = (m * (v - center)).SquareNorm <= 1d;
 
                 yield return inside;
             }
@@ -270,6 +284,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
             return Center.GetHashCode() ^ Axis.GetHashCode() ^ Rotation.GetHashCode();
         }
 
+        // A x^2 + B x y + C y^2 + D x + E y + F = 0
         private class EllipseImplicitParameter {
             public readonly ddouble A, B, C, D, E, F;
 
@@ -287,6 +302,28 @@ namespace DoubleDoubleGeometry.Geometry2D {
                 this.D = -B * y0 - 2d * A * x0;
                 this.E = -B * x0 - 2d * C * y0;
                 this.F = A * x0 * x0 + C * y0 * y0 + B * x0 * y0 - a2 * b2;
+            }
+
+            public EllipseImplicitParameter(Vector2D axis, Complex rotation) {
+                (ddouble a, ddouble b) = axis;
+                (ddouble c, ddouble s) = rotation;
+
+                ddouble a2 = a * a, b2 = b * b, c2 = c * c, s2 = s * s;
+                ddouble ac2 = a2 * c2, bc2 = b2 * c2, as2 = a2 * s2, bs2 = b2 * s2;
+
+                this.A = as2 + bc2;
+                this.B = 2d * c * s * (b2 - a2);
+                this.C = ac2 + bs2;
+                this.D = 0d;
+                this.E = 0d;
+                this.F = -a2 * b2;
+            }
+
+            public static implicit operator 
+                (ddouble a, ddouble b, ddouble c, 
+                ddouble d, ddouble e, ddouble f)(EllipseImplicitParameter param) {
+
+                return (param.A, param.B, param.C, param.D, param.E, param.F);
             }
         }
     }

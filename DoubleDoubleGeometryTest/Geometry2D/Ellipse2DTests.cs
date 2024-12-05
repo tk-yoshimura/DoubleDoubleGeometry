@@ -175,17 +175,38 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
 
             Vector2DAssert.AreEqual((8, 3), ellipse1.BoundingBox.Scale, 1e-30);
 
+            bool any_outside = false;
             for (double t = 0; t < 8; t += 0.25) {
-                ellipse2.BoundingBox.Inside(ellipse2.Point(t) * 0.9999);
+                Assert.IsTrue(ellipse2.BoundingBox.Inside(ellipse2.Point(t) * 0.9999));
+
+                if (!ellipse2.BoundingBox.Inside(ellipse2.Point(t) * 1.01)) {
+                    any_outside = true;
+                }
             }
 
+            Assert.IsTrue(any_outside);
+
+            any_outside = false;
             for (double t = 0; t < 8; t += 0.25) {
-                ellipse3.BoundingBox.Inside(ellipse2.Point(t) * 0.9999 + (1, 2));
+                Assert.IsTrue(ellipse3.BoundingBox.Inside(ellipse2.Point(t) * 0.9999 + (1, 2)));
+
+                if (!ellipse3.BoundingBox.Inside(ellipse3.Point(t) * 1.01)) {
+                    any_outside = true;
+                }
             }
 
+            Assert.IsTrue(any_outside);
+
+            any_outside = false;
             for (double t = 0; t < 8; t += 0.25) {
-                ellipse4.BoundingBox.Inside(ellipse4.Point(t) * 0.9999);
+                Assert.IsTrue(ellipse4.BoundingBox.Inside(ellipse4.Point(t) * 0.9999));
+
+                if (!ellipse4.BoundingBox.Inside(ellipse4.Point(t) * 1.01)) {
+                    any_outside = true;
+                }
             }
+
+            Assert.IsTrue(any_outside);
         }
 
         [TestMethod()]

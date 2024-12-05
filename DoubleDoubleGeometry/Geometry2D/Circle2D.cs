@@ -74,6 +74,9 @@ namespace DoubleDoubleGeometry.Geometry2D {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble C => Center.SquareNorm - Radius * Radius;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public (ddouble a, ddouble b, ddouble c) ImplicitParameter => (A, B, C);
+
         public static Circle2D operator +(Circle2D g) {
             return g;
         }

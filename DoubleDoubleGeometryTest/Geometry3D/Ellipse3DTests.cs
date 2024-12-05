@@ -10,6 +10,8 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         public void Ellipse3DTest() {
             Ellipse3D ellipse = new((1, 2, 7), (4, 3), Vector3D.Rot((0, 0, 1), (2, 3, 4)));
 
+            Ellipse3D.EllipseImplicitParameter param = new Ellipse3D.EllipseImplicitParameter(ellipse.Axis, ellipse.Rotation);
+
             Vector3DAssert.AreEqual((1, 2, 7), ellipse.Center, 1e-30);
             Vector3DAssert.AreEqual(new Vector3D(2, 3, 4).Normal, ellipse.Normal, 1e-30);
             Assert.AreEqual(4d, ellipse.MajorAxis);
@@ -87,6 +89,65 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Vector3DAssert.AreEqual(q * (ellipse1.Point(0) * 5 + (2, 3, 4)), ellipse5.Point(0), 2e-29);
             Vector3DAssert.AreEqual(q * (ellipse1.Point(ddouble.Pi / 4) * 5 + (2, 3, 4)), ellipse5.Point(ddouble.Pi / 4), 2e-29);
             Vector3DAssert.AreEqual(q * (ellipse1.Point(ddouble.Pi / 2) * 5 + (2, 3, 4)), ellipse5.Point(ddouble.Pi / 2), 2e-29);
+        }
+
+        [TestMethod()]
+        public void BoundingBoxTest() {
+            Ellipse3D ellipse1 = new((0, 0, 0), (8, 3), Quaternion.One);
+            Ellipse3D ellipse2 = new((0, 0, 0), (8, 3), (0, 1, 0));
+            Ellipse3D ellipse3 = new((0, 0, 0), (8, 3), (1, 0, 0));
+            Ellipse3D ellipse4 = new((0, 0, 0), (5, 6), (3, -6, 4, 7));
+            Ellipse3D ellipse5 = new((0, 0, 0), (8, 3), (1, -2, 3, 4));
+            Ellipse3D ellipse6 = new((1, 2, 3), (8, 3), (1, -2, 3, 4));
+            Ellipse3D ellipse7 = new((0, 0, 0), (8, 3), (3, 4, 1, -2));
+
+            Vector3DAssert.AreEqual((8, 3, 0), ellipse1.BoundingBox.Scale, 1e-30);
+            Vector3DAssert.AreEqual((8, 0, 3), ellipse2.BoundingBox.Scale, 1e-30);
+            Vector3DAssert.AreEqual((0, 3, 8), ellipse3.BoundingBox.Scale, 1e-30);
+
+            bool any_outside = false;
+            for (double t = 0; t < 8; t += 0.25) {
+                Assert.IsTrue(ellipse4.BoundingBox.Inside(ellipse4.Point(t) * 0.9999));
+
+                if (!ellipse4.BoundingBox.Inside(ellipse4.Point(t) * 1.01)) {
+                    any_outside = true;
+                }
+            }
+
+            Assert.IsTrue(any_outside);
+
+            any_outside = false;
+            for (double t = 0; t < 8; t += 0.25) {
+                Assert.IsTrue(ellipse5.BoundingBox.Inside(ellipse5.Point(t) * 0.9999));
+
+                if (!ellipse5.BoundingBox.Inside(ellipse5.Point(t) * 1.01)) {
+                    any_outside = true;
+                }
+            }
+
+            Assert.IsTrue(any_outside);
+
+            any_outside = false;
+            for (double t = 0; t < 8; t += 0.25) {
+                Assert.IsTrue(ellipse6.BoundingBox.Inside(ellipse5.Point(t) * 0.9999 + (1, 2, 3)));
+
+                if (!ellipse6.BoundingBox.Inside(ellipse6.Point(t) * 1.01)) {
+                    any_outside = true;
+                }
+            }
+
+            Assert.IsTrue(any_outside);
+
+            any_outside = false;
+            for (double t = 0; t < 8; t += 0.25) {
+                Assert.IsTrue(ellipse7.BoundingBox.Inside(ellipse7.Point(t) * 0.9999));
+
+                if (!ellipse7.BoundingBox.Inside(ellipse7.Point(t) * 1.01)) {
+                    any_outside = true;
+                }
+            }
+
+            Assert.IsTrue(any_outside);
         }
 
         [TestMethod()]

@@ -160,7 +160,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public bool Inside(Vector3D v) {
             Vector3D u = v - Center;
-            ddouble sx = Scale.X, sy = Scale.Y, sz = Scale.Y;
+            ddouble sx = Scale.X, sy = Scale.Y, sz = Scale.Z;
 
             bool inside = ddouble.Abs(u.X) <= sx && ddouble.Abs(u.Y) <= sy && ddouble.Abs(u.Z) <= sz;
 
@@ -168,7 +168,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         public IEnumerable<bool> Inside(IEnumerable<Vector3D> vs) {
-            ddouble sx = Scale.X, sy = Scale.Y, sz = Scale.Y;
+            ddouble sx = Scale.X, sy = Scale.Y, sz = Scale.Z;
 
             foreach (Vector3D v in vs) {
                 Vector3D u = v - Center;

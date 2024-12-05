@@ -43,11 +43,37 @@ namespace DoubleDoubleGeometry.Geometry3D {
             );
         }
 
+        public static Sphere3D FromImplicit(ddouble a, ddouble b, ddouble c, ddouble d) {
+            Vector3D center = (a * -0.5d, b * -0.5d, c * -0.5d);
+            ddouble radius = ddouble.Sqrt(ddouble.Ldexp(a * a + b * b + c * c, -2) - d);
+
+            return new Sphere3D(center, radius);
+        }
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Area => 4d * Radius * Radius * ddouble.Pi;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ddouble Volume => ddouble.Abs(Radius * Radius * Radius) * ddouble.Pi / 0.75d;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private SphereImplicitParameter implicit_param = null;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble A => (implicit_param ??= new SphereImplicitParameter(this)).A;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble B => (implicit_param ??= new SphereImplicitParameter(this)).B;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble C => (implicit_param ??= new SphereImplicitParameter(this)).C;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ddouble D => (implicit_param ??= new SphereImplicitParameter(this)).D;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public (ddouble a, ddouble b, ddouble c, ddouble d) 
+            ImplicitParameter => implicit_param ??= new SphereImplicitParameter(this);
 
         public static Sphere3D operator +(Sphere3D g) {
             return g;
@@ -206,6 +232,33 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return e11 * (e32 * e43 + e22 * (e33 - e43) - e33 * e42 - e23 * (e32 - e42)) - e21 * (e32 * e43 - e33 * e42)
                  - e12 * (e31 * e43 + e21 * (e33 - e43) - e33 * e41 - e23 * (e31 - e41)) + e22 * (e31 * e43 - e33 * e41)
                  + e13 * (e31 * e42 + e21 * (e32 - e42) - e32 * e41 - e22 * (e31 - e41)) - e23 * (e31 * e42 - e32 * e41);
+        }
+
+        // x^2 + y^2 + z^2 + A x + B y + C z + D = 0
+        private class SphereImplicitParameter {
+            public readonly ddouble A, B, C, D;
+
+            public SphereImplicitParameter(Sphere3D g) {
+                (ddouble x0, ddouble y0, ddouble z0) = g.Center;
+
+                this.A = -2d * x0;
+                this.B = -2d * y0;
+                this.C = -2d * z0;
+                this.D = x0 * x0 + y0 * y0 + z0 * z0 - g.Radius * g.Radius;
+            }
+
+            public SphereImplicitParameter(ddouble radius) {
+                this.A = 0d;
+                this.B = 0d;
+                this.C = 0d;
+                this.D = -radius * radius;
+            }
+
+            public static implicit operator 
+                (ddouble a, ddouble b, ddouble c, ddouble d)(SphereImplicitParameter param) {
+
+                return (param.A, param.B, param.C, param.D);
+            }
         }
     }
 }

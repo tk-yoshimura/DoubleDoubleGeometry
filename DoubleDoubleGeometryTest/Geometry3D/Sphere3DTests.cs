@@ -10,6 +10,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         public void Sphere3DTest() {
             Sphere3D sphere1 = new((1, 2, 3), 4);
             Sphere3D sphere2 = Sphere3D.FromIntersection((3, 2, -1), (1, 3, -2), (3, -1, -4), (0, 0, -2));
+            Sphere3D sphere3 = Sphere3D.FromImplicit(sphere2.A, sphere2.B, sphere2.C, sphere2.D);
 
             Vector3DAssert.AreEqual((1, 2, 3), sphere1.Center, 1e-30);
             PrecisionAssert.AreEqual(4.0, sphere1.Radius, 1e-30);
@@ -18,6 +19,9 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Vector3DAssert.AreEqual((2, 1, -3), sphere2.Center, 1e-30);
             PrecisionAssert.AreEqual(6, sphere2.Radius * sphere2.Radius, 1e-30);
+
+            Vector3DAssert.AreEqual((2, 1, -3), sphere3.Center, 1e-30);
+            PrecisionAssert.AreEqual(6, sphere3.Radius * sphere3.Radius, 1e-30);
         }
 
         [TestMethod()]
@@ -121,6 +125,57 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Vector3DAssert.AreEqual(sphere6.Center, sphere5.Center, 2e-29);
             PrecisionAssert.AreEqual(sphere6.Radius, sphere5.Radius, 2e-29);
+        }
+
+        [TestMethod()]
+        public void ImplicitParamTest() {
+            Sphere3D sphere1 = new(Vector3D.Zero, 4);
+            Sphere3D sphere2 = new(Vector3D.Zero, 4);
+            Sphere3D sphere3 = new((1, 2, 3), 4);
+
+            for (double u = 0; u < 8; u += 0.25) {
+                for (double v = 0; v < 8; v += 0.25) {
+                    (ddouble x, ddouble y, ddouble z) = sphere1.Point(u, v);
+
+                    ddouble s = x * x + y * y + z * z +
+                        sphere1.A * x + sphere1.B * y + sphere1.C * z + sphere1.D;
+
+                    PrecisionAssert.AreEqual(0, s, 1e-25);
+                }
+            }
+
+            for (double u = 0; u < 8; u += 0.25) {
+                for (double v = 0; v < 8; v += 0.25) {
+                    (ddouble x, ddouble y, ddouble z) = sphere2.Point(u, v);
+
+                    ddouble s = x * x + y * y + z * z +
+                        sphere2.A * x + sphere2.B * y + sphere2.C * z + sphere2.D;
+
+                    PrecisionAssert.AreEqual(0, s, 1e-25);
+                }
+            }
+
+            for (double u = 0; u < 8; u += 0.25) {
+                for (double v = 0; v < 8; v += 0.25) {
+                    (ddouble x, ddouble y, ddouble z) = sphere3.Point(u, v);
+
+                    ddouble s = x * x + y * y + z * z +
+                        sphere3.A * x + sphere3.B * y + sphere3.C * z + sphere3.D;
+
+                    PrecisionAssert.AreEqual(0, s, 1e-25);
+                }
+            }
+
+            for (double u = 0; u < 8; u += 0.25) {
+                for (double v = 0; v < 8; v += 0.25) {
+                    (ddouble x, ddouble y, ddouble z) = sphere3.Point(u, v);
+                    (ddouble a, ddouble b, ddouble c, ddouble d) = sphere3.ImplicitParameter;
+
+                    ddouble s = x * x + y * y + z * z + a * x + b * y + c * z + d;
+
+                    PrecisionAssert.AreEqual(0, s, 1e-25);
+                }
+            }
         }
 
         [TestMethod()]
