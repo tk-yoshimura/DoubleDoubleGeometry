@@ -114,6 +114,65 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         }
 
         [TestMethod()]
+        public void BoundingBoxTest() {
+            Circle3D circle1 = new((0, 0, 0), 8, Quaternion.One);
+            Circle3D circle2 = new((0, 0, 0), 8, (0, 1, 0));
+            Circle3D circle3 = new((0, 0, 0), 8, (1, 0, 0));
+            Circle3D circle4 = new((0, 0, 0), 8, (3, -6, 4, 7));
+            Circle3D circle5 = new((0, 0, 0), 8, (1, -2, 3, 4));
+            Circle3D circle6 = new((1, 2, 3), 8, (1, -2, 3, 4));
+            Circle3D circle7 = new((0, 0, 0), 8, (3, 4, 1, -2));
+
+            Vector3DAssert.AreEqual((8, 8, 0), circle1.BoundingBox.Scale, 1e-30);
+            Vector3DAssert.AreEqual((8, 0, 8), circle2.BoundingBox.Scale, 1e-30);
+            Vector3DAssert.AreEqual((0, 8, 8), circle3.BoundingBox.Scale, 1e-30);
+
+            bool any_outside = false;
+            for (double t = 0; t < 8; t += 0.25) {
+                Assert.IsTrue(circle4.BoundingBox.Inside(circle4.Point(t) * 0.9999));
+
+                if (!circle4.BoundingBox.Inside(circle4.Point(t) * 1.01)) {
+                    any_outside = true;
+                }
+            }
+
+            Assert.IsTrue(any_outside);
+
+            any_outside = false;
+            for (double t = 0; t < 8; t += 0.25) {
+                Assert.IsTrue(circle5.BoundingBox.Inside(circle5.Point(t) * 0.9999));
+
+                if (!circle5.BoundingBox.Inside(circle5.Point(t) * 1.01)) {
+                    any_outside = true;
+                }
+            }
+
+            Assert.IsTrue(any_outside);
+
+            any_outside = false;
+            for (double t = 0; t < 8; t += 0.25) {
+                Assert.IsTrue(circle6.BoundingBox.Inside(circle5.Point(t) * 0.9999 + (1, 2, 3)));
+
+                if (!circle6.BoundingBox.Inside(circle6.Point(t) * 1.01)) {
+                    any_outside = true;
+                }
+            }
+
+            Assert.IsTrue(any_outside);
+
+            any_outside = false;
+            for (double t = 0; t < 8; t += 0.25) {
+                Assert.IsTrue(circle7.BoundingBox.Inside(circle7.Point(t) * 0.9999));
+
+                if (!circle7.BoundingBox.Inside(circle7.Point(t) * 1.01)) {
+                    any_outside = true;
+                }
+            }
+
+            Assert.IsTrue(any_outside);
+        }
+
+        [TestMethod()]
         public void ValidTest() {
             Assert.IsTrue(Circle3D.IsValid(new Circle3D((1, 3, 5), 2, (2, 4, 6))));
             Assert.IsFalse(Circle3D.IsValid(Circle3D.Invalid));
