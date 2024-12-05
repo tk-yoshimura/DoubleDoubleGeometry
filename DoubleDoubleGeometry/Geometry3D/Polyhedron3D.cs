@@ -393,7 +393,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 ReadOnlyCollection<(Plane3D plane, bool is_convex)> planes = Planes;
                 ReadOnlyCollection<Cycle> faces = Faces;
 
-                foreach (((Plane3D plane, bool is_convex), Cycle face) in planes.Zip(faces)) {
+                foreach (((Plane3D plane, _), Cycle face) in planes.Zip(faces)) {
                     bool convex = true;
 
                     for (int vertex_index = 0; vertex_index < Vertices; vertex_index++) {
@@ -430,7 +430,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
                 foreach (((Plane3D plane, bool is_convex), Cycle face) in planes.Zip(faces)) {
                     IEnumerable<Vector3D> vs = face.Select(i => Vertex[i]);
-                    IEnumerable<Vector3D> us = plane.Projection(vs);
+                    IEnumerable<Vector3D> us = Vector3D.Projection(plane, vs);
 
                     yield return us.Max(u => ddouble.Abs(u.Z));
                 }
@@ -629,7 +629,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                     plane_list.Add((plane, is_convex));
 
                     IEnumerable<Vector3D> vs = face.Select(i => g.Vertex[i]);
-                    IEnumerable<Vector3D> us = plane.Projection(vs);
+                    IEnumerable<Vector3D> us = Vector3D.Projection(plane, vs);
 
                     Vector3D center = (us.Max() + us.Min()) / 2d;
                     Polygon2D polygon = new(us.Select(u => (Vector2D)(u - center)));

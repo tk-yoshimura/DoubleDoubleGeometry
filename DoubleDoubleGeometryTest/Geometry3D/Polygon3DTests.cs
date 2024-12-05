@@ -51,7 +51,6 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Polygon3D polygon4 = new Polygon3D(Polygon2D.Regular(7), (1, 3, 5), (2, 4, 6)) + (1, 2, 4);
 
             Quaternion q = new Quaternion(3, 4, 2, 5).Normal;
-            Matrix3D m = new(q);
 
             Polygon3D polygon5 = q * polygon1;
 
@@ -78,11 +77,11 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             Plane3D plane = polygon.Plane;
 
-            Vector3D[] vertex = plane.Projection(polygon.Vertex).ToArray();
+            Vector3D[] vertex = Vector3D.Projection(plane, polygon.Vertex).ToArray();
 
             Assert.IsTrue(vertex.All(v => ddouble.Abs(v.Z) < 1e-30));
 
-            Assert.IsTrue(ddouble.Abs(plane.Projection(polygon.Vertex[0]).Z) < 1e-30);
+            Assert.IsTrue(ddouble.Abs(Vector3D.Projection(plane, polygon.Vertex[0]).Z) < 1e-30);
         }
     }
 }

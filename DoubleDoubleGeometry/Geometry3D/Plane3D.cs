@@ -216,23 +216,5 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 return ((0d, 0d, -g.D / g.C), (0d, 1d, -(g.D + g.B) / g.C), (1d, 0d, -(g.D + g.A) / g.C));
             }
         }
-
-        public Vector3D Projection(Vector3D v) {
-            Quaternion q = Vector3D.Rot(Normal, (0d, 0d, 1d));
-
-            Vector3D u = q * v;
-
-            return (u.X, u.Y, u.Z + D);
-        }
-
-        public IEnumerable<Vector3D> Projection(IEnumerable<Vector3D> vs) {
-            Quaternion q = Vector3D.Rot(Normal, (0d, 0d, 1d));
-
-            foreach (Vector3D v in vs) {
-                Vector3D u = q * v;
-
-                yield return (u.X, u.Y, u.Z + D);
-            }
-        }
     }
 }

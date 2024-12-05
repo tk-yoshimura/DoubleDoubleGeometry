@@ -157,6 +157,25 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return Polygon2D.IsConcave(g.Polygon);
         }
 
+        public static Polygon3D Projection(Plane3D plane, Polygon3D g) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+
+            Polygon3D u = q * g + (0d, 0d, plane.D);
+
+            return u;
+        }
+
+        public static IEnumerable<Polygon3D> Projection(Plane3D plane, IEnumerable<Polygon3D> gs) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+            Vector3D v = (0d, 0d, plane.D);
+
+            foreach (Polygon3D g in gs) {
+                Polygon3D u = q * g + v;
+
+                yield return u;
+            }
+        }
+
         public override string ToString() {
             return $"polygon vertices={Vertices}";
         }

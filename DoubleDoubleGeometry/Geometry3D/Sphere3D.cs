@@ -195,6 +195,25 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return IsFinite(g) && g.Radius >= 0d;
         }
 
+        public static Sphere3D Projection(Plane3D plane, Sphere3D g) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+
+            Sphere3D u = q * g + (0d, 0d, plane.D);
+
+            return u;
+        }
+
+        public static IEnumerable<Sphere3D> Projection(Plane3D plane, IEnumerable<Sphere3D> gs) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+            Vector3D v = (0d, 0d, plane.D);
+
+            foreach (Sphere3D g in gs) {
+                Sphere3D u = q * g + v;
+
+                yield return u;
+            }
+        }
+
         public override string ToString() {
             return $"center={Center}, radius={Radius}";
         }

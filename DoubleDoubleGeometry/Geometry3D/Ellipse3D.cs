@@ -2,6 +2,7 @@
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -189,7 +190,20 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
                     ddouble z = 2d * ddouble.Sqrt(c * m);
                     ddouble x = 2d * ddouble.Sqrt(a * m);
-                    ddouble y = ddouble.Abs((Z * z + X * (ddouble.Sqrt(ddouble.Max(0d, e * z * z - 4d * c * f)) - b * z) / (2d * c)) / Y);
+
+                    ddouble dx = ddouble.Sqrt(ddouble.Max(0d, e * z * z - 4d * c * f));
+                    ddouble dz = ddouble.Sqrt(ddouble.Max(0d, e * x * x - 4d * a * f));
+
+                    ddouble yz0 = -((Z * z + X * (dx - b * z) / (2d * c)) / Y);
+                    ddouble yz1 = -((Z * z - X * (dx + b * z) / (2d * c)) / Y);
+
+                    ddouble yx0 = -((X * x + Z * (dz - b * x) / (2d * a)) / Y);
+                    ddouble yx1 = -((X * x - Z * (dz + b * x) / (2d * a)) / Y);
+
+                    ddouble y = ddouble.Max(
+                        ddouble.Abs(X * x + Y * yz0 + Z * z) < ddouble.Abs(X * x + Y * yz1 + Z * z) ? yz0 : yz1, 
+                        ddouble.Abs(X * x + Y * yx0 + Z * z) < ddouble.Abs(X * x + Y * yx1 + Z * z) ? yx0 : yx1
+                    );
 
                     return bbox ??= new BoundingBox3D(Center, (x, y, z));
                 }
@@ -229,6 +243,25 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static bool IsValid(Ellipse3D g) {
             return IsFinite(g);
+        }
+
+        public static Ellipse3D Projection(Plane3D plane, Ellipse3D g) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+
+            Ellipse3D u = q * g + (0d, 0d, plane.D);
+
+            return u;
+        }
+
+        public static IEnumerable<Ellipse3D> Projection(Plane3D plane, IEnumerable<Ellipse3D> gs) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+            Vector3D v = (0d, 0d, plane.D);
+
+            foreach (Ellipse3D g in gs) {
+                Ellipse3D u = q * g + v;
+
+                yield return u;
+            }
         }
 
         public override string ToString() {

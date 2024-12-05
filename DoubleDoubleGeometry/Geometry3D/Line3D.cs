@@ -1,6 +1,7 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -130,6 +131,25 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static bool IsValid(Line3D g) {
             return IsFinite(g) && Vector3D.IsFinite(g.Direction) && !Vector3D.IsZero(g.Direction);
+        }
+
+        public static Line3D Projection(Plane3D plane, Line3D g) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+
+            Line3D u = q * g + (0d, 0d, plane.D);
+
+            return u;
+        }
+
+        public static IEnumerable<Line3D> Projection(Plane3D plane, IEnumerable<Line3D> gs) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+            Vector3D v = (0d, 0d, plane.D);
+
+            foreach (Line3D g in gs) {
+                Line3D u = q * g + v;
+
+                yield return u;
+            }
         }
 
         public override string ToString() {

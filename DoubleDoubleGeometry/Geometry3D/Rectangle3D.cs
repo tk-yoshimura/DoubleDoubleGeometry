@@ -2,6 +2,7 @@
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -187,6 +188,25 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static bool IsValid(Rectangle3D g) {
             return IsFinite(g);
+        }
+
+        public static Rectangle3D Projection(Plane3D plane, Rectangle3D g) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+
+            Rectangle3D u = q * g + (0d, 0d, plane.D);
+
+            return u;
+        }
+
+        public static IEnumerable<Rectangle3D> Projection(Plane3D plane, IEnumerable<Rectangle3D> gs) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+            Vector3D v = (0d, 0d, plane.D);
+
+            foreach (Rectangle3D g in gs) {
+                Rectangle3D u = q * g + v;
+
+                yield return u;
+            }
         }
 
         public override string ToString() {

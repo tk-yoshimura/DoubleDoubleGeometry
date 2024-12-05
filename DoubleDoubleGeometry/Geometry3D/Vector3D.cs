@@ -320,6 +320,24 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return v;
         }
 
+        public static Vector3D Projection(Plane3D plane, Vector3D v) {
+            Quaternion q = Rot(plane.Normal, (0d, 0d, 1d));
+
+            Vector3D u = q * v;
+
+            return (u.X, u.Y, u.Z + plane.D);
+        }
+
+        public static IEnumerable<Vector3D> Projection(Plane3D plane, IEnumerable<Vector3D> vs) {
+            Quaternion q = Rot(plane.Normal, (0d, 0d, 1d));
+
+            foreach (Vector3D v in vs) {
+                Vector3D u = q * v;
+
+                yield return (u.X, u.Y, u.Z + plane.D);
+            }
+        }
+
         public override string ToString() {
             return $"[{X}, {Y}, {Z}]";
         }

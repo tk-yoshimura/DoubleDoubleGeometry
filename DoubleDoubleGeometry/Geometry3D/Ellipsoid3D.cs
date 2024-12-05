@@ -232,6 +232,25 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return IsFinite(g) && !Quaternion.IsZero(g.Rotation);
         }
 
+        public static Ellipsoid3D Projection(Plane3D plane, Ellipsoid3D g) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+
+            Ellipsoid3D u = q * g + (0d, 0d, plane.D);
+
+            return u;
+        }
+
+        public static IEnumerable<Ellipsoid3D> Projection(Plane3D plane, IEnumerable<Ellipsoid3D> gs) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+            Vector3D v = (0d, 0d, plane.D);
+
+            foreach (Ellipsoid3D g in gs) {
+                Ellipsoid3D u = q * g + v;
+
+                yield return u;
+            }
+        }
+
         public override string ToString() {
             return $"center={Center}, axis={Axis}, rotation={Rotation}";
         }

@@ -2,6 +2,7 @@
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
                 Vector3D v0 = V0 - center, v1 = V1 - center, v2 = V2 - center;
 
-                Vector2D[] us = Plane.Projection([v0, v1, v2]).Select(v => (Vector2D)v).ToArray();
+                Vector2D[] us = Vector3D.Projection(Plane, [v0, v1, v2]).Select(v => (Vector2D)v).ToArray();
 
                 return polygon ??= new Polygon3D(new Polygon2D(us), Center, Normal);
             }
@@ -179,6 +180,32 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static bool IsValid(Triangle3D g) {
             return IsFinite(g) && g.V0 != g.V1 && g.V1 != g.V2 && g.V2 != g.V0;
+        }
+
+        public static Triangle3D Projection(Plane3D plane, Triangle3D g) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+
+            Triangle3D u = q * g;
+
+            return new Triangle3D(
+                (u.V0.X, u.V0.Y, u.V0.Z + plane.D), 
+                (u.V1.X, u.V1.Y, u.V1.Z + plane.D), 
+                (u.V2.X, u.V2.Y, u.V2.Z + plane.D)
+            );
+        }
+
+        public static IEnumerable<Triangle3D> Projection(Plane3D plane, IEnumerable<Triangle3D> gs) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+
+            foreach (Triangle3D g in gs) {
+                Triangle3D u = q * g;
+
+                yield return new Triangle3D(
+                    (u.V0.X, u.V0.Y, u.V0.Z + plane.D), 
+                    (u.V1.X, u.V1.Y, u.V1.Z + plane.D), 
+                    (u.V2.X, u.V2.Y, u.V2.Z + plane.D)
+                );
+            }
         }
 
         public override string ToString() {

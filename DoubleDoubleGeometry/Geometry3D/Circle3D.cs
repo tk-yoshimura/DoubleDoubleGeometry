@@ -2,6 +2,7 @@
 using DoubleDoubleComplex;
 using DoubleDoubleGeometry.Geometry2D;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -182,6 +183,25 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static bool IsValid(Circle3D g) {
             return IsFinite(g);
+        }
+
+        public static Circle3D Projection(Plane3D plane, Circle3D g) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+
+            Circle3D u = q * g + (0d, 0d, plane.D);
+
+            return u;
+        }
+
+        public static IEnumerable<Circle3D> Projection(Plane3D plane, IEnumerable<Circle3D> gs) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+            Vector3D v = (0d, 0d, plane.D);
+
+            foreach (Circle3D g in gs) {
+                Circle3D u = q * g + v;
+
+                yield return u;
+            }
         }
 
         public override string ToString() {

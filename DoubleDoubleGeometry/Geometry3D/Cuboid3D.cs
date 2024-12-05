@@ -191,6 +191,25 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return IsFinite(g) && !Quaternion.IsZero(g.Rotation);
         }
 
+        public static Cuboid3D Projection(Plane3D plane, Cuboid3D g) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+
+            Cuboid3D u = q * g + (0d, 0d, plane.D);
+
+            return u;
+        }
+
+        public static IEnumerable<Cuboid3D> Projection(Plane3D plane, IEnumerable<Cuboid3D> gs) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+            Vector3D v = (0d, 0d, plane.D);
+
+            foreach (Cuboid3D g in gs) {
+                Cuboid3D u = q * g + v;
+
+                yield return u;
+            }
+        }
+
         public override string ToString() {
             return $"center={Center}, scale={Scale}, rotation={Rotation}";
         }

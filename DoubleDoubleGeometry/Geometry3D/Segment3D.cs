@@ -1,6 +1,7 @@
 ﻿using DoubleDouble;
 using DoubleDoubleComplex;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -130,6 +131,25 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public static bool IsValid(Segment3D g) {
             return IsFinite(g) && g.V0 != g.V1;
+        }
+
+        public static Segment3D Projection(Plane3D plane, Segment3D g) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+
+            Segment3D u = q * g + (0d, 0d, plane.D);
+
+            return u;
+        }
+
+        public static IEnumerable<Segment3D> Projection(Plane3D plane, IEnumerable<Segment3D> gs) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+            Vector3D v = (0d, 0d, plane.D);
+
+            foreach (Segment3D g in gs) {
+                Segment3D u = q * g + v;
+
+                yield return u;
+            }
         }
 
         public override string ToString() {

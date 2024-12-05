@@ -182,6 +182,25 @@ namespace DoubleDoubleGeometry.Geometry3D {
             return IsFinite(g) && g.V0 != g.V1 && g.V0 != g.V2 && g.V0 != g.V3 && g.V1 != g.V2 && g.V1 != g.V3 && g.V2 != g.V3;
         }
 
+        public static Tetrahedron3D Projection(Plane3D plane, Tetrahedron3D g) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+
+            Tetrahedron3D u = q * g + (0d, 0d, plane.D);
+
+            return u;
+        }
+
+        public static IEnumerable<Tetrahedron3D> Projection(Plane3D plane, IEnumerable<Tetrahedron3D> gs) {
+            Quaternion q = Vector3D.Rot(plane.Normal, (0d, 0d, 1d));
+            Vector3D v = (0d, 0d, plane.D);
+
+            foreach (Tetrahedron3D g in gs) {
+                Tetrahedron3D u = q * g + v;
+
+                yield return u;
+            }
+        }
+
         public override string ToString() {
             return $"{V0}, {V1}, {V2}, {V3}";
         }
