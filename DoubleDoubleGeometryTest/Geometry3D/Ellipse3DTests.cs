@@ -10,8 +10,6 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
         public void Ellipse3DTest() {
             Ellipse3D ellipse = new((1, 2, 7), (4, 3), Vector3D.Rot((0, 0, 1), (2, 3, 4)));
 
-            Ellipse3D.EllipseImplicitParameter param = new Ellipse3D.EllipseImplicitParameter(ellipse.Axis, ellipse.Rotation);
-
             Vector3DAssert.AreEqual((1, 2, 7), ellipse.Center, 1e-30);
             Vector3DAssert.AreEqual(new Vector3D(2, 3, 4).Normal, ellipse.Normal, 1e-30);
             Assert.AreEqual(4d, ellipse.MajorAxis);

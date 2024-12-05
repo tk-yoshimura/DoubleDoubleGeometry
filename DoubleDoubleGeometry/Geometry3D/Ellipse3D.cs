@@ -310,7 +310,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         }
 
         // A x^2 + B y^2 + C z^2 + D x y + E x z + F y z + G = 0
-        public class EllipseImplicitParameter {
+        private class EllipseImplicitParameter {
             public readonly ddouble A, B, C, D, E, F, G;
 
             public EllipseImplicitParameter(Vector2D axis, Quaternion rotation) {
