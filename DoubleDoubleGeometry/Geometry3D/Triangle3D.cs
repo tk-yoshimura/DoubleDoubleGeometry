@@ -188,8 +188,8 @@ namespace DoubleDoubleGeometry.Geometry3D {
             Triangle3D u = q * g;
 
             return new Triangle3D(
-                (u.V0.X, u.V0.Y, u.V0.Z + plane.D), 
-                (u.V1.X, u.V1.Y, u.V1.Z + plane.D), 
+                (u.V0.X, u.V0.Y, u.V0.Z + plane.D),
+                (u.V1.X, u.V1.Y, u.V1.Z + plane.D),
                 (u.V2.X, u.V2.Y, u.V2.Z + plane.D)
             );
         }
@@ -201,8 +201,8 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 Triangle3D u = q * g;
 
                 yield return new Triangle3D(
-                    (u.V0.X, u.V0.Y, u.V0.Z + plane.D), 
-                    (u.V1.X, u.V1.Y, u.V1.Z + plane.D), 
+                    (u.V0.X, u.V0.Y, u.V0.Z + plane.D),
+                    (u.V1.X, u.V1.Y, u.V1.Z + plane.D),
                     (u.V2.X, u.V2.Y, u.V2.Z + plane.D)
                 );
             }

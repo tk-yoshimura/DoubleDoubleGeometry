@@ -80,7 +80,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public ddouble J => (implicit_param ??= new EllipsoidImplicitParameter(this)).J;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public (ddouble a, ddouble b, ddouble c, ddouble d, ddouble e, ddouble f, ddouble g, ddouble h, ddouble i, ddouble j) 
+        public (ddouble a, ddouble b, ddouble c, ddouble d, ddouble e, ddouble f, ddouble g, ddouble h, ddouble i, ddouble j)
             ImplicitParameter => implicit_param ??= new EllipsoidImplicitParameter(this);
 
         public static Ellipsoid3D operator +(Ellipsoid3D g) {
@@ -283,8 +283,8 @@ namespace DoubleDoubleGeometry.Geometry3D {
         private class EllipsoidImplicitParameter {
             public readonly ddouble A, B, C, D, E, F, G, H, I, J;
 
-            public EllipsoidImplicitParameter(Ellipsoid3D g) 
-                : this(g.Axis, g.Rotation){
+            public EllipsoidImplicitParameter(Ellipsoid3D g)
+                : this(g.Axis, g.Rotation) {
 
                 (ddouble x0, ddouble y0, ddouble z0) = g.Center;
 
@@ -315,9 +315,9 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 this.J = -a2 * b2 * c2;
             }
 
-            public static implicit operator 
-                (ddouble a, ddouble b, ddouble c, 
-                ddouble d, ddouble e, ddouble f, 
+            public static implicit operator
+                (ddouble a, ddouble b, ddouble c,
+                ddouble d, ddouble e, ddouble f,
                 ddouble g, ddouble h, ddouble i, ddouble j)(EllipsoidImplicitParameter param) {
 
                 return (param.A, param.B, param.C, param.D, param.E, param.F, param.G, param.H, param.I, param.J);

@@ -72,7 +72,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
         public ddouble D => (implicit_param ??= new SphereImplicitParameter(this)).D;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public (ddouble a, ddouble b, ddouble c, ddouble d) 
+        public (ddouble a, ddouble b, ddouble c, ddouble d)
             ImplicitParameter => implicit_param ??= new SphereImplicitParameter(this);
 
         public static Sphere3D operator +(Sphere3D g) {
@@ -273,7 +273,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                 this.D = -radius * radius;
             }
 
-            public static implicit operator 
+            public static implicit operator
                 (ddouble a, ddouble b, ddouble c, ddouble d)(SphereImplicitParameter param) {
 
                 return (param.A, param.B, param.C, param.D);

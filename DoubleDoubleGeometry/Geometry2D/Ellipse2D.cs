@@ -106,7 +106,7 @@ namespace DoubleDoubleGeometry.Geometry2D {
         public ddouble F => (implicit_param ??= new EllipseImplicitParameter(this)).F;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public (ddouble a, ddouble b, ddouble c, ddouble d, ddouble e, ddouble f) 
+        public (ddouble a, ddouble b, ddouble c, ddouble d, ddouble e, ddouble f)
             ImplicitParameter => implicit_param ??= new EllipseImplicitParameter(this);
 
         public static Ellipse2D operator +(Ellipse2D g) {
@@ -319,8 +319,8 @@ namespace DoubleDoubleGeometry.Geometry2D {
                 this.F = -a2 * b2;
             }
 
-            public static implicit operator 
-                (ddouble a, ddouble b, ddouble c, 
+            public static implicit operator
+                (ddouble a, ddouble b, ddouble c,
                 ddouble d, ddouble e, ddouble f)(EllipseImplicitParameter param) {
 
                 return (param.A, param.B, param.C, param.D, param.E, param.F);

@@ -164,7 +164,9 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
                 ddouble x2 = X * X, y2 = Y * Y, z2 = Z * Z;
 
-                if (max_index == 0) {
+                ddouble x = ddouble.NaN, y = ddouble.NaN, z = ddouble.NaN, emax = 0d;
+
+                {
                     ddouble a = B * x2 + A * y2 - D * Y * X;
                     ddouble b = F * x2 - (D * Z + E * Y) * X + 2d * A * Y * Z;
                     ddouble c = C * x2 + A * z2 - E * Z * X;
@@ -173,13 +175,16 @@ namespace DoubleDoubleGeometry.Geometry3D {
                     ddouble e = b * b - 4d * a * c;
                     ddouble m = f / e;
 
-                    ddouble y = 2d * ddouble.Sqrt(c * m);
-                    ddouble z = 2d * ddouble.Sqrt(a * m);
-                    ddouble x = ddouble.Abs((Y * y + Z * (ddouble.Sqrt(ddouble.Max(0d, e * y * y - 4d * c * f)) - b * y) / (2d * c)) / X);
+                    ddouble yt = 2d * ddouble.Sqrt(c * m);
+                    ddouble zt = 2d * ddouble.Sqrt(a * m);
 
-                    return bbox ??= new BoundingBox3D(Center, (x, y, z));
+                    if (ddouble.Abs(e) > emax) {
+                        emax = ddouble.Abs(e);
+                        y = yt;
+                        z = zt;
+                    }
                 }
-                else if (max_index == 1) {
+                {
                     ddouble a = C * y2 + B * z2 - F * Z * Y;
                     ddouble b = E * y2 - (D * Z + F * X) * Y + 2d * B * Z * X;
                     ddouble c = A * y2 + B * x2 - D * X * Y;
@@ -188,26 +193,19 @@ namespace DoubleDoubleGeometry.Geometry3D {
                     ddouble e = b * b - 4d * a * c;
                     ddouble m = f / e;
 
-                    ddouble z = 2d * ddouble.Sqrt(c * m);
-                    ddouble x = 2d * ddouble.Sqrt(a * m);
+                    ddouble zt = 2d * ddouble.Sqrt(c * m);
+                    ddouble xt = 2d * ddouble.Sqrt(a * m);
 
-                    ddouble dx = ddouble.Sqrt(ddouble.Max(0d, e * z * z - 4d * c * f));
-                    ddouble dz = ddouble.Sqrt(ddouble.Max(0d, e * x * x - 4d * a * f));
-
-                    ddouble yz0 = -((Z * z + X * (dx - b * z) / (2d * c)) / Y);
-                    ddouble yz1 = -((Z * z - X * (dx + b * z) / (2d * c)) / Y);
-
-                    ddouble yx0 = -((X * x + Z * (dz - b * x) / (2d * a)) / Y);
-                    ddouble yx1 = -((X * x - Z * (dz + b * x) / (2d * a)) / Y);
-
-                    ddouble y = ddouble.Max(
-                        ddouble.Abs(X * x + Y * yz0 + Z * z) < ddouble.Abs(X * x + Y * yz1 + Z * z) ? yz0 : yz1, 
-                        ddouble.Abs(X * x + Y * yx0 + Z * z) < ddouble.Abs(X * x + Y * yx1 + Z * z) ? yx0 : yx1
-                    );
-
-                    return bbox ??= new BoundingBox3D(Center, (x, y, z));
+                    if (ddouble.Abs(e) > emax) {
+                        emax = ddouble.Abs(e);
+                        z = zt;
+                        x = xt;
+                    }
+                    else if (ddouble.IsNaN(z) && ddouble.IsFinite(zt)) {
+                        z = zt;
+                    }
                 }
-                else {
+                {
                     ddouble a = A * z2 + C * x2 - E * X * Z;
                     ddouble b = D * z2 - (F * X + E * Y) * Z + 2d * C * X * Y;
                     ddouble c = B * z2 + C * y2 - F * Y * Z;
@@ -216,12 +214,31 @@ namespace DoubleDoubleGeometry.Geometry3D {
                     ddouble e = b * b - 4d * a * c;
                     ddouble m = f / e;
 
-                    ddouble x = 2d * ddouble.Sqrt(c * m);
-                    ddouble y = 2d * ddouble.Sqrt(a * m);
-                    ddouble z = ddouble.Abs((X * x + Y * (ddouble.Sqrt(ddouble.Max(0d, e * x * x - 4d * c * f)) - b * x) / (2d * c)) / Z);
+                    ddouble xt = 2d * ddouble.Sqrt(c * m);
+                    ddouble yt = 2d * ddouble.Sqrt(a * m);
 
-                    return bbox ??= new BoundingBox3D(Center, (x, y, z));
+                    if (ddouble.Abs(e) > emax) {
+                        emax = ddouble.Abs(e);
+                        x = xt;
+                        y = yt;
+                    }
+                    else {
+                        if (ddouble.IsNaN(x) && ddouble.IsFinite(xt)) {
+                            x = xt;
+                        }
+                        if (ddouble.IsNaN(y) && ddouble.IsFinite(yt)) {
+                            y = yt;
+                        }
+                    }
                 }
+
+                if (emax > 0d) {
+                    x = ddouble.IsFinite(x) ? x : 0d;
+                    y = ddouble.IsFinite(y) ? y : 0d;
+                    z = ddouble.IsFinite(z) ? z : 0d;
+                }
+
+                return bbox ??= new BoundingBox3D(Center, (x, y, z));
             }
         }
 

@@ -107,8 +107,6 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             bool any_outside = false;
             for (double t = 0; t < 8; t += 0.25) {
-                Console.WriteLine(ellipse4.Point(t) * 0.9999);
-
                 Assert.IsTrue(ellipse4.BoundingBox.Inside(ellipse4.Point(t) * 0.9999));
 
                 if (!ellipse4.BoundingBox.Inside(ellipse4.Point(t) * 1.01)) {
