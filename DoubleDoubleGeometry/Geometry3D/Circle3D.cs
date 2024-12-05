@@ -174,92 +174,7 @@ namespace DoubleDoubleGeometry.Geometry3D {
                     return bbox;
                 }
 
-                CircleImplicitParameter param = new(Radius, Rotation);
-
-                (ddouble X, ddouble Y, ddouble Z) = Plane.Normal;
-
-                (ddouble A, ddouble B, ddouble C, ddouble D, ddouble E, ddouble F, ddouble G)
-                    = (param.A, param.B, param.C, param.D, param.E, param.F, param.G);
-
-                int max_index = Vector3D.MaxAbsIndex(Plane.Normal);
-
-                ddouble x2 = X * X, y2 = Y * Y, z2 = Z * Z;
-
-                ddouble x = ddouble.NaN, y = ddouble.NaN, z = ddouble.NaN, emax = 0d;
-
-                {
-                    ddouble a = B * x2 + A * y2 - D * Y * X;
-                    ddouble b = F * x2 - (D * Z + E * Y) * X + 2d * A * Y * Z;
-                    ddouble c = C * x2 + A * z2 - E * Z * X;
-                    ddouble f = G * x2;
-
-                    ddouble e = b * b - 4d * a * c;
-                    ddouble m = f / e;
-
-                    ddouble yt = 2d * ddouble.Sqrt(c * m);
-                    ddouble zt = 2d * ddouble.Sqrt(a * m);
-
-                    if (ddouble.Abs(e) > emax) {
-                        emax = ddouble.Abs(e);
-                        y = yt;
-                        z = zt;
-                    }
-                }
-                {
-                    ddouble a = C * y2 + B * z2 - F * Z * Y;
-                    ddouble b = E * y2 - (D * Z + F * X) * Y + 2d * B * Z * X;
-                    ddouble c = A * y2 + B * x2 - D * X * Y;
-                    ddouble f = G * y2;
-
-                    ddouble e = b * b - 4d * a * c;
-                    ddouble m = f / e;
-
-                    ddouble zt = 2d * ddouble.Sqrt(c * m);
-                    ddouble xt = 2d * ddouble.Sqrt(a * m);
-
-                    if (ddouble.Abs(e) > emax) {
-                        emax = ddouble.Abs(e);
-                        z = zt;
-                        x = xt;
-                    }
-                    else if (ddouble.IsNaN(z) && ddouble.IsFinite(zt)) {
-                        z = zt;
-                    }
-                }
-                {
-                    ddouble a = A * z2 + C * x2 - E * X * Z;
-                    ddouble b = D * z2 - (F * X + E * Y) * Z + 2d * C * X * Y;
-                    ddouble c = B * z2 + C * y2 - F * Y * Z;
-                    ddouble f = G * z2;
-
-                    ddouble e = b * b - 4d * a * c;
-                    ddouble m = f / e;
-
-                    ddouble xt = 2d * ddouble.Sqrt(c * m);
-                    ddouble yt = 2d * ddouble.Sqrt(a * m);
-
-                    if (ddouble.Abs(e) > emax) {
-                        emax = ddouble.Abs(e);
-                        x = xt;
-                        y = yt;
-                    }
-                    else {
-                        if (ddouble.IsNaN(x) && ddouble.IsFinite(xt)) {
-                            x = xt;
-                        }
-                        if (ddouble.IsNaN(y) && ddouble.IsFinite(yt)) {
-                            y = yt;
-                        }
-                    }
-                }
-
-                if (emax > 0d) {
-                    x = ddouble.IsFinite(x) ? x : 0d;
-                    y = ddouble.IsFinite(y) ? y : 0d;
-                    z = ddouble.IsFinite(z) ? z : 0d;
-                }
-
-                return bbox ??= new BoundingBox3D(Center, (x, y, z));
+                return bbox ??= new Ellipse3D(Center, (Radius, Radius), Rotation).BoundingBox;
             }
         }
 
@@ -328,36 +243,6 @@ namespace DoubleDoubleGeometry.Geometry3D {
 
         public override int GetHashCode() {
             return Center.GetHashCode() ^ Radius.GetHashCode() ^ Rotation.GetHashCode();
-        }
-
-        // A x^2 + B y^2 + C z^2 + D x y + E x z + F y z + G = 0
-        private class CircleImplicitParameter {
-            public readonly ddouble A, B, C, D, E, F, G;
-
-            public CircleImplicitParameter(ddouble radius, Quaternion rotation) {
-                ddouble r2 = radius * radius;
-
-                Matrix3D s = Matrix3D.Scale(1d, 1d, 0d);
-                Matrix3D r = new(rotation);
-                Matrix3D ri = new(rotation.Conj);
-
-                Matrix3D m = r * s * ri;
-
-                this.A = m.E00;
-                this.B = m.E11;
-                this.C = m.E22;
-                this.D = 2d * m.E01;
-                this.E = 2d * m.E02;
-                this.F = 2d * m.E12;
-                this.G = -r2;
-            }
-
-            public static implicit operator
-                (ddouble a, ddouble b, ddouble c,
-                ddouble d, ddouble e, ddouble f, ddouble g)(CircleImplicitParameter param) {
-
-                return (param.A, param.B, param.C, param.D, param.E, param.F, param.G);
-            }
         }
     }
 }
