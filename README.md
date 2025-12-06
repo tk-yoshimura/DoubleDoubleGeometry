@@ -2,7 +2,7 @@
  Double-Double Geometry 2D/3D Implements
 
 ## Requirement
- .NET 8.0
+ .NET 10.0
  
  ## Install
 [Download DLL](https://github.com/tk-yoshimura/DoubleDoubleGeometry/releases)  

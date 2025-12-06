@@ -33,13 +33,13 @@ namespace DoubleDoubleGeometryTest.Geometry2D {
             Vector2D[] cross2 = Intersect2D.CircleCircle(((6, 12), 5), ((7, 12), 3));
             Vector2D[] cross3 = Intersect2D.CircleCircle(((0, 0), 5), ((0, 2), 3));
 
-            Assert.AreEqual(2, cross1.Length);
+            Assert.HasCount(2, cross1);
             Vector2DAssert.AreEqual((5, 1), cross1[0], 1e-30);
             Vector2DAssert.AreEqual((3, 5), cross1[1], 1e-30);
 
-            Assert.AreEqual(0, cross2.Length);
+            Assert.IsEmpty(cross2);
 
-            Assert.AreEqual(1, cross3.Length);
+            Assert.HasCount(1, cross3);
 
             Vector2DAssert.AreEqual((0, 5), cross3[0], 1e-30);
         }

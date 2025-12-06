@@ -53,7 +53,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(6, p.Edges);
 
             for (int i = 0; i < p.Vertices; i++) {
-                Assert.AreEqual(3, p.Connection[i].Count);
+                Assert.HasCount(3, p.Connection[i]);
             }
 
             Assert.AreEqual(Vector3D.Zero, p.Center);
@@ -109,7 +109,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(12, p.Edges);
 
             for (int i = 0; i < p.Vertices; i++) {
-                Assert.AreEqual(3, p.Connection[i].Count);
+                Assert.HasCount(3, p.Connection[i]);
             }
 
             Assert.IsTrue(Connection.IsValid(p.Connection));
@@ -167,7 +167,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(12, p.Edges);
 
             for (int i = 0; i < p.Vertices; i++) {
-                Assert.AreEqual(4, p.Connection[i].Count);
+                Assert.HasCount(4, p.Connection[i]);
             }
 
             Assert.IsTrue(Connection.IsValid(p.Connection));
@@ -225,7 +225,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(30, p.Edges);
 
             for (int i = 0; i < p.Vertices; i++) {
-                Assert.AreEqual(3, p.Connection[i].Count);
+                Assert.HasCount(3, p.Connection[i]);
             }
 
             Assert.IsTrue(Connection.IsValid(p.Connection));
@@ -284,7 +284,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
             Assert.AreEqual(30, p.Edges);
 
             for (int i = 0; i < p.Vertices; i++) {
-                Assert.AreEqual(5, p.Connection[i].Count);
+                Assert.HasCount(5, p.Connection[i]);
             }
 
             Console.WriteLine(p.BoundingBox);
@@ -720,7 +720,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             PrecisionAssert.AreEqual(6.5, p.Volume);
 
-            Assert.AreEqual(8, p.Faces.Count);
+            Assert.HasCount(8, p.Faces);
 
             List<Vector3D> insides = [], outsides = [];
 
@@ -825,7 +825,7 @@ namespace DoubleDoubleGeometryTest.Geometry3D {
 
             PrecisionAssert.AreEqual(32, p.Edges);
             PrecisionAssert.AreEqual(16, p.Volume);
-            Assert.AreEqual(16, p.Faces.Count);
+            Assert.HasCount(16, p.Faces);
 
             List<Vector3D> insides = [], outsides = [];
 
